@@ -31,16 +31,13 @@ const VideoSection = ({ t1, t3, t2, time }) => {
     62: <Card2OnVideo t2={t2} />,
   };
   return (
-    <div className="gx-news-tags-row ">
+    <div className="gx-news-tags-row">
+      <div className="casino_cards_section">{t1 && cardOnVideoById[id]}</div>
       <iframe
         title="Casino Video"
-        className="gx-reletive  gx-w-100"
-        style={{ height: 300, position: "relative" }}
+        className="gx-reletive gx-w-100 casino_video"
         src={`https://casino.loki7exch.com/route/?id=${videoData[id]}`}
       />
-      <div className="gx-pl-3" style={{ position: "absolute" }}>
-        {t1 && cardOnVideoById[id]}
-      </div>
     </div>
   );
 };

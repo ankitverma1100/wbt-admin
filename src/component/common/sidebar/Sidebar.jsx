@@ -177,12 +177,6 @@ const Sidebar = (props) => {
                 {
                   label: <Link to="/finish-game">COMPLETED GAMES</Link>,
                 },
-                {
-                  className: `${
-                    userType === "7" || ps == "dtl" ? "" : "d-none"
-                  }`,
-                  label: <Link to="/delete-bet">Reject Bets</Link>,
-                },
               ],
             },
             {
@@ -205,19 +199,23 @@ const Sidebar = (props) => {
                 },
               ],
             },
-            {
-              key: "14",
-              icon: <PlayCircleOutlined />,
-              label: <div>Matka</div>,
-              children: [
-                {
-                  label: <Link to="/matka/inplay">INPLAY MATKA</Link>,
-                },
-                {
-                  label: <Link to="/matka/completed">COMPLETED MATKA</Link>,
-                },
-              ],
-            },
+              {
+                key: "14",
+                icon: <PlayCircleOutlined />,
+                label: <div>Matka</div>,
+                children: [
+                  {
+                    label: <Link to="/matka/inplay">INPLAY MATKA</Link>,
+                  },
+                  {
+                    label: <Link to="/matka/completed">COMPLETED MATKA</Link>,
+                  },
+                  {
+                    className: `${userType != "7" ? "d-none" : ""}`,
+                    label: <Link to="/matka/set-result">SET MATKA RESULT</Link>,
+                  },
+                ],
+              },
             {
               key: "4",
               icon: <PlayCircleOutlined />,
@@ -431,7 +429,7 @@ const Sidebar = (props) => {
               icon: <SettingOutlined />,
               label: (
                 <Link
-                  to="/markets">
+                  to="/app/settings">
                   {window?.location.hostname?.split(".")?.[1]?.toUpperCase()}{" "}
                   Setting
                 </Link>
@@ -659,16 +657,6 @@ const Sidebar = (props) => {
                       </Link>
                     ),
                   },
-                  {
-                    className: `${
-                      userType === "7" || ps == "dtl" ? "" : "d-none"
-                    }`,
-                    label: (
-                      <Link to="/delete-bet" onClick={() => props?.action()}>
-                        Reject Bets
-                      </Link>
-                    ),
-                  },
                 ],
               },
               {
@@ -723,6 +711,14 @@ const Sidebar = (props) => {
                     label: (
                       <Link to="/matka/completed" onClick={() => props?.action()}>
                         COMPLETED MATKA
+                      </Link>
+                    ),
+                  },
+                  {
+                    className: `${userType != "7" ? "d-none" : ""}`,
+                    label: (
+                      <Link to="/matka/set-result" onClick={() => props?.action()}>
+                        SET MATKA RESULT
                       </Link>
                     ),
                   },
@@ -1010,7 +1006,7 @@ const Sidebar = (props) => {
                 icon: <SettingOutlined />,
                 label: (
                   <Link
-                    to="/markets"
+                    to="/app/settings"
                     onClick={() => {
                       props?.action();
                       setOpenKeys([]);

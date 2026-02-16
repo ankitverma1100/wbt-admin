@@ -82,7 +82,8 @@
   overflow-y: unset !important;
 }
 .active_match_table_grid {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
   th,
   td {
@@ -91,6 +92,7 @@
     text-transform: uppercase;
     font-size: 12px;
     font-weight: 500;
+    white-space: nowrap;
   }
   th {
     background: #b7852f;

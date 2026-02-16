@@ -67,7 +67,7 @@ const FancyData = ({ data }) => {
                           <div className="ant-table-content">
                             <table style={{ tableLayout: "auto" }}>
                               <colgroup>
-                                <col style={{ width: "60%" }} />
+                                <col style={{ width: "60%" }} />http://localhost:5174/dashboard
                                 <col style={{ width: "20%" }} />
                                 <col style={{ width: "20%" }} />
                               </colgroup>
@@ -76,7 +76,7 @@ const FancyData = ({ data }) => {
                                   <th className="ant-table-cell matchdtailsNoYesBackground">
                                     <div className="gx-bg-flex gx-justify-content-between gx-align-items-center gx-px-1">
                                       <span className="gx-px-3 gx-py-1 gx-bg-primary">
-                                        {item}
+                                        {item == 'Fancy2' ? 'Fancy (Comm.)' : item} 
                                       </span>
                                       <span style={{ whiteSpace: "nowrap" }}>
                                         Min: 100
@@ -115,12 +115,10 @@ const FancyData = ({ data }) => {
                                             </div>
                                             <button
                                               type="button"
-                                              className="ant-btn ant-btn-default gx-my-0"
+                                              className="ant-btn ant-btn-default gx-my-0 gx-bg-white"
                                               style={{
                                                 height: 30,
-                                                backgroundColor:
-                                                  "rgb(152, 215, 127)",
-                                                color: "white",
+                                                color: "#000",
                                                 lineHeight: "30px",
                                                 marginLeft: 10,
                                               }}
@@ -130,7 +128,7 @@ const FancyData = ({ data }) => {
                                                   fancy?.nation
                                                 )
                                               }>
-                                              <span> Book</span>
+                                              <span> B</span>
                                             </button>
                                           </div>
                                         </div>

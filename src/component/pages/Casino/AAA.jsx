@@ -1,8 +1,10 @@
 import { Table } from "antd";
+import BetCard from "./BetCard";
 
 const getCardImage = (nat) => {
   const cardMap = {
     "Card A": "1.jpg",
+    "Card 1": "1.jpg",
     "Card 2": "2.jpg",
     "Card 3": "3.jpg",
     "Card 4": "4.jpg",
@@ -21,8 +23,19 @@ const getCardImage = (nat) => {
 };
 
 const AAA = ({ odds }) => {
-  const filteredOdds = (odds || []).filter(
-    (item) => item.sid !== "21" && item.sid !== "22"
+  const oddsList = odds || [];
+  const getLabel = (item) => item?.nation || item?.nat || "";
+  const isMainBet = (item) => {
+    const label = getLabel(item).toLowerCase();
+    return (
+      label.includes("amar") ||
+      label.includes("akbar") ||
+      label.includes("anthony")
+    );
+  };
+  const mainBets = oddsList.filter(isMainBet);
+  const filteredOdds = oddsList.filter(
+    (item) => item.sid !== "21" && item.sid !== "22" && !isMainBet(item)
   );
 
   const columns = [
@@ -61,13 +74,36 @@ const AAA = ({ odds }) => {
   ];
 
   return (
-    <Table
-      pagination={false}
-      bordered
-      columns={columns}
-      dataSource={filteredOdds || []}
-      rowKey="sid"
-    />
+    <>
+      {mainBets.length > 0 && (
+        <div className="casino_main_bets">
+          <div className="casino_main_bets_header">
+            <div className="casino_main_bets_title">Main Bets</div>
+            <span className="casino_main_bets_line" />
+          </div>
+          <div className="casino_main_bets_grid">
+            {mainBets.map((item, index) => (
+              <BetCard
+                key={item?.sid || item?.nation || item?.nat || index}
+                item={item}
+                index={index}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+      <div className="casino_main_bets_header">
+        <div className="casino_main_bets_title">CARD BETS</div>
+        <span className="casino_main_bets_line" />
+      </div>
+      <Table
+        pagination={false}
+        bordered
+        columns={columns}
+        dataSource={filteredOdds || []}
+        rowKey="sid"
+      />
+    </>
   );
 };
 

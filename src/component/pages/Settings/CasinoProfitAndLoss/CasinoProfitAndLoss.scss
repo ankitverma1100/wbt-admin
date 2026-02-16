@@ -1,0 +1,61 @@
+.casino_pnl_page {
+  .table_section {
+    padding: 14px 18px 22px;
+  }
+
+  .pnl_total {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    margin: 6px 0 12px;
+    color: #2b2b2b;
+  }
+
+  .total_value {
+    color: #12b32b;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+  }
+
+  th,
+  td {
+    border: 1px solid #d9d9d9;
+    padding: 7px 8px;
+    font-size: 13px;
+  }
+
+  th {
+    background: #1772c9;
+    color: #fff;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  th:first-child {
+    text-align: left;
+  }
+
+  td.title_cell {
+    font-weight: 700;
+    color: #1f1f1f;
+  }
+
+  td.num {
+    text-align: center;
+    font-weight: 700;
+  }
+
+  td.pos {
+    color: #15b600 !important;
+  }
+
+  td.neg {
+    color: #e53935 !important;
+  }
+}

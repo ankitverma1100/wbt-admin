@@ -1,0 +1,42 @@
+.andar_bahar_plus_minus {
+  .casino_username {
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .green {
+    color: #2fb344;
+  }
+
+  .red {
+    color: #f03e3e;
+  }
+
+  .roulette_table {
+    margin-top: 0 !important;
+  }
+
+  .ant-table {
+    background: #fff;
+  }
+
+  .ant-table-thead > tr > th {
+    background: #1677ff;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    padding: 10px 12px;
+  }
+
+  .ant-table-tbody > tr > td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .ant-table-tbody > tr > td,
+  .ant-table-thead > tr > th {
+    border-color: #d9d9d9;
+  }
+}

@@ -8,6 +8,18 @@ import CustomLoading from "../../../common/CustomLoading/CustomLoading";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import TablePagination from "../../../common/TablePagination";
 
+const userTypeLabelMap = {
+  7: "SuperAdmin",
+  6: "Admin",
+  5: "Mini Admin",
+  4: "Master",
+  3: "Super",
+  2: "Agent",
+  1: "Client",
+};
+const currentUserTypeLabel =
+  userTypeLabelMap[Number(localStorage.getItem("userType"))] || "User";
+
 const columns = [
   {
     title: "Date",
@@ -37,6 +49,7 @@ const columns = [
     dataIndex: "balance",
     key: "balance",
     align: "right",
+    width: 280,
     render: (text, record) => {
       const amount = Number(record?.balance || 0);
       const label = amount >= 0 ? "LENA" : "DENA";
@@ -60,7 +73,14 @@ const columns = [
     dataIndex: "description",
     key: "description",
     onCell: () => ({ style: { whiteSpace: "nowrap" } }),
-    render: (text) => <span>{text?.toString().toUpperCase()}</span>,
+    render: (_, record) => {
+      const credit = Number(record?.credit || 0);
+      const debit = Number(record?.debit || 0);
+      const label = currentUserTypeLabel.toString().toUpperCase();
+      const signText = credit > 0 ? "PLUS" : debit > 0 ? "MINUS" : "";
+
+      return <span>{signText ? `${label} ${signText}` : label}</span>;
+    },
   },
 ];
 

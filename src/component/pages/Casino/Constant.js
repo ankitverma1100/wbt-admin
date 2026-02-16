@@ -1,5 +1,5 @@
 export const titleById = {
-  "51": "20-20 Teenpatti",
+  "51": "Teenpatti 2020",
   "52": "20-20 DRAGON TIGER",
   "53": "LUCKY 7 - A",
   "56": "AAA",
@@ -72,6 +72,15 @@ const yellowColorForLabel = "#004e92";
 const blueColorForLabel = "black";
 const whiteColorForLabel = "#fff";
 const greenColorForLabel = "#002d5b";
+const lucky7HighColor = "#cf1322";
+const lucky7HighBg = "#fff1f0";
+const lucky7HighBorder = "#ffa39e";
+const lucky7LowColor = "#389e0d";
+const lucky7LowBg = "#f6ffed";
+const lucky7LowBorder = "#b7eb8f";
+const lucky7TieColor = "#d4b106";
+const lucky7TieBg = "#feffe6";
+const lucky7TieBorder = "#fffb8f";
 
 export const LetterAndColorById = {
   "51": {
@@ -94,11 +103,15 @@ export const LetterAndColorById = {
   },
   "52": {
     "1": {
-      color: greenColorForLabel,
+      color: "#d4380d",
+      background: "#fff2e8",
+      borderColor: "#ffbb96",
       label: "D",
     },
     "2": {
-      color: redColorForLabel,
+      color: "#0958d9",
+      background: "#e6f4ff",
+      borderColor: "#91caff",
       label: "T",
     },
     "3": {
@@ -108,15 +121,21 @@ export const LetterAndColorById = {
   },
   "53": {
     "1": {
-      color: redColorForLabel,
+      color: lucky7LowColor,
+      background: lucky7LowBg,
+      borderColor: lucky7LowBorder,
       label: "L",
     },
     "2": {
-      color: greenColorForLabel,
+      color: lucky7HighColor,
+      background: lucky7HighBg,
+      borderColor: lucky7HighBorder,
       label: "H",
     },
     "0": {
-      color: blueColorForLabel,
+      color: lucky7TieColor,
+      background: lucky7TieBg,
+      borderColor: lucky7TieBorder,
       label: "T",
     },
   },

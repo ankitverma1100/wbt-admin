@@ -1,8 +1,9 @@
 import React from "react";
 import CardItem from "../../common/carditem/CardItem";
 import { BiUserCircle } from "react-icons/bi";
-import { Button, Card, Col, Modal, Row } from "antd";
+import { Card, Col, Modal, Row } from "antd";
 import { Link } from "react-router-dom";
+import ModalFooter from "../Dashboard/ModalFooter";
 
 const MasterDetails = ({ setOpenModals, openModal }) => {
   const data = [
@@ -75,23 +76,7 @@ const MasterDetails = ({ setOpenModals, openModal }) => {
       <Modal
         title="SUPER ADMIN DETAILS"
         onCancel={() => setOpenModals(!openModal)}
-        footer={
-          <>
-            <Button
-              type="default"
-              style={{
-                backgroundColor: "transparent",
-                border: "1px solid #b9b9b9",
-                color: "#000",
-              }}
-              onClick={() => setOpenModals(!openModal)}>
-              Cancel
-            </Button>
-            <Button type="primary" onClick={() => setOpenModals(!openModal)}>
-              OK
-            </Button>
-          </>
-        }
+        footer={<ModalFooter onCancel={() => setOpenModals(!openModal)} />}
         className="antd_dsh_madals antd_dsh_madals--master"
         closable={{ "aria-label": "Custom Close Button" }}
         open={openModal}>
@@ -100,7 +85,7 @@ const MasterDetails = ({ setOpenModals, openModal }) => {
             ?.filter((res) => userTypeMatch[uType]?.includes(res?.userType))
             ?.map((items) => {
               return (
-                <Col md={12} xs={24} key={items?.id}>
+                <Col md={12} xs={12} key={items?.userType || items?.path}>
                   <Card bordered={false}>
                     <Link to={items?.path}>
                       <div className="ant-card ant-card-bordered gx-card-widget gx-card-full gx-bg-transparent">

@@ -95,7 +95,7 @@ const LayOut = () => {
             OK
           </Button>,
         ]}>
-        <HomeRules />
+        <HomeRules onCancel={handleCloseBtn} onOk={handleOk} />
       </Modal>
     </>
   );

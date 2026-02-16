@@ -6,7 +6,7 @@ import CompeleteFancy from '../livereport/compeleteFancy/CompeleteFancy';
 const CompletedFancySlips = () => {
   return (
     <>
-      <div className="match_slip completed_fancy_slip">
+      <div className="match_slip">
        <CompeleteFancy/>
       </div>
     </>

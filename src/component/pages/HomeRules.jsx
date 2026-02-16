@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./HomeRules.scss";
 
-const HomeRules = () => {
+const HomeRules = ({ onCancel, onOk }) => {
   const [activeTab, setActiveTab] = useState("hindi");
 
   return (
@@ -68,8 +68,20 @@ const HomeRules = () => {
 
       {/* FOOTER BUTTONS */}
       <div className="rules-footer">
-        <button className="btn-cancel">Cancel</button>
-        <button className="btn-ok">OK</button>
+        <button
+          type="button"
+          className="btn-cancel"
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          className="btn-ok"
+          onClick={onOk}
+        >
+          OK
+        </button>
       </div>
     </div>
   );

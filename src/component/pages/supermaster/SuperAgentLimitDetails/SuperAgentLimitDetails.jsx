@@ -12,7 +12,7 @@ const SuperAgentLimitDetails = () => {
 
   return (
     <>
-      <div className="main_live_section update_limit">
+      <div className="main_live_section">
         <div className="_match">
           <div
             className="sub_live_section live_report"

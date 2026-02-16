@@ -6,6 +6,7 @@
   min-height: 150px;
   margin-bottom: 1rem;
   background-color: initial;
+  color: #000;
   .master_color {
     text-align: left;
     background-color: rgb(98, 92, 195);
@@ -64,11 +65,14 @@
     border: 1px solid grey;
     padding: 7px !important;
     font-size: 14px !important;
+    font-weight: 700;
   }
   td {
     white-space: wrap;
     border: 1px solid grey;
     padding: 12px;
+    font-weight: 700;
+    color: #000;
   }
   .border_tr {
     text-align: right;
@@ -79,6 +83,39 @@
       color: #545454;
     }
   }
+}
+
+.plus-table td.plus-num {
+  color: #1a8f2d;
+}
+
+.plus-table td.plus-num.plus-num-neg {
+  color: #d32f2f;
+}
+
+.plus-table thead th.pm-header-admin {
+  background: #ffe118;
+  color: #111;
+}
+
+.plus-table thead th.pm-header-subadmin {
+  background: #4463d8;
+  color: #fff;
+}
+
+.plus-table thead th.pm-header-supermaster {
+  background: #f58231;
+  color: #111;
+}
+
+.plus-table thead th.pm-header-master {
+  background: #911eb4;
+  color: #fff;
+}
+
+.plus-table thead th.pm-header-agent {
+  background: #47f0f0;
+  color: #111;
 }
 table {
   border-collapse: collapse;
@@ -114,4 +151,29 @@ table {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.plus-user-6 .plus-table thead th {
+  background: #ffe118;
+  color: #111;
+}
+
+.plus-user-5 .plus-table thead th {
+  background: #4463d8;
+  color: #fff;
+}
+
+.plus-user-4 .plus-table thead th {
+  background: #f58231;
+  color: #111;
+}
+
+.plus-user-3 .plus-table thead th {
+  background: #911eb4;
+  color: #fff;
+}
+
+.plus-user-2 .plus-table thead th {
+  background: #47f0f0;
+  color: #111;
 }

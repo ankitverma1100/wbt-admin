@@ -19,42 +19,56 @@ import {
 } from "../../../../store/service/userlistService";
 import { convertCode } from "../../../../store/constant";
 
-const updateNameDetails = {
-  6: "Super Admin",
-  5: "Admin",
-  4: "Mini Admin",
-  3: "Master",
-  2: "Super",
-  1: "Agent",
-};
 const updateName = {
-  6: "Admin",
-  5: "Mini Admin",
-  4: "Master",
-  3: "Super",
-  2: "Agent",
-  1: "Client",
+  admin: "Admin",
+  subAdmin: "Mini Admin",
+  superMaster: "Master",
+  master: "Super",
+  dealer: "Agent",
+  client: "Client",
 };
 
-const Responsedata = {
-  1: "",
-  2: "dealer",
-  3: "master",
-  4: "superMaster",
-  5: "subAdmin",
-  6: "admin",
+const getRoleKeyFromUserId = (value = "") => {
+  const userId = value.toUpperCase();
+  if (userId.includes("AD")) return "admin";
+  if (userId.includes("SUB")) return "subAdmin";
+  if (userId.includes("M")) return "superMaster";
+  if (userId.includes("SA")) return "master";
+  if (userId.includes("A")) return "dealer";
+  return "client";
 };
-const ResponsedataUpper = {
-  2: "dealer",
-  3: "superMaster",
-  4: "master",
-  5: "subAdmin",
-  6: "admin",
-  7: "my",
+
+const getUpperRoleKey = (roleKey) => {
+  switch (roleKey) {
+    case "client":
+      return "dealer";
+    case "dealer":
+      return "master";
+    case "master":
+      return "superMaster";
+    case "superMaster":
+      return "subAdmin";
+    case "subAdmin":
+      return "admin";
+    case "admin":
+      return "my";
+    default:
+      return "my";
+  }
+};
+
+const getFieldValue = (data, roleKey, suffix, fallback = 0) => {
+  if (!data) return fallback;
+  if (!roleKey || roleKey === "client") {
+    const baseKey = `${suffix.charAt(0).toLowerCase()}${suffix.slice(1)}`;
+    return data?.[baseKey] ?? fallback;
+  }
+  const key = `${roleKey}${suffix}`;
+  return data?.[key] ?? fallback;
 };
 
 const UpdateSuper = () => {
-  const { id, userId } = useParams();
+  const { userId } = useParams();
   const [api, contextHolder] = notification.useNotification();
   const [commType, setCommType] = useState("");
   const [form] = Form.useForm();
@@ -62,18 +76,45 @@ const UpdateSuper = () => {
   const [data, setData] = useState();
 
   const [trigger, { data: updateData, isLoading }] = useUpdateUserMutation();
+  const currentUserId = localStorage.getItem("userId") || "";
+  const currentUserRoleKey = getRoleKeyFromUserId(currentUserId);
   const { data: resuilt } = useGetUserQuery(
     { userId },
     { refetchOnMountOrArgChange: true }
   );
 
+  const editUserId = resuilt?.data?.userId || userId || "";
+  const roleKey = getRoleKeyFromUserId(editUserId);
+  const upperRoleKey = getUpperRoleKey(roleKey);
+  const isClient = roleKey === "client";
+  const isDirectChild = currentUserRoleKey === upperRoleKey;
+  const parentLabel =
+    upperRoleKey === "my"
+      ? "My"
+      : updateName?.[upperRoleKey] || "Parent";
+  const userTypeLabel = updateName?.[roleKey] || "User";
+
   const getUserField = (fieldSuffix) =>
-    resuilt?.data?.[Responsedata?.[id] + fieldSuffix] || 0;
+    getFieldValue(resuilt?.data, roleKey, fieldSuffix, 0);
   const getUserUpper = (fieldSuffix) =>
-    resuilt?.data?.[ResponsedataUpper?.[Number(id) + 1] + fieldSuffix] || 0;
+    getFieldValue(resuilt?.data, upperRoleKey, fieldSuffix, 0);
+  const getMyField = (fieldSuffix, myKey) =>
+    isDirectChild
+      ? resuilt?.data?.[myKey] ?? 0
+      : getUserUpper(fieldSuffix);
 
   useEffect(() => {
     if (resuilt?.status) {
+      console.log("[UpdateSuper] Debug", {
+        currentUserId,
+        currentUserRoleKey,
+        editUserId,
+        roleKey,
+        upperRoleKey,
+        isDirectChild,
+        userTypeLabel,
+        parentLabel,
+      });
       setData(resuilt?.data);
       const userCom =
         resuilt?.data?.matchCommission > 0 ||
@@ -85,7 +126,12 @@ const UpdateSuper = () => {
         getUserUpper("MatchCommission") > 0
           ? "bbb"
           : "no-comm";
-      const isComm = id == "1" ? userCom : otherCom;
+      const isComm = isClient ? userCom : otherCom;
+      const myComm =
+        getMyField("SessionCommision", "mySessionCommision") > 0 ||
+        getMyField("MatchCommission", "myMatchCommission") > 0
+          ? "bbb"
+          : "no-comm";
       setCommType(isComm);
 
       // ✅ Set form values after API data load
@@ -96,39 +142,24 @@ const UpdateSuper = () => {
         number: resuilt?.data?.contact,
         password: "******",
         comm_type: isComm,
-        commType:
-          getUserUpper("SessionCommision") > 0 ||
-          getUserUpper("MatchCommission") > 0
-            ? "Bet by Bet"
-            : "No Comm",
-        matchcomm: getUserUpper("MatchCommission"),
-        super_match_comm:
-          id === "1"
-            ? resuilt?.data?.matchCommission
-            : getUserField("MatchCommission"),
-        sesscomm: getUserUpper("SessionCommision"),
-        super_sess_comm:
-          id === "1"
-            ? resuilt?.data?.sessionCommision
-            : getUserField("SessionCommision"),
-        sess_comm:
-          id === "1"
-            ? resuilt?.data?.casinoCommission
-            : getUserField("CasinoCommission"),
-        super_casino_share: getUserUpper("CasinoPartnership"),
-        matchShare: getUserUpper("Partnership"),
-        super_casino_comm:
-          id === "1"
-            ? resuilt?.data?.casinoCommission
-            : getUserField("CasinoCommission"),
-        supercasinocomm:
-          id === "1"
-            ? resuilt?.data?.casinoPartnership
-            : getUserField("CasinoPartnership"),
-        share:
-          id === "1" ? resuilt?.data?.partnership : getUserField("Partnership"),
+        commType: myComm === "bbb" ? "Bet by Bet" : "No Comm",
+        matchcomm: getMyField("MatchCommission", "myMatchCommission"),
+        super_match_comm: getUserField("MatchCommission"),
+        sesscomm: getMyField("SessionCommision", "mySessionCommision"),
+        super_sess_comm: getUserField("SessionCommision"),
+        sess_comm: getUserField("CasinoCommission"),
+        super_casino_share: getMyField("CasinoPartnership", "myCasinoPartnership"),
+        matchShare: getMyField("Partnership", "myPartnership"),
+        super_casino_comm: getMyField("CasinoCommission", "myCasinoCommission"),
+        supercasinocomm: getUserField("CasinoPartnership"),
+        super_matka_share: getMyField("MatkaPartnership", "myMatkaPartnership"),
+        matka_share: getUserField("MatkaPartnership"),
+        super_matka_comm: getMyField("MatkaCommission", "myMatkaCommission"),
+        matka_comm: getUserField("MatkaCommission"),
+        share: getUserField("Partnership"),
         match_share: resuilt?.data?.matchShare,
       });
+
     }
   }, [resuilt?.data]);
 
@@ -148,9 +179,11 @@ const UpdateSuper = () => {
       partnership: values?.share,
       casinoPartnership: values?.supercasinocomm,
       internationalCasinoPartnership: getUserField("IntlCasinoPartnership"),
+      matkaPartnership: values?.matka_share ?? 0,
       matchCommission: isNoComm ? 0 : values?.super_match_comm,
       sessionCommission: isNoComm ? 0 : values?.super_sess_comm,
-      casinoCommission: isNoComm ? 0 : values?.sess_comm,
+      casinoCommission:  values?.sess_comm,
+      matkaCommission:  values?.matka_comm,
     };
     trigger(userData);
   };
@@ -180,6 +213,14 @@ const UpdateSuper = () => {
   const onCommissionType = (value) => {
     console.log(value, "valuevalue");
     setCommType(value);
+    if (value !== "bbb") {
+      form.setFieldsValue({
+        super_match_comm: 0,
+        super_sess_comm: 0,
+        sess_comm: 0,
+        matka_comm: 0,
+      });
+    }
   };
 
   const { Option } = Select;
@@ -187,21 +228,17 @@ const UpdateSuper = () => {
   return (
     <>
       {contextHolder}
-      <div className="main_live_section update_user">
-        <div className="_match">
-          <div className="sub_live_section live_report">
-            <div
-              style={{ padding: "5px 8px", fontSize: "25px" }}
-              className="team_name">
-              Update {updateName?.[id]}
-            </div>
-            <div className="show_btn">
-              <button onClick={() => nav(-1)}>Back</button>
-            </div>
+      <div className="main_live_section update_user update_super">
+        <div className="update_super_header">
+          <div className="update_super_heading">
+            Edit {updateName?.[roleKey]}
           </div>
+          <button className="update_super_back" onClick={() => nav(-1)}>
+            Back
+          </button>
         </div>
 
-        <div className="ant-spin-nested-loading">
+        <div className="ant-spin-nested-loading update_super_body">
           {isLoading && (
             <div className="spin_icon">
               <Spin size="large" />
@@ -210,10 +247,9 @@ const UpdateSuper = () => {
 
           <Form
             form={form}
-            className="form_data"
+            className="form_data update_super_form"
             name="update_super_form"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
+            layout="vertical"
             onFinish={onFinish}
             initialValues={{
               userId: convertCode(resuilt?.data?.userId),
@@ -223,75 +259,45 @@ const UpdateSuper = () => {
               password: "******",
               comm_type: commType,
             }}>
-            <Row className="super_agent update_agent">
-              <Col lg={12} xs={24}>
-                <Form.Item
-                  label="User ID"
-                  name="userId"
-                  rules={[{ required: true }]}>
-                  <Input disabled />
-                </Form.Item>
+            <div className="update_super_section">
+              <div className="update_super_section_title">User Info</div>
+              <Row className="super_agent update_agent update_super_grid" gutter={[18, 14]}>
+                <Col lg={12} md={12} xs={24}>
+                  <Form.Item
+                    label="Name"
+                    name="name"
+                    rules={[{ required: true }]}>
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col lg={12} md={12} xs={24}>
+                  <Form.Item
+                    label="Reference"
+                    name="reference"
+                    rules={[{ required: true }]}>
+                    <Input placeholder="Enter Reference" />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </div>
 
-                <Form.Item
-                  label="Name"
-                  name="name"
-                  rules={[{ required: true }]}>
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
-                  label="Reference"
-                  name="reference"
-                  rules={[{ required: true }]}>
-                  <Input placeholder="Enter Reference" />
-                </Form.Item>
-
-                <Form.Item label="Contact No." name="number">
-                  <InputNumber
-                    className="number_field"
-                    placeholder="Enter Contact No."
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  label="Password"
-                  name="password"
-                  rules={[{ required: true }]}>
-                  <Input disabled type="text" placeholder="Password" />
-                </Form.Item>
-
-                <Form.Item name="status" label="Status">
-                  <Select value={"active"}>
-                    <Option value="active">Active</Option>
-                    <Option value="inActive">InActive</Option>
-                  </Select>
-                </Form.Item>
-
-                <Form.Item name="share_change_type" label="Share Change Type">
-                  <Select defaultValue="Fixed">
-                    <Option value="Fixed">Fixed</Option>
-                    <Option value="Change">Change</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-
-            {/* Match Share & Commission Section */}
-            <h2 className="update_agent_text">Match Share and Comm</h2>
-
-            <Row className="super_agent update_agent">
-              {id !== "1" && (
+            <div className="update_super_section">
+              <div className="update_super_section_title">
+                Match and Share Info
+              </div>
+              <Row className="super_agent update_agent update_super_grid" gutter={[18, 14]}>
+              {!isClient && (
                 <>
-                  <Col lg={12} xs={24}>
+                  <Col lg={12} md={12} xs={24}>
                     <Form.Item
-                      label={`${updateNameDetails?.[id]} Match Share (%)`}
+                      label={`${parentLabel} Match Share (%)`}
                       name="matchShare">
                       <Input type="number" disabled />
                     </Form.Item>
                   </Col>{" "}
-                  <Col lg={12} xs={24}>
+                  <Col lg={12} md={12} xs={24}>
                     <Form.Item
-                      label="Match Share (%)"
+                      label={`${userTypeLabel} Match Share (%)`}
                       name="share"
                       rules={[
                         { required: true, message: "Please enter match comm" },
@@ -302,17 +308,17 @@ const UpdateSuper = () => {
                 </>
               )}
 
-              <Col lg={12} xs={24}>
+              <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label={`${updateNameDetails?.[id]} Comm Type`}
+                  label={`${parentLabel} Comm Type`}
                   name="commType"
                   rules={[{ required: true }]}>
                   <Input disabled />
                 </Form.Item>
               </Col>
-              <Col lg={12} xs={24}>
+              <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label="Comm Type"
+                  label={`${userTypeLabel} Comm Type`}
                   name="comm_type"
                   rules={[{ required: true }]}>
                   <Select onChange={onCommissionType} value={commType}>
@@ -322,91 +328,85 @@ const UpdateSuper = () => {
                 </Form.Item>
               </Col>
 
-              {commType === "bbb" && (
-                <>
-                  <Col lg={12} xs={24}>
-                    <Form.Item
-                      label={`${updateNameDetails?.[id]} Match Comm (%)`}
-                      name="matchcomm">
-                      <Input type="number" disabled />
-                    </Form.Item>
-                  </Col>
-
-                  <Col lg={12} xs={24}>
-                    <Form.Item
-                      label="Match Comm (%)"
-                      name="super_match_comm"
-                      rules={[
-                        { required: true, message: "Please enter match comm" },
-                      ]}>
-                      <Input />
-                    </Form.Item>
-                  </Col>
-
-                  <Col lg={12} xs={24}>
-                    <Form.Item
-                      label={`${updateNameDetails?.[id]} Sess Comm (%)`}
-                      name="sesscomm">
-                      <Input type="number" disabled />
-                    </Form.Item>
-                  </Col>
-
-                  <Col lg={12} xs={24}>
-                    <Form.Item
-                      label="Sess Comm (%)"
-                      name="super_sess_comm"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter session comm",
-                        },
-                      ]}>
-                      <Input />
-                    </Form.Item>
-                  </Col>
-                </>
-              )}
-            </Row>
-
-            {/* Casino Section */}
-            <h2 className="update_agent_text">Casino Share and Commission</h2>
-            <Switch
-              checkedChildren="ON"
-              unCheckedChildren="OFF"
-              defaultChecked
-            />
-
-            <Row className="super_agent update_agent">
-              <Col lg={12} xs={24}>
+              <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label={`${updateNameDetails?.[id]} Casino Share (%)`}
+                  label={`${parentLabel} Match Comm (%)`}
+                  name="matchcomm">
+                  <Input type="number" disabled />
+                </Form.Item>
+              </Col>
+
+              <Col lg={12} md={12} xs={24}>
+                <Form.Item
+                  label={`${userTypeLabel} Match Comm (%)`}
+                  name="super_match_comm"
+                  rules={[
+                    {
+                      required: commType === "bbb",
+                      message: "Please enter match comm",
+                    },
+                  ]}>
+                  <Input disabled={commType !== "bbb"} />
+                </Form.Item>
+              </Col>
+
+              <Col lg={12} md={12} xs={24}>
+                <Form.Item
+                  label={`${parentLabel} Sess Comm (%)`}
+                  name="sesscomm">
+                  <Input type="number" disabled />
+                </Form.Item>
+              </Col>
+
+              <Col lg={12} md={12} xs={24}>
+                <Form.Item
+                  label={`${userTypeLabel} Sess Comm (%)`}
+                  name="super_sess_comm"
+                  rules={[
+                    {
+                      required: commType === "bbb",
+                      message: "Please enter session comm",
+                    },
+                  ]}>
+                  <Input disabled={commType !== "bbb"} />
+                </Form.Item>
+              </Col>
+              </Row>
+            </div>
+
+            <div className="update_super_section">
+
+              <Row className="super_agent update_agent update_super_grid" gutter={[18, 14]}>
+              <Col lg={12} md={12} xs={24}>
+                <Form.Item
+                  label={`${parentLabel} Casino Share (%)`}
                   name="super_casino_share">
                   <Input type="number" disabled />
                 </Form.Item>
               </Col>
 
-              <Col lg={12} xs={24}>
+              <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label="Casino Share (%)"
+                  label={`${userTypeLabel} Casino Share (%)`}
                   name="supercasinocomm"
                   rules={[
                     { required: true, message: "Please enter casino share" },
                   ]}>
-                  <Input disabled={id === "1"} />
+                  <Input disabled={isClient} />
                 </Form.Item>
               </Col>
 
-              <Col lg={12} xs={24}>
+              <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label={`${updateNameDetails?.[id]} Casino Comm (%)`}
+                  label={`${parentLabel} Casino Comm (%)`}
                   name="super_casino_comm">
                   <Input type="number" disabled />
                 </Form.Item>
               </Col>
 
-              <Col lg={12} xs={24}>
+              <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label="Casino Comm (%)"
+                  label={`${userTypeLabel} Casino Comm (%)`}
                   name="sess_comm"
                   rules={[
                     { required: true, message: "Please enter casino comm" },
@@ -415,18 +415,61 @@ const UpdateSuper = () => {
                 </Form.Item>
               </Col>
             </Row>
+            </div>
 
-            {/* Submit */}
-            <Row className="super_agent update_agent">
-              <Col lg={12} xs={24}></Col>
-              <Col lg={12} xs={24}>
-                <Form.Item wrapperCol={{ offset: 19 }}>
-                  <Button type="primary" htmlType="submit">
-                    Submit
-                  </Button>
-                </Form.Item>
-              </Col>
-            </Row>
+            <div className="update_super_section">
+              <div className="update_super_section_title">
+                Matka Share and Commission
+              </div>
+              <Row className="super_agent update_agent update_super_grid" gutter={[18, 14]}>
+                <Col lg={12} md={12} xs={24}>
+                  <Form.Item
+                    label={`${parentLabel} Matka Share (%)`}
+                    name="super_matka_share">
+                    <Input type="number" disabled />
+                  </Form.Item>
+                </Col>
+
+                <Col lg={12} md={12} xs={24}>
+                  <Form.Item
+                    label={`${userTypeLabel} Matka Share (%)`}
+                    name="matka_share"
+                    rules={[
+                      { required: true, message: "Please enter matka share" },
+                    ]}>
+                  <Input disabled={isClient} />
+                  </Form.Item>
+                </Col>
+
+                <Col lg={12} md={12} xs={24}>
+                  <Form.Item
+                    label={`${parentLabel} Matka Comm (%)`}
+                    name="super_matka_comm">
+                    <Input type="number" disabled />
+                  </Form.Item>
+                </Col>
+
+                <Col lg={12} md={12} xs={24}>
+                  <Form.Item
+                    label={`${userTypeLabel} Matka Comm (%)`}
+                    name="matka_comm"
+                    rules={[
+                      {
+                        required: commType === "bbb",
+                        message: "Please enter matka commission",
+                      },
+                    ]}>
+                    <Input />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </div>
+
+            <div className="update_super_actions">
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </div>
           </Form>
         </div>
       </div>

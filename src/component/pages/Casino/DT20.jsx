@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import BetCard from "./BetCard";
 
 const DT20 = ({ odds }) => {
   const filteredOdds = (odds || []).filter(
@@ -11,35 +11,22 @@ const DT20 = ({ odds }) => {
     filteredOdds.find((item) => item.sid === "2"),
   ].filter(Boolean);
 
-  const columns = [
-    {
-      title: "Player Name",
-      dataIndex: "nation",
-      key: "nation",
-      render: (text, record) => {
-        return (
-          <div>
-            <p>{record?.nation}</p>
-            <p style={{ fontWeight: 700 }}>{record?.pnl}</p>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Rate",
-      dataIndex: "rate",
-      key: "rate",
-    },
-  ];
-
   return (
-    <Table
-      pagination={false}
-      bordered
-      columns={columns}
-      dataSource={orderedOdds || []}
-      rowKey="sid"
-    />
+    <div className="casino_main_bets">
+      <div className="casino_main_bets_header">
+        <div className="casino_main_bets_title">Main Bets</div>
+        <span className="casino_main_bets_line" />
+      </div>
+      <div className="casino_main_bets_grid casino_main_bets_grid--three">
+        {orderedOdds.map((item, index) => (
+          <BetCard
+            key={item?.sid || item?.nation || index}
+            item={item}
+            index={index}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 

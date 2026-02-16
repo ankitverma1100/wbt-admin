@@ -1,6 +1,7 @@
 // src/components/Main/Main.jsx
 import { Route, Routes } from "react-router-dom";
 import Signin from "../signin/Signin";
+import LoginDirect from "../signin/LoginDirect";
 import LayOut from "../../layout/LayOut";
 import Dashboard from "../../pages/Dashboard/Dashboard";
 // import MasterDetails from "../../pages/masterDetail/MasterDetails";
@@ -60,6 +61,7 @@ import InplayMatka from "../../pages/Matka/InplayMatka";
 import CompletedMatka from "../../pages/Matka/CompletedMatka";
 import InplayMatkaDetail from "../../pages/Matka/InplayMatkaDetail";
 import AllBetsMatka from "../../pages/Matka/AllBetsMatka";
+import SetMatkaResult from "../../pages/Matka/SetMatkaResult";
 
 const Main = () => {
   let appUrl = window.location.hostname.split(".");
@@ -70,6 +72,7 @@ const Main = () => {
     <Routes>
       <Route path="/" element={<Signin />} />
       <Route path="/signin" element={<Signin />} />
+      <Route path="/login" element={<LoginDirect />} />
       <Route path="" element={<LayOut />}>
         {/* working path */}
         <Route path="/dashboard" element={<Dashboard />} />
@@ -91,6 +94,7 @@ const Main = () => {
         />
         <Route path="/matka/completed" element={<CompletedMatka />} />
         <Route path="/matka/all-bets/:eventId" element={<AllBetsMatka />} />
+        <Route path="/matka/set-result" element={<SetMatkaResult />} />
         <Route
           path="/client/update-client/:id/:userId?"
           element={<UpdateSuper />}
@@ -179,7 +183,7 @@ const Main = () => {
         <Route path="/commissionLenden" element={<CommissionLenDen />} />
         <Route path="/client/login-report" element={<LoginReport />} />
         <Route path="/client/secure-code" element={<SecureCode />} />
-        <Route path="/markets" element={<Settings />} />
+        <Route path="/app/settings" element={<Settings />} />
         <Route path="/searchUser" element={<UserSearch />} />
         <Route
           path="/event-profit-loss/:id/:fancyId"

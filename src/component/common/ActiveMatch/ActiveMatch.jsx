@@ -32,43 +32,47 @@ const ActiveMatch = () => {
         ) : (
           <div className="table_section statement_tabs_data active_match_table">
             <table className="active_match_table_grid">
-              <tr>
-                <th>NAME</th>
-                <th>OPEN DATE</th>
-                <th>COMPETITION</th>
-                <th>INPLAY</th>
-                <th>DETAILS</th>
-              </tr>
-              {data?.data?.map((res, id) => {
-                return (
-                  <tr key={id} style={{ cursor: "pointer" }}>
-                    <td>{res?.matchName}</td>
-                    <td>
-                      {moment(res?.openDate).format("MM/DD/YYYY hh:mm A")}
-                    </td>
-                    <td>{res?.league}</td>
-                    <td>
-                      <span
-                        className={`inplay_badge ${
-                          res?.inPlay ? "inplay_active" : ""
-                        }`}>
-                        {res?.inPlay && <span className="inplay_dot" />}
-                        INPLAY
-                      </span>
-                    </td>
-                    <td>
-                      <Button
-                        type="primary"
-                        size="small"
-                        className="details_btn"
-                        icon={<EyeOutlined />}
-                        onClick={() => handleDetails(res?.matchId)}>
-                        View
-                      </Button>
-                    </td>
-                  </tr>
-                );
-              })}
+              <thead>
+                <tr>
+                  <th>NAME</th>
+                  <th>OPEN DATE</th>
+                  <th>COMPETITION</th>
+                  <th>INPLAY</th>
+                  <th>DETAILS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.data?.map((res, id) => {
+                  return (
+                    <tr key={id} style={{ cursor: "pointer" }}>
+                      <td>{res?.matchName}</td>
+                      <td>
+                        {moment(res?.openDate).format("MM/DD/YYYY hh:mm A")}
+                      </td>
+                      <td>{res?.league}</td>
+                      <td>
+                        <span
+                          className={`inplay_badge ${
+                            res?.inPlay ? "inplay_active" : ""
+                          }`}>
+                          {res?.inPlay && <span className="inplay_dot" />}
+                          INPLAY
+                        </span>
+                      </td>
+                      <td>
+                        <Button
+                          type="primary"
+                          size="small"
+                          className="details_btn"
+                          icon={<EyeOutlined />}
+                          onClick={() => handleDetails(res?.matchId)}>
+                          View
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             </table>
             {data?.data?.length == 0 ? (
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />

@@ -4,19 +4,14 @@ import { useParams } from "react-router-dom";
 
 const CasinoCommission = ({ createName, commiType }) => {
   const { id } = useParams();
+  const labelPrefix = `${(createName || "User").toUpperCase()} `;
   return (
     <>
-      <div>
-        <h2 className="match_share">
-          {createName} Casino Share And Commission
-        </h2>
-      </div>
-
-      <Row className="super_agent sub_super">
+      <Row className="super_agent sub_super" gutter={[18, 14]}>
         {id !== "2" && (
-          <Col span={12}>
+          <Col lg={12} md={12} xs={12}>
             <Form.Item
-              label="My Casino Share (%)"
+              label="MY CASINO SHARE (%)"
               name="cassinoShare"
               required={false}>
               <Input type="number" value={2} disabled />
@@ -24,9 +19,9 @@ const CasinoCommission = ({ createName, commiType }) => {
           </Col>
         )}
         {id !== "2" && (
-          <Col span={12}>
+          <Col lg={12} md={12} xs={12}>
             <Form.Item
-              label="Casino Share (%)"
+              label={`${labelPrefix}CASINO SHARE (%)`}
               name="cassino_Share"
               required
               rules={[
@@ -39,17 +34,17 @@ const CasinoCommission = ({ createName, commiType }) => {
             </Form.Item>
           </Col>
         )}
-        <Col span={12}>
+        <Col lg={12} md={12} xs={12}>
           <Form.Item
-            label="My Casino comm(%)"
+            label="MY CASINO COMM(%)"
             name="cassinoComm"
             required={false}>
             <Input type="number" value={2} disabled />
           </Form.Item>
         </Col>
-        <Col span={12}>
+        <Col lg={12} md={12} xs={12}>
           <Form.Item
-            label="Casino comm(%)"
+            label={`${labelPrefix}CASINO COMM(%)`}
             name="cassino_Comm"
             required
             rules={[

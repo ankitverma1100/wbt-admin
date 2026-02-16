@@ -1,0 +1,138 @@
+.completed-fancy-panel {
+  border: 1px solid #d9d1c7;
+  background: #fff;
+  margin: 12px;
+}
+
+.completed-fancy-header {
+  background: #1571cd;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.completed-fancy-back {
+  background: #fff;
+  color: #111;
+  border: 1px solid #d9d1c7;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.completed-fancy-filters {
+  padding: 12px 16px 0;
+}
+
+.completed-fancy-label {
+  display: block;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  color: #222;
+  font-size: 12px;
+}
+
+.completed-fancy-select {
+  width: 100%;
+}
+
+.completed-fancy-select.ant-select .ant-select-selector {
+  border-radius: 6px !important;
+}
+
+.completed-fancy-filters .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.completed-fancy-filters .ant-col {
+  margin-bottom: 16px;
+}
+
+.completed-fancy-table {
+  padding: 0 16px 16px;
+}
+
+.completed-fancy-ant .ant-table-thead > tr > th {
+  background: #1571cd !important;
+  color: #fff !important;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.completed-fancy-ant .ant-table-tbody > tr > td {
+  font-weight: 600;
+}
+
+.completed-fancy-ant .ant-table-tbody .ant-table-cell {
+  padding: 8px 12px;
+}
+
+.completed-fancy-ant .ant-table-tbody td:last-child {
+  text-transform: uppercase;
+}
+
+.completed-fancy-ant .ant-table-tbody td:last-child .ant-badge-status-text {
+  color: #2e7d32;
+}
+
+.completed-fancy-ant .ant-table-tbody .status-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.completed-fancy-ant .ant-table-tbody .status-pill.is-win {
+  color: #2e7d32;
+  background: #e9f6ec;
+  border: 1px solid #7bc96f;
+}
+
+.completed-fancy-ant .ant-table-tbody .status-pill.is-loss {
+  color: #d32f2f;
+  background: #fdecec;
+  border: 1px solid #f5a3a3;
+}
+
+.completed-fancy-ant .ant-table-tbody .bet-type-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: none;
+  color: #333;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.completed-fancy-ant .completed-row-back > td {
+  background: #f2fbf2 !important;
+}
+
+.completed-fancy-ant .completed-row-lay > td {
+  background: #fff4f4 !important;
+}
+
+@media (max-width: 1024px) {
+  .completed-fancy-panel {
+    margin: 0;
+  }
+
+  .completed-fancy-filters {
+    padding: 12px;
+  }
+
+  .completed-fancy-table {
+    padding: 0 12px 12px;
+  }
+}

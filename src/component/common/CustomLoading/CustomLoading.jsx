@@ -1,4 +1,6 @@
 
+import "./CustomLoading.scss";
+
 const CustomLoading = () => {
   return (
     <>

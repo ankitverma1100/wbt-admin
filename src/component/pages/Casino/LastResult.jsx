@@ -9,20 +9,42 @@ const LastResult = () => {
   const { data } = useCasinoResultQuery(casinoName);
 
   return (
-    <div className="ant-row gx-mb-3 gx-pt-4">
-      <div style={{ display: "inline-block" }}>Last 10 winners:</div>
-      {data?.map((items) => {
-        return (
-          <Tag
-            key={items?.mid}
-            style={{
-              borderRadius: 0,
-            }}
-            color="rgb(16, 142, 233)">
-            {LetterAndColorById[id]?.[items.result]?.label}
-          </Tag>
-        );
-      })}
+    <div className="casino_last_winners_section">
+      <div className="casino_main_bets_header">
+        <div className="casino_main_bets_title">LAST WINNERS</div>
+        <span className="casino_main_bets_line" />
+      </div>
+      <div className="ant-row casino_last_winners">
+        {data?.map((items) => {
+          const meta = LetterAndColorById[id]?.[items.result];
+          const label = meta?.label?.toUpperCase();
+          return (
+            <Tag
+              key={items?.mid}
+              className={
+                label === "A"
+                  ? "casino_winner casino_winner-a"
+                  : label === "B"
+                  ? "casino_winner casino_winner-b"
+                  : label === "C"
+                  ? "casino_winner casino_winner-c"
+                  : label === "D"
+                  ? "casino_winner casino_winner-d"
+                  : label === "T"
+                  ? "casino_winner casino_winner-t"
+                  : "casino_winner"
+              }
+              style={{
+                border: `1px solid ${meta?.borderColor || meta?.color || "#1677ff"}`,
+                color: meta?.color || "#1677ff",
+                background: meta?.background || "#fff",
+              }}
+            >
+              {label}
+            </Tag>
+          );
+        })}
+      </div>
     </div>
   );
 };

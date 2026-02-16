@@ -39,22 +39,14 @@ const AccountOperations = () => {
       title: "Date",
       dataIndex: "date",
       key: "date",
+      render: (value) =>
+        value ? moment(value).format("DD-MMM-YYYY hh:mm A").toUpperCase() : "",
     },
     {
       title: "Operation",
       dataIndex: "operation",
       key: "operation",
-    },
-    {
-      title: "Done By",
-      dataIndex: "doneBy",
-      key: "doneBy",
-      render: (text) => {
-        const output = text.replace(/\((.*?)\)/g, (match, code) => {
-          return `(${convertCode(code)})`;
-        });
-        return <span>{output}</span>;
-      },
+      render: (text) => <span className="operation_badge">{text}</span>,
     },
     {
       title: "Description",
@@ -64,7 +56,7 @@ const AccountOperations = () => {
         const output = text.replace(/\((.*?)\)/g, (match, code) => {
           return `(${convertCode(code)})`;
         });
-        return <span>{output}</span>;
+        return <span>{output.toUpperCase()}</span>;
       },
     },
   ];
@@ -76,7 +68,7 @@ const AccountOperations = () => {
           onClick={() => setIsModalOpen(false)}
           className="report_overlay"></div>
       )}
-      <div className="match_slip account_match_slip">
+      <div className="match_slip">
         <div>
           <Card
             style={{
@@ -84,24 +76,8 @@ const AccountOperations = () => {
               width: "100%",
             }}
             className="sport_detail acc_name"
-            title={`List Of All Transactions (${data?.data?.length || 0})`}
+            title="Account Operation"
             extra={<button onClick={handleBackClick}>Back</button>}>
-            <div className="">
-              <Row>
-                <Col xs={24} md={24} lg={8} xl={8}>
-                  <RangePicker
-                    style={{
-                      marginBottom: "10px",
-                      width: "100%",
-                      borderRadius: "20px",
-                    }}
-                    className="acc_datepicker"
-                    defaultValue={[dayjs(timeBefore), dayjs(time)]}
-                    onChange={onChange}
-                  />
-                </Col>
-              </Row>
-            </div>
 
             <div className="table_section statement_tabs_data">
               <div className="table_section">

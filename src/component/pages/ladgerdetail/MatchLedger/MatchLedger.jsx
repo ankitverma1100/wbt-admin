@@ -88,8 +88,16 @@ const MatchLedger = () => {
     { refetchOnMountOrArgChange: true }
   );
 
-  const totalCreadit =
-    ledgerData?.data?.reduce((acc, item) => acc + item.credit, 0) || 0;
+  const totals =
+    ledgerData?.data?.reduce(
+      (acc, item) => {
+        acc.credit += item?.credit || 0;
+        acc.debit += item?.debit || 0;
+        return acc;
+      },
+      { credit: 0, debit: 0 }
+    ) || { credit: 0, debit: 0 };
+  const totalNet = totals.credit + totals.debit;
   const paginatedData = ledgerData?.data?.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
@@ -106,7 +114,7 @@ const MatchLedger = () => {
         title="MATCH LEDGER"
         extra={<button onClick={() => nav(-1)}>Back</button>}>
         <Row className="" gutter={[16, 16]} style={{ padding: "12px 4px" }}>
-          <Col lg={6} xs={24} className="match_ladger profit_loss_ledger">
+          <Col sm={4} lg={6} xs={24} className="match_ladger profit_loss_ledger">
             <DatePicker
               style={{
                 marginBottom: "10px",
@@ -117,7 +125,7 @@ const MatchLedger = () => {
               placeholder="Start date"
             />
           </Col>
-          <Col lg={6} xs={24} className="match_ladger profit_loss_ledger">
+          <Col sm={4}  lg={6} xs={24} className="match_ladger profit_loss_ledger">
             <DatePicker
               style={{
                 marginBottom: "10px",
@@ -128,37 +136,7 @@ const MatchLedger = () => {
               placeholder="End date"
             />
           </Col>
-          <Col lg={6} xs={24} className="match_ladger profit_loss_ledger">
-            <Select
-              style={{
-                marginBottom: "10px",
-                width: "100%",
-                borderRadius: "20px",
-              }}
-              placeholder="Select Game Type"
-              options={[
-                {
-                  label: "All",
-                  value: "All",
-                },
-                {
-                  label: "Sport",
-                  value: "sport",
-                },
-                {
-                  label: "Int Casino",
-                  value: "intcasino",
-                },
-                {
-                  label: "Diamond Casino",
-                  value: "casino",
-                },
-              ]}
-              showSearch
-              allowClear
-            />
-          </Col>
-          <Col lg={6} xs={24} className="match_ladger profit_loss_ledger">
+          <Col sm={4}  lg={6} xs={24} className="match_ladger profit_loss_ledger">
             <ActionButton
               style={{
                 marginBottom: "10px",
@@ -175,8 +153,8 @@ const MatchLedger = () => {
               <p style={{ fontSize: "20px" }}>
                 Total:{" "}
                 <span
-                  className={totalCreadit > 0 ? "text_success" : "text_danger"}>
-                  {totalCreadit?.toFixed(2)}
+                  className={totalNet > 0 ? "text_success" : "text_danger"}>
+                  {totalNet?.toFixed(2)}
                 </span>
               </p>
             </div>

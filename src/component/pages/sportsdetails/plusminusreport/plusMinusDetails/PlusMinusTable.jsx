@@ -8,6 +8,7 @@ import LedgerdataSubAdmin from "./LedgerData/LedgerdataSubAdmin";
 import LedgerdataSuperMaster from "./LedgerData/LedgerdataSuperMaster";
 import LedgerdataMaster from "./LedgerData/LedgerdataMaster";
 import LedgerdataAgent from "./LedgerData/LedgerdataAgent";
+import { useEffect } from "react";
 
 const PlusMinusTable = () => {
   const { state } = useLocation();
@@ -22,8 +23,28 @@ const PlusMinusTable = () => {
 
   const userType = localStorage.getItem("userType");
 
+  useEffect(() => {
+    const tables = document.querySelectorAll(".plus-table");
+    tables.forEach((table) => {
+      table.querySelectorAll("td").forEach((cell) => {
+        cell.classList.remove("plus-num", "plus-num-neg");
+        const text = cell.textContent?.trim();
+        if (!text) return;
+        const normalized = text.replace(/,/g, "");
+        const value = Number(normalized);
+        if (Number.isNaN(value)) return;
+        cell.classList.add("plus-num");
+        if (value < 0) {
+          cell.classList.add("plus-num-neg");
+        }
+      });
+    });
+  }, [ledgerData, userType]);
+
   return (
-    <div style={{ position: "relative" }}>
+    <div
+      className={`plus-minus-table plus-user-${userType || "unknown"}`}
+      style={{ position: "relative" }}>
       <MapInteractionCSS
         defaultValue={{
           scale: 1,

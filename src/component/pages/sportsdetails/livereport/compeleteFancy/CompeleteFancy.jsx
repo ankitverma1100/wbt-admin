@@ -1,8 +1,12 @@
-import { Card, Col, Row, Select, Table } from "antd";
+import { Col, Row, Select, Table } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useGetCompletedFancyMutation } from "../../../../../store/service/SportDetailServices";
+import {
+  useGetCompletedFancyMutation,
+  useGetSessionHavingBetQuery,
+} from "../../../../../store/service/SportDetailServices";
 import { useLazyFilterbyClientQuery } from "../../../../../store/service/supermasteAccountStatementServices";
+import "./CompeleteFancy.scss";
 
 const CompeleteFancy = () => {
   const [clientId, setClientId] = useState("");
@@ -15,124 +19,129 @@ const CompeleteFancy = () => {
 
   const columns = [
     {
-      title: "username",
-      dataIndex: "userId",
-      key: "userId",
-    },
-    {
-      title: "Date",
+      title: "Place Time",
       dataIndex: "date",
       key: "date",
+      render: (_, record) => record?.date || record?.time || "-",
     },
     {
-      title: "F. Name",
+      title: "Runner Name",
       dataIndex: "fancyName",
       key: "fancyName",
+      render: (_, record) => record?.fancyName || record?.selectionName || "-",
     },
     {
-      title: "Rate",
-      dataIndex: "odds",
-      key: "odds",
+      title: "Username",
+      dataIndex: "username",
+      key: "userId",
+      render: (_, record) =>
+        record?.username
+          ? `${record.username} (${record.userId})`
+          : record?.userId || "-",
     },
     {
-      title: "Value",
-      dataIndex: "priceValue",
-      key: "priceValue",
-    },
-    {
-      title: "Back/Lay",
+      title: "Bet Type",
       dataIndex: "isBack",
       key: "isBack",
-      render: (text) => <span>{text ? "Yes" : "No"}</span>,
+      render: (text) => (
+        <span className="bet-type-pill">{text ? "YES" : "NO"}</span>
+      ),
     },
     {
-      title: "Result",
-      dataIndex: "result",
-      key: "result",
+      title: "Price",
+      dataIndex: "odds",
+      key: "odds",
+      render: (text) => text ?? "-",
     },
     {
-      title: "Creator",
-      dataIndex: "creator",
-      key: "creator",
-    },
-    {
-      title: "Stake",
+      title: "Amount",
       dataIndex: "stake",
       key: "stake",
+      render: (text) => text ?? "-",
     },
     {
-      title: "PNL",
-      dataIndex: "pnl",
-      key: "pnl",
-      render: (text) => <span>{text?.toFixed(2)}</span>,
+      title: "Status",
+      dataIndex: "result",
+      key: "result",
+      render: (_, record) => {
+        const isWin = (record?.netPnl ?? record?.pnl ?? 0) >= 0;
+        return (
+          <span className={isWin ? "status-pill is-win" : "status-pill is-loss"}>
+            {isWin ? "Won" : "Loss"}
+          </span>
+        );
+      },
     },
   ];
 
   const [userTrigger, { data: userData }] = useLazyFilterbyClientQuery();
+  const { data: sessionBets } = useGetSessionHavingBetQuery({
+    matchCompleted: true,
+    matchId: id ?? "",
+  });
   const [trigger, { data, isLoading, isFetching }] =
     useGetCompletedFancyMutation();
 
-  // Get unique fancies from the data
-  const uniqueFancies = data?.data?.reduce((acc, item) => {
-    const existing = acc.find(fancy => fancy.fancyId === item.fancyId);
-    if (!existing) {
-      acc.push({
-        fancyId: item.fancyId,
-        fancyName: item.fancyName
-      });
-    }
-    return acc;
-  }, []) || [];
-
-  // Filter data based on selected fancy
-  const filteredData = selectedFancyId 
-    ? data?.data?.filter(item => item.fancyId === selectedFancyId) || []
-    : data?.data || [];
-
   useEffect(() => {
-    trigger({ matchId: id, userId: clientId });
-  }, [id, clientId]);
+    if (!selectedFancyId) return;
+    trigger({ matchId: id, userId: clientId, fancyId: selectedFancyId });
+  }, [id, clientId, selectedFancyId]);
 
   useEffect(() => {
     userTrigger({ userId: "", userType: 1 });
   }, []);
 
-  const totalPnl = filteredData?.reduce((acc, item) => acc + item.pnl, 0) || 0;
+  const filteredData =
+    data?.data?.filter((item) => {
+      if (selectedFancyId && item.fancyId !== selectedFancyId) return false;
+      if (clientId && item.userId !== clientId) return false;
+      return true;
+    }) || [];
 
   return (
     <>
       <div>
-        <Card
-          style={{
-            margin: "12px",
-            width: "100%",
-          }}
-          className="sport_detail completed_fancy"
-          title="Fancy Profit and Loss"
-          extra={
-            <div>
-              {/* <button onClick={handleRefresh}>Refresh</button> */}
-              {pathname?.includes("completed-fancy-slips") && (
-                <button style={{ marginLeft: "10px" }} onClick={() => nav(-1)}>
-                  Back
-                </button>
-              )}
-            </div>
-          }>
-          <Row
-            gutter={[16, 16]}
-            justify="center"
-            className="fancy_pl"
-            align="middle">
-            <Col xs={24} md={24} lg={6} xl={6}>
+        <div className="completed-fancy-panel">
+          <div className="completed-fancy-header">
+            <span>Completed Bets</span>
+            {pathname?.includes("completed-fancy-slips") && (
+              <button
+                type="button"
+                className="completed-fancy-back"
+                onClick={() => nav(-1)}>
+                Back
+              </button>
+            )}
+          </div>
+          <Row gutter={[16, 16]} className="completed-fancy-filters">
+            <Col xs={24} md={24} lg={12} xl={12}>
+              <label className="completed-fancy-label">Session</label>
               <Select
-                placeholder="Select User"
+                placeholder="Select Session"
+                value={selectedFancyId}
+                onSelect={(value) => setSelectedFancyId(value)}
+                allowClear
+                onClear={() => setSelectedFancyId("")}
+                options={(sessionBets?.data || []).map((item) => ({
+                  value: item.fancyId,
+                  label: item.fancyName,
+                }))}
+                showSearch
+                className="completed-fancy-select"
+              />
+            </Col>
+            <Col xs={24} md={24} lg={12} xl={12}>
+              <label className="completed-fancy-label">Client</label>
+              <Select
+                placeholder="Select Client"
                 showSearch
                 onSearch={(value) => {
                   if (value) userTrigger({ userId: value, userType: 1 });
                 }}
                 value={clientId}
                 onSelect={(value) => setClientId(value)}
+                allowClear
+                className="completed-fancy-select"
                 options={[
                   {
                     label: "All Users",
@@ -145,53 +154,23 @@ const CompeleteFancy = () => {
                 ]}
               />
             </Col>
-            <Col xs={24} md={24} lg={6} xl={6}>
-              <Select
-                placeholder="Select Fancy"
-                value={selectedFancyId}
-                onSelect={(value) => setSelectedFancyId(value)}
-                allowClear
-                onClear={() => setSelectedFancyId("")}
-                options={[
-                  {
-                    value: "",
-                    label: "All Fancy",
-                  },
-                  ...uniqueFancies.map((fancy) => ({
-                    value: fancy.fancyId,
-                    label: fancy.fancyName,
-                  })),
-                ]}
-                showSearch
-              />
-            </Col>
-            <Col xs={24} md={24} lg={6} xl={6}>
-              <p className="total_pl_fancy">
-                Total P/L:{" "}
-                <span style={{ color: totalPnl > 0 ? "green" : "red" }}>
-                  {totalPnl?.toFixed(2)}
-                </span>
-              </p>
-            </Col>
           </Row>
 
-          <div className="table_section statement_tabs_data">
-            <div className="table_section">
-              <Table
-                className="live_table agent_master1"
-                bordered
-                columns={columns}
-                dataSource={filteredData}
-                loading={isLoading || isFetching}
-                rowClassName={(record) => {
-                  if (record.pnl >= 0) return "gx-bg-green-0";
-                  if (record.pnl < 0) return "gx-bg-red";
-                  return "";
-                }}
-              />
-            </div>
+          <div className="completed-fancy-table">
+            <Table
+              className="completed-fancy-ant"
+              bordered
+              columns={columns}
+              dataSource={filteredData}
+              loading={isLoading || isFetching}
+              rowKey={(record, index) => `${record?.fancyId}-${index}`}
+              rowClassName={(record) =>
+                record?.isBack ? "completed-row-back" : "completed-row-lay"
+              }
+              pagination={false}
+            />
           </div>
-        </Card>
+        </div>
       </div>
     </>
   );

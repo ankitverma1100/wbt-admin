@@ -4,20 +4,21 @@ import { useParams } from "react-router-dom";
 
 const MatchCommission = ({ commissionType, commiType, data, createName }) => {
   const { id } = useParams();
+  const labelPrefix = `${(createName || "User").toUpperCase()} `;
 
   return (
     <>
       <div>
-        <h2 className="match_share">{createName} Match Share and Commission</h2>
+        <h2 className="match_share">Match and Share info</h2>
       </div>
-      <Row className="super_agent sub_super">
+      <Row className="super_agent sub_super" gutter={[18, 14]}>
         {id === "2" ? (
           <></>
         ) : (
           <>
-            <Col lg={12} xs={24}>
+            <Col lg={12} md={12} xs={12}>
               <Form.Item
-                label="My Match Share"
+                label="MY MATCH SHARE"
                 name="MyMatchShare"
                 required={false}>
                 <InputNumber
@@ -29,9 +30,9 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
                 />
               </Form.Item>
             </Col>
-            <Col lg={12} xs={24}>
+            <Col lg={12} md={12} xs={12}>
               <Form.Item
-                label="Match Share(%)"
+                label={`${labelPrefix}MATCH SHARE(%)`}
                 name="matchShare"
                 rules={[
                   {
@@ -73,16 +74,19 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
           </>
         )}
 
-        <Col lg={12} xs={24}>
-          <Form.Item label="My Comm type" name="MyCommtype" required={false}>
+        <Col lg={12} md={12} xs={12}>
+          <Form.Item
+            label="MY COMM TYPE"
+            name="MyCommtype"
+            required={false}>
             <Input type="text" disabled />
           </Form.Item>
         </Col>
 
-        <Col lg={12} xs={24}>
+        <Col lg={12} md={12} xs={12}>
           <Form.Item
             name="Commtype"
-            label="Comm type"
+            label={`${labelPrefix}COMM TYPE`}
             required
             rules={[
               {
@@ -92,17 +96,20 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
             ]}>
             <Select
               onChange={commissionType}
-              defaultValue="Commision Type"
-              allowClear>
-              <Option value="nocomm">No Comm</Option>
-              <Option value="bbb">Bet by bet</Option>
-            </Select>
+              allowClear
+              options={[
+                { value: "nocomm", label: "No Comm" },
+                { value: "bbb", label: "Bet by bet" },
+              ]}
+            />
           </Form.Item>
         </Col>
         {commiType === "bbb" && (
           <>
-            <Col lg={12} xs={24}>
-              <Form.Item name="My_Match_comm" label="My Match comm(%)">
+            <Col lg={12} md={12} xs={12}>
+              <Form.Item
+                name="My_Match_comm"
+                label="MY MATCH COMM(%)">
                 <InputNumber
                   className="number_field"
                   min={0}
@@ -111,11 +118,11 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
                 />
               </Form.Item>
             </Col>
-            <Col lg={12} xs={24}>
+            <Col lg={12} md={12} xs={12}>
               <Form.Item
                 name="Match_comm"
                 required
-                label="Match comm(%)"
+                label={`${labelPrefix}MATCH COMM(%)`}
                 rules={[
                   {
                     required: true,
@@ -126,8 +133,10 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
               </Form.Item>
             </Col>
 
-            <Col lg={12} xs={24}>
-              <Form.Item name="My_sess_comm" label="My Sess comm(%)">
+            <Col lg={12} md={12} xs={12}>
+              <Form.Item
+                name="My_sess_comm"
+                label="MY SESS COMM(%)">
                 <InputNumber
                   className="number_field"
                   min={0}
@@ -136,11 +145,11 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
                 />
               </Form.Item>
             </Col>
-            <Col lg={12} xs={24}>
+            <Col lg={12} md={12} xs={12}>
               <Form.Item
                 name="sess_comm"
                 required
-                label="Sess Comm(%)"
+                label={`${labelPrefix}SESS COMM(%)`}
                 rules={[
                   {
                     required: true,
@@ -164,7 +173,7 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
           <></>
         ) : (
           <>
-            <Col lg={12} xs={24}>
+            <Col lg={12} xs={12}>
               <Form.Item
                 label="My Casino Share(%)"
                 name="MyCasinoShare"
@@ -177,7 +186,7 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
                 />
               </Form.Item>
             </Col>
-            <Col lg={12} xs={24}>
+            <Col lg={12} xs={12}>
               <Form.Item
                 label="Casino Share(%)"
                 name="casinoShare"

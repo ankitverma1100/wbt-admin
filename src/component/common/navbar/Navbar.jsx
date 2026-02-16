@@ -14,6 +14,7 @@ import { imgUrl } from "../../../store/constant";
 
 const Navbar = ({ action, collapsed, onToggleCollapse }) => {
   const userData = localStorage.getItem("username");
+  const userId = localStorage.getItem("userId");
   const userType = localStorage.getItem("userType");
 
   const [trigger] = useLogoutMutation();
@@ -101,6 +102,8 @@ const Navbar = ({ action, collapsed, onToggleCollapse }) => {
               hostName.includes("mumbaiexchange9") ? "/img/mum-img.png" : imgUrl
             }
             height={40}
+            style={{ cursor: "pointer" }}
+            onClick={() => nav("/dashboard")}
           />
         </div>
         <div className="nav_drop">
@@ -118,8 +121,8 @@ const Navbar = ({ action, collapsed, onToggleCollapse }) => {
                 className="user_deatils"
                 style={{ cursor: "pointer", marginRight: "42px" }}
                 onClick={(e) => e.preventDefault()}>
-                <span style={{ fontSize: "20px" }}>
-                  {userData}{" "}
+                <span className="user_deatils_text">
+                  {userId ? `${userData} (${userId})` : userData}{" "}
                   <DownOutlined style={{ fontSize: "14px" }} />
                 </span>
               </span>

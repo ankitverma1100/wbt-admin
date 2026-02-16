@@ -20,35 +20,35 @@ const Settings = () => {
     <Card className="setting_main">
       <div>
         <Row gutter={[8]}>
-          <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <div
               className="setting_data"
               onClick={() => navigate("/account-statement")}>
               <span>STATEMENT</span>
             </div>
           </Col>
-          <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <div
               className="setting_data"
               onClick={() => navigate("/account-operation")}>
               <span>A/C OPERATIONS</span>
             </div>
           </Col>
-          <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <div
               className="setting_data"
               onClick={() => navigate("/Events/matchledger")}>
               <span>PROFIT & LOSS</span>
             </div>
           </Col>
-          <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <div
               className="setting_data"
               onClick={() => navigate("/casinoprofitandloss")}>
               <span>CASINO PROFIT & LOSS</span>
             </div>
           </Col>
-          <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+          <Col xs={24} sm={12} md={6} lg={6} xl={6}>
             <div
               className="setting_data"
               onClick={() => navigate("/searchUser")}>

@@ -113,7 +113,7 @@ const SuperAgentLedger = () => {
       align: "center",
       render: (text, record) => (
         <div>
-          {itemName !== "Clear" && !isNsg && (
+          {/* {itemName !== "Clear" && !isNsg && (
             <Button
               style={{
                 padding: "3px 5px",
@@ -125,7 +125,7 @@ const SuperAgentLedger = () => {
               onClick={() => handleSettelemtData(record, itemName)}>
               Settlement
             </Button>
-          )}
+          )} */}
           <span
             style={{ cursor: "pointer" }}
             onClick={() =>
@@ -155,7 +155,7 @@ const SuperAgentLedger = () => {
         extra={<button onClick={handleBackbtn}>Back</button>}>
         <Row className="main_super_super_ledger" gutter={[24]} style={{ padding: "16px 0px" }}>
           {["Lena", "Dena", "Clear"].map((itemName, index) => (
-            <Col key={index} xs={24} lg={8} md={24}>
+            <Col key={index} xs={24} md={8} lg={8}>
               <div
                 className={`super_ledger item${index + 1}`}
                 style={{ width: "100%" }}>

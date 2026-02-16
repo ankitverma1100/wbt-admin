@@ -114,6 +114,13 @@ export const sportDetailsApi = createApi({
         };
       },
     }),
+    getChildListForBets: build.query({
+      query: (body) => ({
+        url: `/urbbet/get-child-list-for-bets`,
+        method: "POST",
+        body,
+      }),
+    }),
     getFancyBook: build.mutation({
       query: (body) => {
         return {
@@ -302,6 +309,15 @@ export const sportDetailsApi = createApi({
         };
       },
     }),
+    getBetlistUrbFilter: build.mutation({
+      query: (body) => {
+        return {
+          url: `/urbbet/get-betlist-urb-filter`,
+          method: "POST",
+          body,
+        };
+      },
+    }),
     getAllSessionBet: build.query({
       query: (body) => {
         return {
@@ -419,6 +435,7 @@ export const {
   useGetAgentPlusMinusQuery,
   useLazyGetUserLabilatyQuery,
   useGetFancyBetVMutation,
+  useGetBetlistUrbFilterMutation,
   useGetAllSessionBetQuery,
   useGetCompletedPlusMinusQuery,
   useGetDeletedTranstionMutation,
@@ -429,5 +446,6 @@ export const {
   useGetCommissionResetMutation,
   useGetQueryMatchBetsQuery,
   useGetSessionQureyBetQuery,
-  useGetActiveSessionDataQuery
+  useGetActiveSessionDataQuery,
+  useGetChildListForBetsQuery
 } = sportDetailsApi;

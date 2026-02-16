@@ -38,7 +38,8 @@
 .logo_icon {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-left: 16px;
   left: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 2;
@@ -48,7 +49,9 @@
   .bm_side_logo {
     cursor: pointer;
     img {
-      width: 112px;
+      width: 150px;
+      height: 60px;
+      object-fit: contain;
       margin-top: 6px;
       margin-left: -12px;
     }
@@ -61,6 +64,8 @@
     height: 63px;
     img {
       width: 100%;
+      height: auto;
+      object-fit: contain;
       margin-top: 12px;
       margin-left: 4px;
     }
@@ -346,6 +351,13 @@ p.ant-dropdown-trigger.user_deatils.droup_nav {
   p {
     margin: 2px;
   }
+}
+
+.user_deatils_text {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
 }
 
 @media screen and (max-width: 1024px) {

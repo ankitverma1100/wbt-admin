@@ -187,7 +187,7 @@ const AddSuperLimites = () => {
                         </Form>
                       </Menu>
                     )}
-                    <p className="search_code">
+                    <div className="search_code">
                       <Space>
                         <SearchOutlined
                           onClick={() =>
@@ -197,7 +197,7 @@ const AddSuperLimites = () => {
                           }
                         />
                       </Space>
-                    </p>
+                    </div>
                   </div>
                 </th>
 
@@ -243,7 +243,7 @@ const AddSuperLimites = () => {
                         </Form>
                       </Menu>
                     )}
-                    <p className="search_code">
+                    <div className="search_code">
                       <Space>
                         <SearchOutlined
                           onClick={() =>
@@ -253,7 +253,7 @@ const AddSuperLimites = () => {
                           }
                         />
                       </Space>
-                    </p>
+                    </div>
                   </div>
                 </th>
 
@@ -278,9 +278,10 @@ const AddSuperLimites = () => {
                             handleInputChange(user.userId, e.target.value)
                           }
                           style={{
-                            width: "110px",
+                            width: "100%",
                             padding: "6px",
                             background: "#fff",
+                            borderRadius: "8px",
                           }}
                         />
                       </Form.Item>
@@ -290,12 +291,12 @@ const AddSuperLimites = () => {
                         <Button
                           className="add"
                           onClick={() => handleLimitAction(user, true)}>
-                          Add
+                          <span className="action_icon">+</span> Add
                         </Button>
                         <Button
                           className="minus"
                           onClick={() => handleLimitAction(user, false)}>
-                          Minus
+                          <span className="action_icon">−</span> Minus
                         </Button>
                       </div>
                     </td>

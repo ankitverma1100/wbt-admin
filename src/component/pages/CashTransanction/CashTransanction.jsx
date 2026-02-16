@@ -1,52 +1,47 @@
 import { BiUserCircle } from "react-icons/bi";
 import { Card, Col, Modal, Row } from "antd";
 import { Link } from "react-router-dom";
+import ModalFooter from "../Dashboard/ModalFooter";
 
 const data = [
   {
     image: <BiUserCircle />,
-    head: "Admin",
-    name: "Dr/Cr Entry Admin",
+    head: "ADMIN",
     path: "/client/txn-super/Admin/6",
     size: "14",
     userType: 6,
   },
   {
     image: <BiUserCircle />,
-    head: "Mini Master",
-    name: "Dr/Cr Entry Super",
+    head: "MINI MASTER",
     path: "/client/txn-super/madmin/5",
     size: "14",
     userType: 5,
   },
   {
     image: <BiUserCircle />,
-    head: "Master",
-    name: "Dr/Cr Entry Super",
+    head: "MASTER MASTER",
     path: "/client/txn-super/Master/4",
     size: "14",
     userType: 4,
   },
   {
     image: <BiUserCircle />,
-    head: "Superagent",
-    name: "Dr/Cr Entry Master",
+    head: "SUPER MASTER",
     path: "/client/txn-super/Super/3",
     size: "14",
     userType: 3,
   },
   {
     image: <BiUserCircle />,
-    head: "Agent",
-    name: "Dr/Cr Entry Agent",
+    head: "AGENT MASTER",
     path: "/client/txn-super/Agent/2",
     size: "14",
     userType: 2,
   },
   {
     image: <BiUserCircle />,
-    head: "Client",
-    name: "Dr/Cr Entry Client",
+    head: "CLIENT MASTER",
     path: "/client/txn-super/Client/1",
     size: "14",
     userType: 1,
@@ -66,14 +61,9 @@ const CashTransanction = ({ setOpenModals, openModal }) => {
   return (
     <>
       <Modal
+        title="CASH TRANSCTIONS"
         onCancel={() => setOpenModals(!openModal)}
-        footer={
-          <button
-            onClick={() => setOpenModals(!openModal)}
-            className="ant-btn gx-bg-grey ant-modal-footer ant-btn-default">
-            Close
-          </button>
-        }
+        footer={<ModalFooter onCancel={() => setOpenModals(!openModal)} />}
         className="antd_dsh_madals"
         closable={{ "aria-label": "Custom Close Button" }}
         open={openModal}>
@@ -82,7 +72,7 @@ const CashTransanction = ({ setOpenModals, openModal }) => {
             .filter((res) => userTypeMatch[uType]?.includes(res?.userType))
             ?.map((items, id) => {
               return (
-                <Col md={12} xs={24} key={id}>
+                <Col md={12} xs={12} key={id}>
                   <Card bordered={false}>
                     <Link to={items?.path}>
                       <div className="ant-card ant-card-bordered gx-card-widget gx-card-full gx-bg-transparent">

@@ -1,25 +1,21 @@
 import { Card, Col, Modal, Row } from "antd";
 import { HiUser } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import ModalFooter from "./ModalFooter";
 
 const SettingModals = ({ setOpenModals, openModal }) => {
   const userId = localStorage.getItem("userId");
   return (
     <>
       <Modal
+        title="Settings"
         onCancel={() => setOpenModals(!openModal)}
-        footer={
-          <button
-            onClick={() => setOpenModals(!openModal)}
-            className="ant-btn gx-bg-grey ant-modal-footer ant-btn-default">
-            Close
-          </button>
-        }
+        footer={<ModalFooter onCancel={() => setOpenModals(!openModal)} />}
         className="antd_dsh_madals"
         closable={{ "aria-label": "Custom Close Button" }}
         open={openModal}>
         <Row className="modal_opne_dash">
-          <Col md={12} xs={24}>
+          <Col md={12} xs={12}>
             <Card bordered={false}>
               <Link to="/account-statement">
                 <div className="ant-card ant-card-bordered gx-card-widget gx-card-full gx-bg-transparent">
@@ -46,7 +42,7 @@ const SettingModals = ({ setOpenModals, openModal }) => {
               </Link>
             </Card>
           </Col>
-          <Col md={12} xs={24}>
+          <Col md={12} xs={12}>
             <Card bordered={false}>
               {/* /client/account-operations/${dataVal} */}
               <Link to={`/account-operation/${userId}`}>
@@ -75,7 +71,7 @@ const SettingModals = ({ setOpenModals, openModal }) => {
               </Link>
             </Card>
           </Col>
-          <Col md={12} xs={24}>
+          <Col md={12} xs={12}>
             <Card bordered={false}>
               <Link to="/Events/matchledger">
                 <div className="ant-card ant-card-bordered gx-card-widget gx-card-full gx-bg-transparent">
@@ -103,7 +99,7 @@ const SettingModals = ({ setOpenModals, openModal }) => {
               </Link>
             </Card>
           </Col>
-          <Col md={12} xs={24}>
+          <Col md={12} xs={12}>
             <Card bordered={false}>
               <Link to="/casinoprofitandloss">
                 <div className="ant-card ant-card-bordered gx-card-widget gx-card-full gx-bg-transparent">

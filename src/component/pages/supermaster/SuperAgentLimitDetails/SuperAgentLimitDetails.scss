@@ -30,6 +30,15 @@
       margin: 11px;
     }
   }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
   .ant-input {
     color: #545454;
     background-color: #fff;
@@ -47,33 +56,38 @@
       td {
         text-transform: capitalize;
         .minus_btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          white-space: nowrap;
+
+          .action_icon {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1;
+            margin-right: 6px;
+          }
+
           .add {
             color: #fff;
             background-color: #038fde;
             border-color: #038fde;
-            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
-            color: #ffffff !important;
-            background-color: #038fde !important;
-            border-color: #038fde !important;
-            border-radius: 2px;
-            margin-right: 15px;
+            box-shadow: none;
+            border-radius: 6px;
             outline: unset;
-            line-height: 2px;
-            padding: 18px 14px;
+            line-height: 1;
+            padding: 8px 14px;
             font-weight: 400;
           }
           .minus {
             color: #fff;
-            background-color: #038fde;
-            border-color: #038fde;
-            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
-            color: #ffffff !important;
-            background-color: var(--bg-color) !important;
-            border: 1px solid #ff4d4f;
-            border-radius: 2px;
+            background-color: #0b6d6f !important;
+            border-color: #0b6d6f !important;
+            box-shadow: none;
+            border-radius: 6px;
             outline: unset;
-            line-height: 2px;
-            padding: 18px 12px;
+            line-height: 1;
+            padding: 8px 14px;
             font-weight: 400;
           }
         }
@@ -101,29 +115,21 @@
     color: #fff;
     background-color: #038fde;
     border-color: #038fde;
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
-    color: #ffffff !important;
-    background-color: #038fde !important;
-    border-color: #038fde !important;
-    border-radius: 2px;
-    margin-right: 15px;
+    box-shadow: none;
+    border-radius: 6px;
     outline: unset;
     padding: 8px 14px;
-    font-weight: 600;
+    font-weight: 400;
   }
   .minus {
     color: #fff;
-    background-color: #038fde;
-    border-color: #038fde;
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
-    color: #ffffff !important;
-    background-color: var(--bg-color) !important;
-    border-color: #ff4d4f;
-    border-radius: 2px;
+    background-color: #0b6d6f !important;
+    border-color: #0b6d6f !important;
+    box-shadow: none;
+    border-radius: 6px;
     outline: unset;
-    padding: 4px 8px;
     padding: 8px 14px;
-    font-weight: 600;
+    font-weight: 400;
   }
 }
 

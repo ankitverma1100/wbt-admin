@@ -9,13 +9,14 @@
     margin-left: 12px;
     a {
       color: #fff;
-      background-color: #038fde;
-      border-color: #038fde;
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
       box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
       color: #ffffff !important;
-      background-color: #038fde !important;
-      border-color: #038fde !important;
-      padding: 6px 10px;
+      background-color: var(--primary-color) !important;
+      border-color: var(--primary-color) !important;
+      height: 32px;
+      padding: 0 12px;
       font-size: 13px;
       line-height: 1;
       display: flex;
@@ -76,14 +77,14 @@
     }
     thead {
       th {
-        background: #b7862b;
+        background: var(--primary-color);
         color: #fff;
         padding: 7px 10px !important;
         font-weight: 600;
         letter-spacing: 0.3px;
         text-transform: uppercase !important;
-        border-right: 1px solid #caa35a;
-        border-bottom: 1px solid #caa35a;
+        border-right: 1px solid #fff;
+        border-bottom: 1px solid #fff;
         white-space: nowrap;
         line-height: 1.1;
       }

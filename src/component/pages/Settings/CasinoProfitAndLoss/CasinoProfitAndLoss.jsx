@@ -1,140 +1,96 @@
-import { useState } from "react";
-import { Card, Col, DatePicker, Divider, Empty, Row } from "antd";
+import { useMemo, useState } from "react";
+import { Card, Empty } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useGetCasinoPnlByDateQuery } from "../../../../store/service/CasinoServices";
 import dayjs from "dayjs";
 import CustomLoading from "../../../common/CustomLoading/CustomLoading";
-import TablePagination from "../../../common/TablePagination";
-
-const { RangePicker } = DatePicker;
+import "./CasinoProfitAndLoss.scss";
 
 const CasinoProfitAndLoss = () => {
   const nav = useNavigate();
   const today = dayjs().format("YYYY-MM-DD");
+  const twoWeeksAgo = dayjs().subtract(14, "day").format("YYYY-MM-DD");
 
-  const [dates, setDates] = useState({
-    fromDate: today,
+  const [dates] = useState({
+    fromDate: twoWeeksAgo,
     toDate: today,
   });
 
-  const { data, refetch, isLoading, isFetching } =
-    useGetCasinoPnlByDateQuery(dates);
+  const { data, isLoading, isFetching } = useGetCasinoPnlByDateQuery(dates);
 
   const handleBackClick = () => {
     nav(-1);
   };
 
-  const handleRangeChange = (value) => {
-    if (value) {
-      setDates({
-        fromDate: value[0].format("YYYY-MM-DD"),
-        toDate: value[1].format("YYYY-MM-DD"),
-      });
-    }
-  };
+  const rows = useMemo(() => {
+    const fromLabel = dayjs(dates.fromDate).format("DD-MM-YYYY");
+    const toLabel = dayjs(dates.toDate).format("DD-MMM-YYYY").toUpperCase();
+    return (data?.data || []).flatMap((group) =>
+      (group?.dataList || []).map((item) => ({
+        key: `${group?.date}-${item?.marketId}-${item?.tableId}`,
+        title: `${fromLabel} ${item?.eventName}-${toLabel}`,
+        pnl: Number(item?.pnl || 0),
+        exposure: Number(item?.exposure || 0),
+        clientpnl: Number(item?.clientpnl || 0),
+      }))
+    );
+  }, [data, dates.fromDate, dates.toDate]);
 
-  const handleTodayClick = () => {
-    setDates({
-      fromDate: today,
-      toDate: today,
-    });
-    refetch();
-  };
+  const totalNetPl = useMemo(
+    () => rows.reduce((acc, row) => acc + row.pnl + row.clientpnl, 0),
+    [rows]
+  );
 
   return (
-    <div className="match_slip casino_diamond">
+    <div className="match_slip casino_pnl_page">
       <Card
         style={{ margin: 0, width: "100%" }}
         className="sport_detail"
-        title="Diamond Casino Details"
+        title="CASINO PROFIT LOSS"
         extra={<button onClick={handleBackClick}>Back</button>}>
-        <Row className="profit_apply">
-          <Col xs={12} xl={6} lg={6} md={12}>
-            <div className="profit_date">
-              <RangePicker
-                style={{
-                  marginBottom: "10px",
-                  width: "100%",
-                  borderRadius: "20px",
-                }}
-                onChange={handleRangeChange}
-              />
-            </div>
-          </Col>
-          <Col xs={8} xl={4} lg={4} md={8} className="btn_apply">
-            <button
-              className="ant-btn-danger"
-              onClick={() => refetch()}
-              style={{ whiteSpace: "wrap" }}>
-              Apply
-            </button>
-            <button
-              className="apply_btn1"
-              onClick={handleTodayClick}
-              style={{ whiteSpace: "wrap" }}>
-              Today P/L
-            </button>
-          </Col>
-        </Row>
-
         <div className="table_section statement_tabs_data">
           {(isLoading || isFetching) && <CustomLoading />}
+          <div className="pnl_total">
+            <span className="total_label">TOTAL:</span>
+            <span className="total_value">{totalNetPl.toFixed(2)}</span>
+          </div>
           <table>
             <thead>
               <tr>
-                <th>Game Id</th>
-                <th>Type</th>
-                <th>Exposer</th>
-                <th>P/L</th>
-                <th>Client P/L</th>
-                <th>Action</th>
+                <th>TITLE</th>
+                <th>PL</th>
+                <th>COMM+</th>
+                <th>COMM-</th>
+                <th>NET PL</th>
               </tr>
             </thead>
             <tbody>
-              {data?.data?.[0]?.dataList?.map((res) => (
-                <tr key={res?.key}>
-                  <td>{res?.tableId}</td>
-                  <td>{res?.eventName}</td>
-                  <td>{res?.exposure?.toFixed(2)}</td>
-                  <td>{res?.clientpnl?.toFixed(2)}</td>
-                  <td>{res?.pnl.toFixed(2)}</td>
-                  <td>
-                    <span
-                      onClick={() =>
-                        nav(`/casinoprofitandloss/${res?.marketId}`)
-                      }
-                      style={{
-                        backgroundColor: "rgb(16, 142, 233)",
-                        borderRadius: "0px",
-                        marginBottom: "8px",
-                        color: "#fff",
-                        margin: "0 8px 0 0",
-                        padding: "4px 7px",
-                        fontSize: "12px",
-                        cursor: "pointer",
-                        whiteSpace: "nowrap",
-                      }}>
-                      Show View
-                    </span>
-                  </td>
-                </tr>
-              ))}
+              {rows.map((row) => {
+                const commPlus = Math.max(row.exposure, 0);
+                const commMinus = Math.abs(Math.min(row.exposure, 0));
+                const netPl = row.pnl + row.clientpnl;
+                return (
+                  <tr key={row.key}>
+                    <td className="title_cell">{row.title}</td>
+                    <td className={row.pnl > 0 ? "num pos" : "num neg"}>
+                      {row.pnl.toFixed(2)}
+                    </td>
+                    <td className="num pos">
+                      {commPlus.toFixed(2)}
+                    </td>
+                    <td className="num neg">
+                      {commMinus.toFixed(2)}
+                    </td>
+                    <td className={netPl > 0 ? "num pos" : "num neg"}>
+                      {netPl.toFixed(2)}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
 
-          {data?.length === 0 ? (
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-          ) : (
-            <>
-              <Divider />
-              <div className="pagination_cus">
-                <TablePagination
-                  className="pagination_main ledger_pagination"
-                  total={5}
-                />
-              </div>
-            </>
-          )}
+          {!rows.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
         </div>
       </Card>
     </div>

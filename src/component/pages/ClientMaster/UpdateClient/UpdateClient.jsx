@@ -8,6 +8,15 @@ const UpdateClient = () => {
     console.log("Failed:", errorInfo);
   };
   const { Option } = Select;
+
+  const handleNumberWheel = (event) => {
+    if (event?.preventDefault) {
+      event.preventDefault();
+    }
+    if (event?.target && typeof event.target.blur === "function") {
+      event.target.blur();
+    }
+  };
   
   return (
     <>
@@ -39,7 +48,7 @@ const UpdateClient = () => {
           autoComplete="off">
           <div>
             <Row className="super_agent update_agent">
-              <Col span={12}>
+              <Col lg={12} md={12} xs={24}>
                 <Form.Item
                   label="Name"
                   name="name"
@@ -75,7 +84,11 @@ const UpdateClient = () => {
                       message: "Invalid Contact NO!",
                     },
                   ]}>
-                  <Input type="number" placeholder="Enter Reference" />
+                  <Input
+                    type="number"
+                    placeholder="Enter Reference"
+                    onWheel={handleNumberWheel}
+                  />
                 </Form.Item>
                 <Form.Item
                   label="Password"
@@ -119,13 +132,13 @@ const UpdateClient = () => {
                   <Input type="password" placeholder="Password" />
                 </Form.Item>
               </Col>
-              <Col span={12}></Col>
+              <Col lg={12} md={12} xs={24}></Col>
             </Row>
             <div className="update_agent">
               <h2 className="match_share">Match Share and Comm</h2>
             </div>
             <Row className="super_agent update_agent">
-              <Col span={12}>
+              <Col lg={12} md={12} xs={24}>
                 <Form.Item name="AgentCommType" label="AGENT comm type">
                   <Select disabled allowClear>
                     <Option value="NoComm">No Comm</Option>
@@ -133,7 +146,7 @@ const UpdateClient = () => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col lg={12} md={12} xs={24}>
                 <Form.Item
                   required
                   name="SupperCommType"
@@ -145,13 +158,18 @@ const UpdateClient = () => {
                 </Form.Item>
               </Col>
 
-              <Col span={12}>
+              <Col lg={12} md={12} xs={24}>
                 <Form.Item label="AGENT casino comm(%)" name="casinoComm">
-                  <Input type="number" placeholder="0" disabled />
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    disabled
+                    onWheel={handleNumberWheel}
+                  />
                 </Form.Item>
               </Col>
 
-              <Col span={12}>
+              <Col lg={12} md={12} xs={24}>
                 <Form.Item
                   label="CLIENT casino comm(%)"
                   name="ClientcasinoComm"
@@ -161,7 +179,12 @@ const UpdateClient = () => {
                       message: "Please enter valid Casino commission",
                     },
                   ]}>
-                  <Input type="number" placeholder="0.0" value="0.0" />
+                  <Input
+                    type="number"
+                    placeholder="0.0"
+                    value="0.0"
+                    onWheel={handleNumberWheel}
+                  />
                 </Form.Item>
                 <Form.Item
                   wrapperCol={{

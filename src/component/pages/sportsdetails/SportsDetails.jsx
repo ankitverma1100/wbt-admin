@@ -144,7 +144,7 @@ const SportsDetails = () => {
                                     onClick={() => setDropdownStates(false)}
                                     to={`/Events/${res.matchId}/4/live-report`}
                                     className="title_section">
-                                    Match and Session Position
+                                    MATCH AND SESSION POSITION
                                   </Link>
                                 ),
                                 key: "0",
@@ -154,7 +154,7 @@ const SportsDetails = () => {
                                   <span
                                     className="title_section"
                                     onClick={() => handlePlusMinus(res.matchId)}>
-                                    Match and Session Plus Minus
+                                    MATCH AND SESSION PL REPORT
                                   </span>
                                 ),
                                 key: "1",
@@ -168,7 +168,7 @@ const SportsDetails = () => {
                                         `/matchplusminus/${res?.matchId}/${res?.matchName}`
                                       )
                                     }>
-                                    Match and Session Plus Minus 2
+                                    MATCH AND SESSION PL
                                   </span>
                                 ),
                                 key: "2",
@@ -179,7 +179,7 @@ const SportsDetails = () => {
                                     onClick={() => setDropdownStates(false)}
                                     className="title_section"
                                     to={`/match-slips/${res.matchId}/1`}>
-                                    Display Match Bets
+                                    MATCH BETS
                                   </Link>
                                 ),
                                 key: "3",
@@ -190,7 +190,7 @@ const SportsDetails = () => {
                                     onClick={() => setDropdownStates(false)}
                                     className="title_section"
                                     to={`/fancy-slips/${res.matchId}/1`}>
-                                    Display Session Bets
+                                    SESSION BETS
                                   </Link>
                                 ),
                                 key: "4",
@@ -201,7 +201,7 @@ const SportsDetails = () => {
                                     onClick={() => setDropdownStates(false)}
                                     className="title_section"
                                     to={`/matchsessionbet/${res.matchId}/1`}>
-                                    Match And Session Bet
+                                    MATCH AND SESSION BET
                                   </Link>
                                 ),
                                 key: "5",
@@ -212,7 +212,7 @@ const SportsDetails = () => {
                                     onClick={() => setDropdownStates(false)}
                                     className="title_section"
                                     to={`/completed-fancy-slips/${res.matchId}`}>
-                                    Completed Fancies
+                                    COMPLETED FANCIES
                                   </Link>
                                 ),
                                 key: "6",
@@ -223,7 +223,7 @@ const SportsDetails = () => {
                                     onClick={() => setDropdownStates(false)}
                                     className="title_section"
                                     to={`/agent-list/${res.matchId}/${res.matchName}`}>
-                                    Agent Plus Minus
+                                    AGENT PLUS MINUS
                                   </Link>
                                 ),
                                 key: "7",
@@ -234,7 +234,7 @@ const SportsDetails = () => {
                                     onClick={() => setDropdownStates(false)}
                                     className="title_section"
                                     to={`/rejectedBetsByEvent/${res.matchId}/${res?.matchName}`}>
-                                    Rejected Bet
+                                    REJECTED BET
                                   </Link>
                                 ),
                                 key: "8",

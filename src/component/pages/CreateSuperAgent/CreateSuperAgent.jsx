@@ -26,6 +26,7 @@ const CreateSuperAgent = ({ createName }) => {
   const [createUserId, setCreateUserID] = useState();
   const [api, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
+  const currentUsername = localStorage.getItem("username") || "";
 
   const commissionType = (value) => {
     setCommiType(value);
@@ -118,6 +119,12 @@ const CreateSuperAgent = ({ createName }) => {
   useEffect(() => {
     setUserData(data?.data);
   }, [data?.data, UserList?.status]);
+
+  useEffect(() => {
+    if (currentUsername) {
+      form.setFieldsValue({ reference: currentUsername });
+    }
+  }, [currentUsername, form]);
 
   return (
     <>
@@ -380,7 +387,7 @@ const CreateSuperAgent = ({ createName }) => {
               </Row>
               <div>
                 <h2 className="match_share">
-                  {createName} Match Share and Commission
+                 Match Share and Commission
                 </h2>
               </div>
               <Row className="super_agent sub_super">

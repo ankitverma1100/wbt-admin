@@ -19,6 +19,13 @@ export const authApi = createApi({
         body,
       }),
     }),
+    loginDirect: build.mutation({
+      query: (body) => ({
+        url: "/login/cleint-login",
+        method: "POST",
+        body,
+      }),
+    }),
     loginWithOtp: build.mutation({
       query: (body) => ({
         url: "/login/client-login-wotp",
@@ -35,5 +42,9 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useLoginWithOtpMutation } =
-  authApi;
+export const {
+  useLoginMutation,
+  useLoginDirectMutation,
+  useLogoutMutation,
+  useLoginWithOtpMutation,
+} = authApi;

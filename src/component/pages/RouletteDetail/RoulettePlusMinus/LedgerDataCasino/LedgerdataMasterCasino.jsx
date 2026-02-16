@@ -12,7 +12,6 @@ const RecursiveCard = ({ data, depth }) => {
           <div className={` card-header ${`color_${depth}`} `}>
             <h2 className="card-title text-bold">
               <span className={`card_${depth}`}></span>
-              <span className="border-title">{depthLabels[depth]}</span>
               <span className="border-userid">{item[depthKeys[depth]]}</span>
             </h2>
           </div>

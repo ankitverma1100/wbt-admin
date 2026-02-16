@@ -3,20 +3,22 @@ import CardItem from "../../common/carditem/CardItem";
 import { BiUserCircle } from "react-icons/bi";
 import { Card, Col, Modal, Row } from "antd";
 import { Link } from "react-router-dom";
+import ModalFooter from "./ModalFooter";
 
 const SportModal = ({ setOpenModals, openModal }) => {
   const data = [
     {
-      name: "INPLAY Games",
+      name: "ACTIVE GAMES",
       path: "/Events/sports-details",
       size: "20",
       id: 0,
       userType: 0,
     },
     {
-      name: "COMPLETED GAMES",
+      name: "FINISHED GAMES",
       path: `/finish-game`,
       size: "20",
+      id: 1,
       userType: 1,
     },
   ];
@@ -30,21 +32,19 @@ const SportModal = ({ setOpenModals, openModal }) => {
   return (
     <>
       <Modal
+        title="SPORTS DETAILS"
         onCancel={() => setOpenModals(!openModal)}
-        footer={
-          <button
-            onClick={() => setOpenModals(!openModal)}
-            className="ant-btn gx-bg-grey ant-modal-footer ant-btn-default">
-            Close
-          </button>
-        }
+        footer={<ModalFooter onCancel={() => setOpenModals(!openModal)} />}
         className="antd_dsh_madals"
         closable={{ "aria-label": "Custom Close Button" }}
         open={openModal}>
         <Row className="modal_opne_dash">
-          {data?.map((items) => {
+          {data?.map((items, index) => {
             return (
-              <Col md={12} xs={24} key={items?.id}>
+              <Col
+                md={12}
+                xs={12}
+                key={items?.id ?? items?.path ?? index}>
                 <Card bordered={false}>
                   <Link to={items?.path}>
                     <div className="ant-card ant-card-bordered gx-card-widget gx-card-full gx-bg-transparent">

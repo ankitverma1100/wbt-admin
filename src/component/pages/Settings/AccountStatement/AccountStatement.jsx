@@ -53,7 +53,7 @@ const AccountStatement = () => {
 
   return (
     <>
-      <div className={pName == "/markets" ? "" : "match_slip"}>
+      <div className={pName == "/app/settings" ? "" : "match_slip"}>
         <div className="">
           <Card
             style={{

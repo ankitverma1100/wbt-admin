@@ -55,7 +55,7 @@ const FinishedGame = () => {
     {
       label: (
         <span className="title_section" onClick={() => handlePlusMinus(matchId)}>
-          Match and Session Plus Minus
+          MATCH AND SESSION PL REPORT
         </span>
       ),
       key: "1",
@@ -66,7 +66,7 @@ const FinishedGame = () => {
           className="title_section"
           // onClick={() => nav("/matchplusminus/1212")}
           onClick={() => nav(`/matchplusminus/${matchId}/${dataNameee}`)}>
-          Match and Session Plus Minus 2
+          MATCH AND SESSION PL
         </span>
       ),
       key: "1",
@@ -77,7 +77,7 @@ const FinishedGame = () => {
           onClick={() => setDropdownStates(false)}
           className="title_section"
           to={`/match-slips/${matchId}/0`}>
-          Display Match Bets
+          MATCH BETS
         </Link>
       ),
       key: "2",
@@ -88,7 +88,7 @@ const FinishedGame = () => {
           onClick={() => setDropdownStates(false)}
           className="title_section"
           to={`/fancy-slips/${matchId}/0`}>
-          Display Session Bets
+          SESSION BETS
         </Link>
       ),
       key: "3",
@@ -99,7 +99,7 @@ const FinishedGame = () => {
           onClick={() => setDropdownStates(false)}
           className="title_section"
           to={`/matchsessionbet/${matchId}/0`}>
-          Match And Session Bet
+            MATCH AND SESSION BETS
         </Link>
       ),
       key: "3",
@@ -110,7 +110,7 @@ const FinishedGame = () => {
           onClick={() => setDropdownStates(false)}
           className="title_section"
           to={`/completed-fancy-slips/${matchId}`}>
-          Completed Fancies
+          COMPLETED SESSIONS
         </Link>
       ),
       key: "4",
@@ -121,7 +121,7 @@ const FinishedGame = () => {
           onClick={() => setDropdownStates(false)}
           className="title_section"
           to={`/agent-list/${matchId}/${dataNameee}`}>
-          Agent Plus Minus
+          AGENT PLUS MINUS
         </Link>
       ),
       key: "4",
@@ -132,7 +132,7 @@ const FinishedGame = () => {
           onClick={() => setDropdownStates(false)}
           className="title_section"
           to={`/rejectedBetsByEvent/${matchId}/${dataNameee}`}>
-          Rejected Bet
+          REJECTED BETS
         </Link>
       ),
       key: "5",

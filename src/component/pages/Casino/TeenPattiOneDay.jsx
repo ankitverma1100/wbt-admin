@@ -1,5 +1,5 @@
-import { Table } from "antd";
 import { useGetCasinoLabilityQuery } from "../../../store/service/userlistService";
+import BetCard from "./BetCard";
 
 const TeenPattiOneDay = ({ odds, id }) => {
   // const filteredOdds = (odds || []).filter(
@@ -15,55 +15,32 @@ const TeenPattiOneDay = ({ odds, id }) => {
 
   const labilityData = data?.data || [];
 
-  const columns = [
-    {
-      title: "Player Name",
-      dataIndex: "nation",
-      key: "nation",
-      render: (text, record) => {
-        const pnl = labilityData?.find(
-          (pnlData) => Number(pnlData?.sid) === Number(record?.sectionId)
-        )?.liability;
-        return (
-          <div>
-            <p>{record?.nation}</p>
-            <p
-              style={{
-                fontWeight: 700,
-                color: pnl > 0 ? "green" : pnl < 0 ? "red" : "black",
-              }}>
-              {pnl || 0}
-            </p>
-          </div>
-        );
-      },
-    },
-    {
-      title: "Back",
-      dataIndex: "b1",
-      key: "rate",
-      align: "center",
-      render: (text, render) => {
-        return <span>{Number(render?.l1)?.toFixed(2)}</span>;
-      },
-    },
-    {
-      title: "Lay",
-      dataIndex: "l1",
-      key: "rate",
-      align: "center",
-      render: (text, render) => {
-        return <span>{Number(render?.l1)?.toFixed(2)}</span>;
-      },
-    },
-  ];
+  const normalizedOdds = (t1 || []).map((item) => {
+    const pnl = labilityData?.find(
+      (pnlData) => Number(pnlData?.sid) === Number(item?.sectionId)
+    )?.liability;
+    return {
+      ...item,
+      pnl: Number.isFinite(Number(pnl)) ? Number(pnl) : 0,
+    };
+  });
+  const mainBets = normalizedOdds.slice(0, 2);
   return (
-    <Table
-      pagination={false}
-      bordered
-      columns={columns}
-      dataSource={t1 || []}
-    />
+    <div className="casino_main_bets">
+      <div className="casino_main_bets_header">
+        <div className="casino_main_bets_title">Main Bets</div>
+        <span className="casino_main_bets_line" />
+      </div>
+      <div className="casino_main_bets_grid">
+        {mainBets.map((item, index) => (
+          <BetCard
+            key={item?.sid || item?.nation || item?.sectionId || index}
+            item={item}
+            index={index}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 

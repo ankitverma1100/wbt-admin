@@ -74,5 +74,17 @@ span.ant-spin-dot.ant-spin-dot-spin {
     .ant-table-cell {
       text-transform: capitalize !important;
     }
+    .operation_badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      border-radius: 4px;
+      color: #b11f1f;
+      border: 1px solid #ef9a9a;
+      background: #fff2f2;
+    }
   }
 }

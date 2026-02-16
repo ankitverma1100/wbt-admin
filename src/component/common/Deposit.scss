@@ -29,7 +29,7 @@
     padding: 0px 24px 18px !important;
   }
   .ant-modal-header {
-    background: #b7862b;
+    background: var(--primary-color);
     margin: 0 -24px;
     padding: 12px 24px;
     border-bottom: 1px solid #caa35a;
@@ -102,6 +102,7 @@ textarea.ant-input {
     span {
       font-size: 16px;
       font-weight: 400;
+      text-transform: uppercase;
     }
   }
   .ant-modal-body {
@@ -112,4 +113,46 @@ textarea.ant-input {
 .pri_button {
   padding: 5px 12px;
   border-radius: 5px;
+}
+
+.reset_cancel_button {
+  background: transparent !important;
+  border: 1px solid #d9d9d9 !important;
+  color: #333 !important;
+}
+
+.reset_pass_form {
+  padding: 0 18px 6px;
+
+  .ant-form-item {
+    margin-bottom: 12px;
+  }
+
+  .ant-form-item-label > label {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+}
+
+.reset_pass_info {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reset_pass_info_title {
+  margin-top: 4px;
+  font-weight: 700;
+}
+
+.reset_pass_info_item {
+  span {
+    font-weight: 700;
+  }
 }

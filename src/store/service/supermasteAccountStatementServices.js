@@ -134,6 +134,14 @@ export const supermasteAccountStatementApi = createApi({
       }),
       invalidatesTags: ["superUserList"],
     }),
+    userMatkaLock: build.mutation({
+      query: (body) => ({
+        url: "/ant-pro/matka-bet-lock",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["superUserList"],
+    }),
 
     casinoList: build.query({
       query: (body) => ({
@@ -279,6 +287,7 @@ export const {
   useSuperuserListMutation,
   useChildListDetailsQuery,
   useUserCasinoLockMutation,
+  useUserMatkaLockMutation,
   useGetCreateUserMutation,
   useGetUserDetailsQuery,
   useUserIdForSearchQuery,

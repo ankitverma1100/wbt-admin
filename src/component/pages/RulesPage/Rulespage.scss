@@ -1,36 +1,62 @@
-.rules_page {
-  .ant-card-body {
-    padding: 0px 24px !important;
-    .btn-lg {
-      color: #545454;
-      border: solid 1px #d9d9d9;
-      border-radius: 2px;
-      padding: 4px 12px;
-      display: inline-block;
-      font-weight: 400;
-      color: #545454;
-      text-align: center;
-      white-space: nowrap;
-      vertical-align: middle;
-      border: 1px solid #d9d9d9;
-      padding: 0 15px;
-      height: 36px;
-      font-size: 14px;
-      line-height: 34px;
-      border-radius: 2px;
-      margin-bottom: 15px;
-    }
-  }
-  .rules_heading {
-    font-size: 20px;
-    margin-left: -20px;
-}
-ul {
-    margin-left: 15px;
-    margin-bottom: 10px;
-    li {
-        margin-bottom: 10px;
-    }
-}
+.rules-layout {
+  min-height: 100vh;
+  background: #f0f2f5;
 }
 
+.rules-header {
+  background: #ededed;
+  padding: 0;
+}
+
+.rules-header-inner {
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  height: 64px;
+  justify-content: center;
+}
+
+.rules-content {
+  padding: 24px 0;
+  background: #eee;
+}
+
+.rules-card {
+  background: #eee;
+
+  .ant-card-head {
+    border-radius: 0;
+    background: #eee;
+    background: var(--primary-color) !important;
+  }
+
+  .ant-card-body {
+    background: #eee;
+  }
+}
+.ant-typography {
+  margin-bottom: 0 !important;
+}
+
+.rules-intro {
+  margin-bottom: 24px;
+}
+
+.rules-section {
+  margin-bottom: 24px;
+}
+
+.rules-item-text {
+  margin-left: 8px;
+}
+
+.ant-list-item {
+  padding: 16px 24px !important;
+  justify-content: start !important;
+  font-weight: 700;
+
+}
+
+.ant-collapse-item {
+  border-bottom: 1px solid #f0f0f0;
+}

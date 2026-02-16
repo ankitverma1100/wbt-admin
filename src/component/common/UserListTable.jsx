@@ -7,6 +7,7 @@ import {
   Form,
   Input,
   Menu,
+  Modal,
   Space,
   Spin,
   Tag,
@@ -28,6 +29,7 @@ import {
   useSuperuserListMutation,
   useUserBetLockMutation,
   useUserCasinoLockMutation,
+  useUserMatkaLockMutation,
 } from "../../store/service/supermasteAccountStatementServices";
 import {
   useGetGenerateMutation,
@@ -77,6 +79,14 @@ const UserListTable = ({
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [openResetPassModal, setOpenResetPassModal] = useState(false);
   const [openExp, setOpenExp] = useState(false);
+  const [isBlockActionsModalOpen, setIsBlockActionsModalOpen] =
+    useState(false);
+  const [blockActionsUserId, setBlockActionsUserId] = useState(null);
+  const [blockActionLoading, setBlockActionLoading] = useState({
+    betting: false,
+    casino: false,
+    matka: false,
+  });
   const [userToSearch, setUserToSearch] = useState("");
   const [activeSearch, setActiveSearch] = useState(null);
   const [codeForm] = Form.useForm();
@@ -87,6 +97,10 @@ const UserListTable = ({
   const nameRef = useRef(null);
 
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    console.log("UserListTable userType:", userType);
+  }, [userType]);
 
   useEffect(() => {
     // Reset search value
@@ -105,6 +119,7 @@ const UserListTable = ({
   const [getBetLock] = useUserBetLockMutation();
   const [getUserActiveDeactive] = useGetUserActiveDeactiveMutation();
   const [getCasinoLock] = useUserCasinoLockMutation();
+  const [getMatkaLock] = useUserMatkaLockMutation();
   const [
     getPartnershipData,
     { data: partnershipDetail, isLoading: loadingPartnership },
@@ -151,6 +166,17 @@ const UserListTable = ({
     resetDropdownStates();
   };
 
+  const handleShowBlockActionsModal = (res) => {
+    setBlockActionsUserId(res?.userId ?? res?.userid ?? null);
+    setIsBlockActionsModalOpen(true);
+    resetDropdownStates();
+  };
+
+  const handleCloseBlockActionsModal = () => {
+    setIsBlockActionsModalOpen(false);
+    resetDropdownStates();
+  };
+
   const handleToggleAccountStatus = async (res) => {
     const result = await getUserActiveDeactive({
       activate: !res?.isActive,
@@ -166,30 +192,71 @@ const UserListTable = ({
   };
 
   const handleBlockBetting = async (res) => {
-    const result = await getBetLock({
-      userId: res?.userId,
-      isLock: !res?.betLock,
-    }).unwrap();
-    if (result?.status) {
-      openNotification(result?.message);
-      fetchData();
-      resetDropdownStates();
-    } else {
-      openNotificationError(result?.message);
+    setBlockActionLoading((prev) => ({ ...prev, betting: true }));
+    try {
+      const result = await getBetLock({
+        userId: res?.userId,
+        isLock: !res?.betLock,
+      }).unwrap();
+      if (result?.status) {
+        openNotification(result?.message);
+        fetchData();
+        resetDropdownStates();
+      } else {
+        openNotificationError(result?.message);
+      }
+    } catch (error) {
+      openNotificationError(
+        error?.data?.message || error?.message || "Something went wrong"
+      );
+    } finally {
+      setBlockActionLoading((prev) => ({ ...prev, betting: false }));
     }
   };
 
   const handleBlockCasino = async (res) => {
-    const result = await getCasinoLock({
-      userId: res?.userId,
-      isLock: !res?.casinoLock,
-    }).unwrap();
-    if (result?.status) {
-      openNotification(result?.message);
-      fetchData();
-      resetDropdownStates();
-    } else {
-      openNotificationError(result?.message);
+    setBlockActionLoading((prev) => ({ ...prev, casino: true }));
+    try {
+      const result = await getCasinoLock({
+        userId: res?.userId,
+        isLock: !res?.casinoLock,
+      }).unwrap();
+      if (result?.status) {
+        openNotification(result?.message);
+        fetchData();
+        resetDropdownStates();
+      } else {
+        openNotificationError(result?.message);
+      }
+    } catch (error) {
+      openNotificationError(
+        error?.data?.message || error?.message || "Something went wrong"
+      );
+    } finally {
+      setBlockActionLoading((prev) => ({ ...prev, casino: false }));
+    }
+  };
+
+  const handleBlockMatka = async (res) => {
+    setBlockActionLoading((prev) => ({ ...prev, matka: true }));
+    try {
+      const result = await getMatkaLock({
+        userId: res?.userId,
+        isLock: !res?.matkaBetLock,
+      }).unwrap();
+      if (result?.status) {
+        openNotification(result?.message);
+        fetchData();
+        resetDropdownStates();
+      } else {
+        openNotificationError(result?.message);
+      }
+    } catch (error) {
+      openNotificationError(
+        error?.data?.message || error?.message || "Something went wrong"
+      );
+    } finally {
+      setBlockActionLoading((prev) => ({ ...prev, matka: false }));
     }
   };
 
@@ -201,6 +268,10 @@ const UserListTable = ({
     setSelectedUserIdForActions(userId);
     setParentUserIds(parentUserID);
   };
+
+  const selectedBlockUser = userDetailsData?.find(
+    (user) => (user?.userId ?? user?.userid) === blockActionsUserId
+  );
 
   const [dropdownOpenStates, setDropdownOpenStates] = useState([]);
 
@@ -263,7 +334,6 @@ const UserListTable = ({
 
   const onSearchFinish = (values) => {
     setUserToSearch(values?.username);
-    fetchData(convertCodeReverse(values?.username));
   };
 
   const handleResetData = async () => {
@@ -332,24 +402,13 @@ const UserListTable = ({
         key: "2",
       },
 
-      // Block/Unblock Betting
       !isDeadClient && {
         label: (
-          <div onClick={() => handleBlockBetting(res)}>
-            {res?.betLock ? "UnBlock Betting" : "Block Betting"}
+          <div onClick={() => handleShowBlockActionsModal(res)}>
+            Block Actions
           </div>
         ),
         key: "3",
-      },
-
-      // Block/Unblock Casino
-      !isDeadClient && {
-        label: (
-          <div onClick={() => handleBlockCasino(res)}>
-            {res?.casinoLock ? "UnBlock Casino" : "Block Casino"}
-          </div>
-        ),
-        key: "4",
       },
 
       // Edit Client
@@ -527,7 +586,7 @@ const UserListTable = ({
                           </Form>
                         </Menu>
                       )}
-                      <p className="search_code">
+                      <div className="search_code">
                         <Space>
                           <SearchOutlined
                             onClick={() =>
@@ -537,7 +596,7 @@ const UserListTable = ({
                             }
                           />
                         </Space>
-                      </p>
+                      </div>
                     </div>
                   </th>
                   <th rowSpan={2}>
@@ -584,7 +643,7 @@ const UserListTable = ({
                           </Form>
                         </Menu>
                       )}
-                      <p className="search_code">
+                      <div className="search_code">
                         <Space>
                           <SearchOutlined
                             onClick={() =>
@@ -594,7 +653,7 @@ const UserListTable = ({
                             }
                           />
                         </Space>
-                      </p>
+                      </div>
                     </div>
                   </th>
                   <th rowSpan={2}>
@@ -614,14 +673,14 @@ const UserListTable = ({
                   </th>
                   <th rowSpan={2}>D.O.J </th>
                   <th rowSpan={2}>PASSWORD</th>
-                  <th rowSpan={2}>Share%</th>
+                  <th rowSpan={2}>Share</th>
                   {userType == 1 && (
                     <th rowSpan={2} style={{ textAlign: "right" }}>
                       Exposure
                     </th>
                   )}
                   <th colSpan={3} className="text-center">
-                    {Listname} Comm %
+                    {Listname} Comm
                   </th>
                   <th rowSpan={2} className="text-right">
                     Chips
@@ -677,6 +736,12 @@ const UserListTable = ({
                       <td>
                         <span
                           onClick={() => {
+                            if (userType == 1) {
+                              nav(`/account-statement/${res?.userId}`);
+                              setIndexData(0);
+                              return;
+                            }
+
                             if (userTyep != 1) {
                               nav(
                                 `${
@@ -698,8 +763,19 @@ const UserListTable = ({
                         {res?.parentName} ({convertCode(res?.parentId)})
                       </td>
                       <td>{moment(res?.createdOn).format("DD-MMM-YYYY")}</td>
-                      <td>{isNsg ? "*******" : res?.password}</td>
-                      <td>{res?.partnerShip}</td>
+                      <td>
+                        {(() => {
+                          const pwd = res?.password ?? "";
+                          const maskedLength = String(pwd).length || 1;
+                          return "*".repeat(maskedLength);
+                        })()}
+                      </td>
+                      <td>
+                        {res?.partnerShip !== undefined &&
+                        res?.partnerShip !== null
+                          ? `${Number(res?.partnerShip)}%`
+                          : "-"}
+                      </td>
                       {userType == 1 && (
                         <td style={{ textAlign: "right" }}>
                           <span
@@ -728,8 +804,18 @@ const UserListTable = ({
                           ? "NOC"
                           : "BBB"}
                       </td>
-                      <td>{Number(res?.matchCommission)?.toFixed(2)}</td>
-                      <td>{Number(res?.sessionCommission)?.toFixed(2)}</td>
+                      <td>
+                        {res?.matchCommission !== undefined &&
+                        res?.matchCommission !== null
+                          ? Number(res?.matchCommission).toFixed(2)
+                          : "-"}
+                      </td>
+                      <td>
+                        {res?.sessionCommission !== undefined &&
+                        res?.sessionCommission !== null
+                          ? Number(res?.sessionCommission).toFixed(2)
+                          : "-"}
+                      </td>
                       <td className="text-right">
                         {userType == 1
                           ? (
@@ -792,6 +878,63 @@ const UserListTable = ({
           fetchData={fetchData}
           userType={userType}
         />
+        <Modal
+          title={`Block Actions - ${
+            selectedBlockUser?.userId
+              ? convertCode(selectedBlockUser?.userId)
+              : ""
+          }`}
+          open={isBlockActionsModalOpen}
+          onCancel={handleCloseBlockActionsModal}
+          footer={null}>
+          <div style={{ display: "flex", gap: 12, marginTop: 8, minHeight: 140 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}>
+              <Button
+                type='text'
+                style={{ background: "transparent", border: "1px solid #d9d9d9", boxShadow: "none" }}
+                loading={blockActionLoading.betting}
+                onClick={() => handleBlockBetting(selectedBlockUser)}
+                disabled={!selectedBlockUser || blockActionLoading.betting}>
+                 {selectedBlockUser?.betLock ? "Unblock" : "Block"} Betting
+              </Button>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}>
+              <Button
+                type='text'
+                style={{ background: "transparent", border: "1px solid #d9d9d9", boxShadow: "none" }}
+                loading={blockActionLoading.casino}
+                onClick={() => handleBlockCasino(selectedBlockUser)}
+                disabled={!selectedBlockUser || blockActionLoading.casino}>
+                {selectedBlockUser?.casinoLock ? "Unblock" : "Block"} Casino
+              </Button>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}>
+              <Button
+                type='text'
+                style={{ background: "transparent", border: "1px solid #d9d9d9", boxShadow: "none" }}
+                loading={blockActionLoading.matka}
+                onClick={() => handleBlockMatka(selectedBlockUser)}
+                disabled={!selectedBlockUser || blockActionLoading.matka}>
+                {selectedBlockUser?.matkaBetLock ? "Unblock" : "Block"} Matka
+              </Button>
+            </div>
+          </div>
+        </Modal>
         <Exposure openExp={openExp} setOpenExp={setOpenExp} userId={userId} />
 
         <ResetPassword

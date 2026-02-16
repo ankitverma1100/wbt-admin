@@ -1,0 +1,92 @@
+.rejected-bets-panel {
+  border: 1px solid #d9d1c7;
+  background: #fff;
+  margin: 12px 0;
+}
+
+.rejected-bets-header {
+  background: #1571cd;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rejected-bets-back {
+  background: #fff;
+  color: #111;
+  border: 1px solid #d9d1c7;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.rejected-bets-filters {
+  padding: 12px 16px 0;
+}
+
+.rejected-bets-filters .ant-col {
+  margin-bottom: 16px;
+}
+
+.rejected-bets-filters .ant-select {
+  margin-bottom: 4px;
+}
+
+.rejected-bets-label {
+  display: block;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  color: #222;
+  font-size: 12px;
+}
+
+.rejected-bets-select {
+  width: 100%;
+}
+
+.rejected-bets-select.ant-select .ant-select-selector {
+  border-radius: 6px !important;
+}
+
+.rejected-bets-table {
+  padding: 0 16px 16px;
+}
+
+.rejected-bets-grid {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rejected-bets-grid th,
+.rejected-bets-grid td {
+  border: 1px solid #d9d1c7;
+  padding: 8px 12px;
+}
+
+.rejected-bets-grid thead th {
+  background: #1571cd;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+@media (max-width: 1024px) {
+  .rejected-bets-panel {
+    margin: 0;
+  }
+
+  .rejected-bets-filters {
+    padding: 12px;
+  }
+
+  .rejected-bets-table {
+    padding: 0 12px 12px;
+  }
+}

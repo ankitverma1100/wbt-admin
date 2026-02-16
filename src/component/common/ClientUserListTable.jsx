@@ -379,13 +379,13 @@ const ClientUserListTable = ({ userType, Listname, UserId }) => {
                         </Form>
                       </Menu>
                     )}
-                    <p className="search_code">
+                    <div className="search_code">
                       <Space>
                         <SearchOutlined
                           onClick={() => setDroupSearch(!droupSearch)}
                         />
                       </Space>
-                    </p>
+                    </div>
                   </div>
                 </th>
                 <th rowSpan={2}>Name</th>

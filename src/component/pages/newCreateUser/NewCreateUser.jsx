@@ -11,6 +11,7 @@ import {
   notification,
 } from "antd";
 import { useEffect, useState } from "react";
+import "./NewCreateUser.scss";
 
 import {
   useGetCreateUserMutation,
@@ -56,6 +57,7 @@ const NewCreateUser = () => {
 
   const userId = localStorage.getItem("userId");
   const userType = localStorage.getItem("userType");
+  const currentUsername = localStorage.getItem("username") || "";
   const { data: userDetails } = useGetUserDetailsQuery({
     userId: parentId ? convertCodeReverse(parentId) : userId,
   });
@@ -63,6 +65,39 @@ const NewCreateUser = () => {
 
   const [createUser, { data: UserList, error, isLoading }] =
     useGetCreateUserMutation();
+
+  const handleNumberWheel = (event) => {
+    if (event?.target && typeof event.target.blur === "function") {
+      event.target.blur();
+    }
+  };
+
+  useEffect(() => {
+    const handleWheelWhileNumberFocused = (event) => {
+      const activeElement = document.activeElement;
+      if (!activeElement || activeElement.tagName !== "INPUT") {
+        return;
+      }
+      const inputType = activeElement.getAttribute("type");
+      const isNumberInput = inputType === "number";
+      const isAntNumberInput = activeElement.classList?.contains(
+        "ant-input-number-input"
+      );
+      if (isNumberInput || isAntNumberInput) {
+        event.preventDefault();
+        activeElement.blur();
+      }
+    };
+
+    window.addEventListener("wheel", handleWheelWhileNumberFocused, {
+      passive: false,
+    });
+    return () => {
+      window.removeEventListener("wheel", handleWheelWhileNumberFocused, {
+        passive: false,
+      });
+    };
+  }, []);
 
   const onFinish = (values) => {
     const {
@@ -75,6 +110,8 @@ const NewCreateUser = () => {
       cassino_Comm,
       sess_comm,
       Match_comm,
+      matkaShare,
+      matkaComm,
       Coins,
       appId,
       loginOtpDisabled,
@@ -93,6 +130,9 @@ const NewCreateUser = () => {
       matchCommission: commiType === "bbb" ? Match_comm : 0,
       sessionCommission: commiType === "bbb" ? sess_comm : 0,
       casinoCommission: commiType === "bbb" ? cassino_Comm : 0,
+      matkaPartnership:
+        id === "2" ? userDetails?.data?.myMatkaPartnership : matkaShare ?? 0,
+      matkaCommission: commiType === "bbb" ? matkaComm : 0,
       limit: Coins,
       parentIdForUserCreation: convertCodeReverse(parentId),
       ...(Number(id) === 7 && {
@@ -115,8 +155,6 @@ const NewCreateUser = () => {
 
   const nav = useNavigate();
 
-  console.log("appDeatis", appDeatis?.data);
-
   return (
     <div className="create_user_section">
       {contextHolder}
@@ -128,20 +166,16 @@ const NewCreateUser = () => {
         />
       )}
       {(parentId?.length > 0 || Number(userType) == Number(id)) && (
-        <div className="main_live_section">
-          <div className="_match">
-            <div className="sub_live_section live_report">
-              <div
-                style={{ padding: "5px 8px", fontSize: "22px" }}
-                className="team_name">
-                Create {createName?.[id] ?? "User"}
-              </div>
-              <div className="show_btn">
-                <button onClick={() => nav(-1)}>Back</button>
-              </div>
+        <div className="main_live_section create_user_panel">
+          <div className="create_user_header">
+            <div className="create_user_heading">
+              Create {createName?.[id] ?? "User"}
             </div>
+            <button className="create_user_back" onClick={() => nav(-1)}>
+              Back
+            </button>
           </div>
-          <div className="ant-spin-nested-loading">
+          <div className="ant-spin-nested-loading create_user_body">
             {isLoading ? (
               <div className="spin_icon">
                 <Spin size="large" />
@@ -153,8 +187,7 @@ const NewCreateUser = () => {
               className="form_data create_user_form"
               form={form}
               name="basic"
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
+              layout="vertical"
               // initialValues={{ remember: true }}
               onFinish={onFinish}
               autoComplete="off"
@@ -164,12 +197,20 @@ const NewCreateUser = () => {
                   value: userDetails?.data?.balance,
                 },
                 {
+                  name: "reference",
+                  value: currentUsername,
+                },
+                {
                   name: "code",
                   value: "d0001",
                 },
                 {
                   name: "MyMatchShare",
                   value: userDetails?.data?.myPartnership,
+                },
+                {
+                  name: "MyMatkaShare",
+                  value: userDetails?.data?.myMatkaPartnership,
                 },
                 {
                   name: "cassinoShare",
@@ -196,7 +237,17 @@ const NewCreateUser = () => {
                   value: userDetails?.data?.mySessionCommision,
                 },
                 {
+                  name: "MyMatkaComm",
+                  value:
+                    userDetails?.data?.myMatkaCommision ??
+                    userDetails?.data?.myMatkaCommission,
+                },
+                {
                   name: "cassino_Comm",
+                  value: commiType !== "bbb" ? 0 : "",
+                },
+                {
+                  name: "matkaComm",
                   value: commiType !== "bbb" ? 0 : "",
                 },
                 {
@@ -209,8 +260,12 @@ const NewCreateUser = () => {
                 },
               ]}>
               <div>
-                <Row className="super_agent">
-                  <Col xl={12} lg={12} md={24} xs={24}>
+                <div className="create_user_section_block">
+                  <div className="create_user_section_title">User Info</div>
+                  <Row
+                    className="super_agent create_user_grid"
+                    gutter={[18, 14]}>
+                  <Col xl={12} lg={12} md={12} xs={12}>
                     <Form.Item
                       label="Name"
                       name="Name"
@@ -235,7 +290,7 @@ const NewCreateUser = () => {
                       />
                     </Form.Item>
                   </Col>
-                  <Col xl={12} lg={12} md={24} xs={24}>
+                  <Col xl={12} lg={12} md={12} xs={12}>
                     <Form.Item
                       rules={[
                         {
@@ -248,7 +303,7 @@ const NewCreateUser = () => {
                       <Input type="text" placeholder="Enter Reference" />
                     </Form.Item>
                   </Col>
-                  <Col lg={12} xs={24}>
+                  <Col lg={12} md={12} xs={12}>
                     <Form.Item
                       rules={[
                         {
@@ -258,10 +313,10 @@ const NewCreateUser = () => {
                       ]}
                       label="My Coins"
                       name="My Coins">
-                      <Input type="number" disabled />
+                      <Input type="number" disabled onWheel={handleNumberWheel} />
                     </Form.Item>
                   </Col>
-                  <Col lg={12} xs={24}>
+                  <Col lg={12} md={12} xs={12}>
                     <Form.Item
                       label="Coins"
                       name="Coins"
@@ -292,6 +347,7 @@ const NewCreateUser = () => {
                         min={0}
                         type="number"
                         placeholder="Enter Coins"
+                        onWheel={handleNumberWheel}
                         onKeyDown={(e) => {
                           if (e.key == ".") {
                             e.preventDefault();
@@ -300,7 +356,7 @@ const NewCreateUser = () => {
                       />
                     </Form.Item>
                   </Col>
-                  <Col lg={12} xs={24}>
+                  <Col lg={12} md={12} xs={12}>
                     <Form.Item
                       label="Contact No."
                       name="mobile"
@@ -327,6 +383,7 @@ const NewCreateUser = () => {
                         className="number_field"
                         min={0}
                         type="number"
+                        onWheel={handleNumberWheel}
                         onKeyDown={(e) => {
                           if (!e.key.match(/^[0-9]$/) && e.key.length === 1) {
                             e.preventDefault();
@@ -336,7 +393,7 @@ const NewCreateUser = () => {
                     </Form.Item>
                   </Col>
 
-                  <Col lg={12} xs={24}>
+                  <Col lg={12} md={12} xs={12}>
                     <Form.Item
                       label="Password"
                       name="password"
@@ -350,7 +407,7 @@ const NewCreateUser = () => {
                     </Form.Item>
                   </Col>
                   {id !== "2" && (
-                    <Col lg={12} xs={24}>
+                    <Col lg={12} md={12} xs={12}>
                       <Form.Item
                         label="Share Type"
                         name="shareType"
@@ -362,7 +419,6 @@ const NewCreateUser = () => {
                           },
                         ]}>
                         <Select
-                          defaultValue={"Fixed"}
                           options={[
                             {
                               value: "Fixed",
@@ -379,7 +435,7 @@ const NewCreateUser = () => {
                   )}
                   {Number(id) === 7 && (
                     <>
-                      <Col lg={12} xs={24}>
+                      <Col lg={12} md={12} xs={12}>
                         <Form.Item
                           label="App Url"
                           name="appId"
@@ -399,7 +455,7 @@ const NewCreateUser = () => {
                         </Form.Item>
                       </Col>
                       {userDetails?.data?.loginOtpDisabled && (
-                        <Col lg={12} xs={24}>
+                        <Col lg={12} md={12} xs={12}>
                           <Form.Item
                             label="Login Otp Disabled"
                             name="loginOtpDisabled"
@@ -410,7 +466,6 @@ const NewCreateUser = () => {
                               },
                             ]}>
                             <Select
-                              defaultValue={false}
                               options={[
                                 {
                                   value: true,
@@ -427,29 +482,110 @@ const NewCreateUser = () => {
                       )}
                     </>
                   )}
-                </Row>
-                <MatchCommission
-                  createName={createName[id]}
-                  commissionType={commissionType}
-                  commiType={commiType}
-                  data={userDetails?.data}
-                  userData={userData}
-                />
-                <CasinoCommission
-                  createName={createName[id]}
-                  commiType={commiType}
-                />
+                  </Row>
+                </div>
+                <div className="create_user_section_block">
+                  <MatchCommission
+                    createName={createName[id]}
+                    commissionType={commissionType}
+                    commiType={commiType}
+                    data={userDetails?.data}
+                    userData={userData}
+                  />
+                </div>
+                <div className="create_user_section_block">
+                  <CasinoCommission
+                    createName={createName[id]}
+                    commiType={commiType}
+                  />
+                </div>
+                <div className="create_user_section_block">
+                  <div>
+                    <h2 className="match_share">
+                      {createName[id]} Matka Share and Commission
+                    </h2>
+                  </div>
+                  <Row
+                    className="super_agent sub_super create_user_grid"
+                    gutter={[18, 14]}>
+                    {id !== "2" && (
+                      <>
+                        <Col lg={12} md={12} xs={12}>
+                          <Form.Item
+                            label="My Matka Share (%)"
+                            name="MyMatkaShare"
+                            required={false}>
+                            <InputNumber
+                              className="number_field"
+                              disabled
+                              onWheel={handleNumberWheel}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col lg={12} xs={12}>
+                          <Form.Item
+                            label="Matka Share (%)"
+                            name="matkaShare"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please enter matka share",
+                              },
+                            ]}>
+                            <InputNumber
+                              className="number_field"
+                              min={0}
+                              step="1"
+                              type="number"
+                              placeholder="Enter Matka Share"
+                              onWheel={handleNumberWheel}
+                              onKeyDown={(e) => {
+                                if (e.key == ".") {
+                                  e.preventDefault();
+                                }
+                              }}
+                            />
+                          </Form.Item>
+                        </Col>
+                      </>
+                    )}
 
-                <Row className="super_agent sub_super">
-                  <Col lg={12} xs={24}></Col>
-                  <Col lg={12} xs={24}>
-                    <Form.Item wrapperCol={{ offset: 19, span: 24 }}>
-                      <Button type="primary" htmlType="submit">
-                        Submit
-                      </Button>
-                    </Form.Item>
-                  </Col>
-                </Row>
+                    <Col lg={12} md={12} xs={12}>
+                      <Form.Item
+                        label="My Matka Comm (%)"
+                        name="MyMatkaComm"
+                        required={false}>
+                        <InputNumber
+                          className="number_field"
+                          disabled
+                          onWheel={handleNumberWheel}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col lg={12} md={12} xs={12}>
+                      <Form.Item
+                        label="Matka Comm (%)"
+                        name="matkaComm"
+                        rules={[
+                          {
+                            required: commiType === "bbb",
+                            message: "Please enter matka commission",
+                          },
+                        ]}>
+                        <Input
+                          placeholder="Matka Commission"
+                          disabled={commiType !== "bbb"}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </div>
+
+                <div className="create_user_actions">
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
+                </div>
               </div>
             </Form>
           </div>

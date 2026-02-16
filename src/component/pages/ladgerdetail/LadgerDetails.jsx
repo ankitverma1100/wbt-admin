@@ -1,61 +1,62 @@
 import { Card, Col, Modal, Row } from "antd";
 import { BiUserCircle } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import ModalFooter from "../Dashboard/ModalFooter";
 
 const LadgerDetails = ({ setOpenModals, openModal }) => {
   const data = [
     {
       image: <BiUserCircle />,
-      name: "P/L",
+      name: "PROFIT/LOSS",
       path: "/Events/matchledger",
       size: "20",
       userType: 10,
     },
     {
       image: <BiUserCircle />,
-      name: "My Ledger",
+      name: "MY LEDGER",
       path: "/client/my-ledger",
       size: "20",
       userType: 10,
     },
     {
       image: <BiUserCircle />,
-      name: "Admin",
+      name: "ADMIN",
       path: "/client/ledger-super/6/Admin",
       size: "20",
       userType: 6,
     },
     {
       image: <BiUserCircle />,
-      name: "Mini Admin",
+      name: "MINI MASTER",
       path: "/client/ledger-super/5/Mini-Admin",
       size: "20",
       userType: 5,
     },
     {
       image: <BiUserCircle />,
-      name: "Master",
+      name: "MASTER MASTER",
       path: "/client/ledger-super/4/Master",
       size: "20",
       userType: 4,
     },
     {
       image: <BiUserCircle />,
-      name: "Super",
+      name: "SUPER MASTER",
       path: "/client/ledger-super/3/Super",
       size: "20",
       userType: 3,
     },
     {
       image: <BiUserCircle />,
-      name: "Agent",
+      name: "AGENT MASTER",
       path: `/client/ledger-super/2/Agent`,
       size: "20",
       userType: 2,
     },
     {
       image: <BiUserCircle />,
-      name: "Client",
+      name: "CLIENT MASTER",
       path: "/client/ledger-super/1/Client",
       size: "20",
       userType: 1,
@@ -75,14 +76,9 @@ const LadgerDetails = ({ setOpenModals, openModal }) => {
   return (
     <>
       <Modal
+        title="LEDGER DETAILS"
         onCancel={() => setOpenModals(false)}
-        footer={
-          <button
-            onClick={() => setOpenModals(false)}
-            className="ant-btn gx-bg-grey ant-modal-footer ant-btn-default">
-            Close
-          </button>
-        }
+        footer={<ModalFooter onCancel={() => setOpenModals(false)} />}
         className="antd_dsh_madals"
         closable={{ "aria-label": "Custom Close Button" }}
         open={openModal}>
@@ -91,7 +87,7 @@ const LadgerDetails = ({ setOpenModals, openModal }) => {
             .filter((res) => userTypeMatch[uType]?.includes(res?.userType))
             ?.map((items, id) => {
               return (
-                <Col md={12} xs={24} key={id}>
+                <Col md={12} xs={12} key={id}>
                   <Card bordered={false}>
                     <Link to={items?.path}>
                       <div className="ant-card ant-card-bordered gx-card-widget gx-card-full gx-bg-transparent">

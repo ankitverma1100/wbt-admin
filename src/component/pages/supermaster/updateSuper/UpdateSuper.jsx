@@ -15,6 +15,8 @@ import "./UpdateSuper.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetUserQuery,
+  useAppDetailsAllowedForChangeQuery,
+  useAppDetailsQuery,
   useUpdateUserMutation,
 } from "../../../../store/service/userlistService";
 import { convertCode } from "../../../../store/constant";
@@ -86,6 +88,9 @@ const UpdateSuper = () => {
   const editUserId = resuilt?.data?.userId || userId || "";
   const roleKey = getRoleKeyFromUserId(editUserId);
   const upperRoleKey = getUpperRoleKey(roleKey);
+  const isAdminRole = roleKey === "admin";
+  const isSubAdminOrSuperMaster =
+    roleKey === "subAdmin" || roleKey === "superMaster";
   const isClient = roleKey === "client";
   const isDirectChild = currentUserRoleKey === upperRoleKey;
   const parentLabel =
@@ -102,6 +107,21 @@ const UpdateSuper = () => {
     isDirectChild
       ? resuilt?.data?.[myKey] ?? 0
       : getUserUpper(fieldSuffix);
+  const appIdChangeAllowedByUpline = Boolean(
+    resuilt?.data?.appIdChangeAllowed
+  );
+  const { data: appDetails } = useAppDetailsQuery(undefined, {
+    skip: !isAdminRole,
+  });
+  const { data: appDetailsAllowedForChange } =
+    useAppDetailsAllowedForChangeQuery(undefined, {
+      skip: !isSubAdminOrSuperMaster,
+    });
+  const appOptions = isAdminRole
+    ? appDetails?.data
+    : appDetailsAllowedForChange?.data;
+  const showAppUrl =
+    isAdminRole || (isSubAdminOrSuperMaster && appIdChangeAllowedByUpline);
 
   useEffect(() => {
     if (resuilt?.status) {
@@ -158,6 +178,8 @@ const UpdateSuper = () => {
         matka_comm: getUserField("MatkaCommission"),
         share: getUserField("Partnership"),
         match_share: resuilt?.data?.matchShare,
+        appId: resuilt?.data?.appId,
+        appIdChangeAllowed: Boolean(resuilt?.data?.appIdChangeAllowed),
       });
 
     }
@@ -185,6 +207,16 @@ const UpdateSuper = () => {
       casinoCommission:  values?.sess_comm,
       matkaCommission:  values?.matka_comm,
     };
+    if (isAdminRole && !appIdChangeAllowedByUpline) {
+      userData.appId = values?.appId;
+    }
+    if (
+      (isAdminRole || isSubAdminOrSuperMaster) &&
+      appIdChangeAllowedByUpline
+    ) {
+      userData.appId = values?.appId;
+      userData.appIdChangeAllowed = values?.appIdChangeAllowed;
+    }
     trigger(userData);
   };
 
@@ -278,6 +310,41 @@ const UpdateSuper = () => {
                     <Input placeholder="Enter Reference" />
                   </Form.Item>
                 </Col>
+                {showAppUrl && (
+                  <Col lg={12} md={12} xs={24}>
+                    <Form.Item
+                      label="App Url"
+                      name="appId"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select app details",
+                        },
+                      ]}>
+                      <Select
+                        options={appOptions?.map((item) => ({
+                          value: item.id ?? item.appId,
+                          label: item.appName,
+                        }))}
+                      />
+                    </Form.Item>
+                  </Col>
+                )}
+                {isAdminRole && appIdChangeAllowedByUpline && (
+                  <Col lg={12} md={12} xs={24}>
+                    <Form.Item
+                      label="App Id Change Allowed"
+                      name="appIdChangeAllowed"
+                      rules={[{ required: true, message: "Please select value" }]}>
+                      <Select
+                        options={[
+                          { value: true, label: "Yes" },
+                          { value: false, label: "No" },
+                        ]}
+                      />
+                    </Form.Item>
+                  </Col>
+                )}
               </Row>
             </div>
 

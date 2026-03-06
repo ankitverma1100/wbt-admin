@@ -172,6 +172,12 @@ export const userlistApi = createApi({
         body,
       }),
     }),
+    appDetailsAllowedForChange: build.query({
+      query: () => ({
+        url: "/user/app-detail-allowed-forchange",
+        method: "POST",
+      }),
+    }),
     selfDeposit: build.mutation({
       query: (body) => ({
         url: "/superadmin/self-deposit",
@@ -317,6 +323,7 @@ export const {
   useGetUpdatePasswordMutation,
   useAccOprationQuery,
   useAppDetailsQuery,
+  useAppDetailsAllowedForChangeQuery,
   useSelfDepositMutation,
   useGetCasinoLabilityQuery,
   useGetMatchListLederQuery,

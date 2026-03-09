@@ -11,8 +11,8 @@ import CustomLoading from "../../../common/CustomLoading/CustomLoading";
 const { RangePicker } = DatePicker;
 
 const AccountStatement = () => {
-  const timeBefore = moment().startOf("year").format("YYYY-MM-DD");
-  const time = moment().format("YYYY-MM-DD");
+  const timeBefore = moment().startOf("month").format("YYYY-MM-DD");
+  const time = moment().endOf("month").format("YYYY-MM-DD");
   const [dateData, setDateData] = useState([timeBefore, time]);
   const [clientId, setClientId] = useState("");
   const [detailType, setDetailsType] = useState("ALL");
@@ -50,6 +50,15 @@ const AccountStatement = () => {
   };
 
   const pName = window.location.pathname;
+  const statementRows = data?.data || [];
+  const totalCredit = statementRows.reduce(
+    (sum, row) => sum + Number(row?.credit || 0),
+    0
+  );
+  const totalDebit = statementRows.reduce(
+    (sum, row) => sum + Number(row?.debit || 0),
+    0
+  );
 
   return (
     <>
@@ -119,7 +128,7 @@ const AccountStatement = () => {
                                 : inactiveFilterStyle
                             }
                             onClick={() => setDetailsType("ACCOUNT")}>
-                            Account
+                            Limit
                           </div>
                         </div>
                       </div>
@@ -127,6 +136,22 @@ const AccountStatement = () => {
                   </Row>
                 </Form>
               </div>
+              {detailType === "ACCOUNT" && (
+                <div className="statement_limit_summary">
+                  <div className="statement_limit_item">
+                    <div className="statement_limit_label">TOTAL CREDIT</div>
+                    <div className="statement_limit_value is-credit">
+                      {totalCredit.toFixed(2)}
+                    </div>
+                  </div>
+                  <div className="statement_limit_item">
+                    <div className="statement_limit_label">TOTAL DEBIT</div>
+                    <div className="statement_limit_value is-debit">
+                      {totalDebit.toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="tab_section transtion_tab">
                 <AllStatement
                   gameType={1}
@@ -135,7 +160,7 @@ const AccountStatement = () => {
                     spinning: isLoading || isFetching,
                     indicator: <CustomLoading />,
                   }}
-                  dateData={data?.data}
+                  dateData={statementRows}
                 />
               </div>
             </div>

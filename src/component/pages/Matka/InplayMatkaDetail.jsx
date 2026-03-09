@@ -51,42 +51,126 @@ const InplayMatkaDetail = () => {
     : [];
   const bets = Array.isArray(betsData?.data) ? betsData.data : [];
 
-  useEffect(() => {
-    if (!markets.length) return;
-    if (!selectedTab) {
-      const initial =
-        markets.find((market) => market.marketName === activeTabParam) ||
-        markets[0];
-      setSelectedTab(initial?.marketName || "");
-    }
-  }, [markets, selectedTab, activeTabParam]);
+  const normalizedTabParam = (activeTabParam || "").toUpperCase();
+  const isHarupMarket = (marketName = "") =>
+    marketName.toUpperCase().includes("HARUP");
 
-  const selectedMarket = useMemo(() => {
+  const singleMarket = useMemo(() => {
     return (
-      markets.find((market) => market.marketName === selectedTab) ||
-      markets[0]
+      markets.find((market) => {
+        const name = (market?.marketName || "").toUpperCase();
+        return name.includes("SINGLE") || name.includes("JODI");
+      }) ||
+      markets.find((market) => !isHarupMarket(market?.marketName || "")) ||
+      null
     );
-  }, [markets, selectedTab]);
+  }, [markets]);
+  const harupAndarMarket = useMemo(() => {
+    return (
+      markets.find((market) => {
+        const name = (market?.marketName || "").toUpperCase();
+        return name.includes("HARUP") && name.includes("ANDAR");
+      }) || null
+    );
+  }, [markets]);
+  const harupBaharMarket = useMemo(() => {
+    return (
+      markets.find((market) => {
+        const name = (market?.marketName || "").toUpperCase();
+        return name.includes("HARUP") && name.includes("BAHAR");
+      }) || null
+    );
+  }, [markets]);
+  const tabItems = useMemo(() => {
+    const items = [];
+    if (singleMarket) items.push({ key: "SINGLE_JODI", label: "SINGLE JODI" });
+    if (harupAndarMarket || harupBaharMarket) {
+      items.push({ key: "HARUP", label: "HARUP" });
+    }
+    return items;
+  }, [singleMarket, harupAndarMarket, harupBaharMarket]);
 
-  const selectedMarketName = selectedMarket?.marketName
-    ? selectedMarket.marketName.split("_")[0]
+  useEffect(() => {
+    if (!tabItems.length) return;
+    if (!selectedTab) {
+      if (normalizedTabParam === "HARUP") {
+        setSelectedTab("HARUP");
+        return;
+      }
+      if (
+        normalizedTabParam.includes("HARUP") &&
+        (harupAndarMarket || harupBaharMarket)
+      ) {
+        setSelectedTab("HARUP");
+        return;
+      }
+      if (normalizedTabParam === "SINGLE_JODI" || normalizedTabParam === "SINGLE JODI") {
+        setSelectedTab("SINGLE_JODI");
+        return;
+      }
+      if (normalizedTabParam.includes("SINGLE") && singleMarket) {
+        setSelectedTab("SINGLE_JODI");
+        return;
+      }
+      setSelectedTab(tabItems[0]?.key || "");
+    }
+  }, [
+    tabItems,
+    selectedTab,
+    normalizedTabParam,
+    singleMarket,
+    harupAndarMarket,
+    harupBaharMarket,
+  ]);
+
+  const selectedSingleMarket = selectedTab === "SINGLE_JODI" ? singleMarket : null;
+  const selectedSingleMarketName = selectedSingleMarket?.marketName
+    ? selectedSingleMarket.marketName.split("_")[0]
     : "";
-  const selectedMarketIdRaw = selectedMarket?.marketName || "";
-  const selectedMarketId = selectedMarketIdRaw
-    .replace(/\bharup\b/i, "")
-    .replace(/\s+/g, " ")
-    .trim();
+  const getMarketId = (marketName) =>
+    (marketName || "")
+      .replace(/\bharup\b/i, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const selectedSingleMarketId = getMarketId(selectedSingleMarket?.marketName);
+  const harupAndarMarketId = getMarketId(harupAndarMarket?.marketName);
+  const harupBaharMarketId = getMarketId(harupBaharMarket?.marketName);
 
   const {
-    data: liabilityData,
-    isLoading: isLiabilityLoading,
-    isFetching: isLiabilityFetching,
+    data: singleLiabilityData,
+    isLoading: isSingleLiabilityLoading,
+    isFetching: isSingleLiabilityFetching,
   } = useGetMatkaLiabilityQuery(
     {
       matchId: matchId,
-      marketId: selectedMarketId,
+      marketId: selectedSingleMarketId,
     },
-    { skip: !matchId || !selectedMarketId }
+    { skip: !matchId || selectedTab !== "SINGLE_JODI" || !selectedSingleMarketId }
+  );
+
+  const {
+    data: harupAndarLiabilityData,
+    isLoading: isHarupAndarLiabilityLoading,
+    isFetching: isHarupAndarLiabilityFetching,
+  } = useGetMatkaLiabilityQuery(
+    {
+      matchId: matchId,
+      marketId: harupAndarMarketId,
+    },
+    { skip: !matchId || selectedTab !== "HARUP" || !harupAndarMarketId }
+  );
+
+  const {
+    data: harupBaharLiabilityData,
+    isLoading: isHarupBaharLiabilityLoading,
+    isFetching: isHarupBaharLiabilityFetching,
+  } = useGetMatkaLiabilityQuery(
+    {
+      matchId: matchId,
+      marketId: harupBaharMarketId,
+    },
+    { skip: !matchId || selectedTab !== "HARUP" || !harupBaharMarketId }
   );
 
   const isBusy =
@@ -94,32 +178,92 @@ const InplayMatkaDetail = () => {
     isMarketFetching ||
     isBetsLoading ||
     isBetsFetching ||
-    isLiabilityLoading ||
-    isLiabilityFetching;
+    isSingleLiabilityLoading ||
+    isSingleLiabilityFetching ||
+    isHarupAndarLiabilityLoading ||
+    isHarupAndarLiabilityFetching ||
+    isHarupBaharLiabilityLoading ||
+    isHarupBaharLiabilityFetching;
 
-  const liabilities = useMemo(() => {
-    if (!Array.isArray(liabilityData?.data)) return {};
-    return liabilityData.data.reduce((acc, item) => {
+  const buildLiabilityMap = (liabilityPayload) => {
+    if (!Array.isArray(liabilityPayload?.data)) return {};
+    return liabilityPayload.data.reduce((acc, item) => {
       acc[item.selectionId] = item.liability;
       return acc;
     }, {});
-  }, [liabilityData]);
-
-  const totalBetsAmount = selectedMarket
-    ? bets
-        .filter(
-          (bet) =>
-            bet.matkaName === selectedMarket.marketName ||
-            bet.matkaName === selectedMarketName
-        )
-        .reduce((sum, bet) => sum + (bet.amount || 0), 0)
-    : 0;
+  };
+  const singleLiabilities = useMemo(
+    () => buildLiabilityMap(singleLiabilityData),
+    [singleLiabilityData]
+  );
+  const harupAndarLiabilities = useMemo(
+    () => buildLiabilityMap(harupAndarLiabilityData),
+    [harupAndarLiabilityData]
+  );
+  const harupBaharLiabilities = useMemo(
+    () => buildLiabilityMap(harupBaharLiabilityData),
+    [harupBaharLiabilityData]
+  );
 
   const errorMessage =
     (marketData?.status === false && marketData?.message) ||
     (betsData?.status === false && betsData?.message) ||
     marketError?.data?.message ||
     betsError?.data?.message;
+
+  const renderRunnerGrid = (market, liabilitiesMap) => {
+    const runners = market?.data || [];
+    return (
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+          gap: "10px",
+          marginBottom: "24px",
+        }}>
+        {runners.map((runner) => (
+          <div
+            key={runner.selectionId || runner.selectionName}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "6px",
+            }}>
+            <div
+              style={{
+                width: "100%",
+                borderRadius: "6px",
+                border: "1px solid #d9d9d9",
+                background: "#f2f2f2",
+                padding: "6px 8px",
+                textAlign: "center",
+                fontSize: "13px",
+                color: "#2f2f2f",
+              }}>
+              {runner.selectionName}
+            </div>
+            <div
+              style={{
+                fontSize: "13px",
+                color:
+                  Number(liabilitiesMap[runner.selectionId] || 0) < 0
+                    ? "#f03e3e"
+                    : "#2fb344",
+                fontWeight: 600,
+              }}>
+              {Number(liabilitiesMap[runner.selectionId] || 0).toFixed(2)}
+            </div>
+          </div>
+        ))}
+        {runners.length === 0 && (
+          <div style={{ gridColumn: "1 / -1" }}>
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="match_slip">
@@ -132,7 +276,7 @@ const InplayMatkaDetail = () => {
         extra={<button onClick={() => nav("/matka/inplay")}>Back</button>}>
         <div style={{ padding: "20px" }}>
           <Tabs
-            activeKey={selectedTab || (markets[0]?.marketName || "")}
+            activeKey={selectedTab || (tabItems[0]?.key || "")}
             onChange={(key) => {
               const params = new URLSearchParams(location.search);
               if (key) {
@@ -148,10 +292,7 @@ const InplayMatkaDetail = () => {
             }}
             type="card"
             size="small"
-            items={markets.map((market) => ({
-              key: market.marketName,
-              label: market.marketName,
-            }))}
+            items={tabItems}
           />
 
           {errorMessage && (
@@ -172,57 +313,63 @@ const InplayMatkaDetail = () => {
             <div style={{ padding: "30px 0", position: "relative" }}>
               <CustomLoading />
             </div>
-          ) : (            
-          <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-                gap: "10px",
-                marginBottom: "24px",
-              }}>
-              {(selectedMarket?.data || []).map((runner) => (
-                <div
-                  key={runner.selectionId || runner.selectionName}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "6px",
-                  }}>
+          ) : (
+            <>
+              {selectedTab === "SINGLE_JODI" &&
+                renderRunnerGrid(selectedSingleMarket, singleLiabilities)}
+
+              {selectedTab === "HARUP" && (
+                <>
                   <div
                     style={{
-                      width: "100%",
-                      borderRadius: "6px",
-                      border: "1px solid #d9d9d9",
-                      background: "#f2f2f2",
-                      padding: "6px 8px",
-                      textAlign: "center",
-                      fontSize: "13px",
-                      color: "#2f2f2f",
+                      marginBottom: "14px",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "8px",
+                      overflow: "hidden",
                     }}>
-                    {runner.selectionName}
+                    <div
+                      style={{
+                        background: "#1677ff",
+                        color: "#fff",
+                        padding: "8px 12px",
+                        fontWeight: 600,
+                        fontSize: "18px",
+                      }}>
+                      ANDAR
+                    </div>
+                    <div style={{ padding: "12px 12px 0 12px" }}>
+                      {renderRunnerGrid(harupAndarMarket, harupAndarLiabilities)}
+                    </div>
                   </div>
                   <div
                     style={{
-                      fontSize: "13px",
-                      color:
-                        Number(liabilities[runner.selectionId] || 0) < 0
-                          ? "#f03e3e"
-                          : "#2fb344",
-                      fontWeight: 600,
+                      marginBottom: "14px",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "8px",
+                      overflow: "hidden",
                     }}>
-                    {Number(
-                      liabilities[runner.selectionId] || 0
-                    ).toFixed(0)}
+                    <div
+                      style={{
+                        background: "#1677ff",
+                        color: "#fff",
+                        padding: "8px 12px",
+                        fontWeight: 600,
+                        fontSize: "18px",
+                      }}>
+                      BAHAR
+                    </div>
+                    <div style={{ padding: "12px 12px 0 12px" }}>
+                      {renderRunnerGrid(harupBaharMarket, harupBaharLiabilities)}
+                    </div>
                   </div>
-                </div>
-              ))}
-              {(selectedMarket?.data || []).length === 0 && (
-                <div style={{ gridColumn: "1 / -1" }}>
+                </>
+              )}
+              {!selectedTab && (
+                <div style={{ marginBottom: "24px" }}>
                   <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 </div>
               )}
-            </div>
+            </>
           )}
           <div className="table_section statement_tabs_data ant-spin-nested-loading">
             <table className="live_table login_data_table">
@@ -242,21 +389,31 @@ const InplayMatkaDetail = () => {
               </thead>
               <tbody>
                 {(() => {
-                  const selectedName = selectedMarketName || "";
-                  const filteredBets = selectedMarketId
-                    ? bets.filter((bet) => {
-                        const betName = (bet.matkaName || "").toUpperCase();
-                        const marketName = (selectedMarket?.marketName || "")
-                          .toUpperCase();
-                        const selected = selectedName.toUpperCase();
-                        return (
-                          betName === marketName ||
-                          betName === selected ||
-                          betName.includes(selected) ||
-                          (bet.marketId || "").toUpperCase().includes(selected)
-                        );
-                      })
-                    : bets;
+                  const filteredBets = bets.filter((bet) => {
+                    const betName = (bet.matkaName || "").toUpperCase();
+                    const marketId = (bet.marketId || "").toUpperCase();
+
+                    if (selectedTab === "HARUP") {
+                      return (
+                        betName.includes("HARUP") || marketId.includes("HARUP")
+                      );
+                    }
+
+                    if (selectedTab === "SINGLE_JODI") {
+                      const selectedName = (selectedSingleMarketName || "").toUpperCase();
+                      const marketName = (
+                        selectedSingleMarket?.marketName || ""
+                      ).toUpperCase();
+                      return (
+                        betName === marketName ||
+                        betName === selectedName ||
+                        betName.includes(selectedName) ||
+                        marketId.includes(selectedName)
+                      );
+                    }
+
+                    return true;
+                  });
 
                   return filteredBets.length > 0 ? (
                     filteredBets.map((bet, index) => (

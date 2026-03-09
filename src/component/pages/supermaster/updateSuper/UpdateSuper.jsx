@@ -163,9 +163,9 @@ const UpdateSuper = () => {
         password: "******",
         comm_type: isComm,
         commType: myComm === "bbb" ? "Bet by Bet" : "No Comm",
-        matchcomm: getMyField("MatchCommission", "myMatchCommission"),
+        myMatchCommission: getMyField("MatchCommission", "myMatchCommission"),
         super_match_comm: getUserField("MatchCommission"),
-        sesscomm: getMyField("SessionCommision", "mySessionCommision"),
+        mySessionCommision: getMyField("SessionCommision", "mySessionCommision"),
         super_sess_comm: getUserField("SessionCommision"),
         sess_comm: getUserField("CasinoCommission"),
         super_casino_share: getMyField("CasinoPartnership", "myCasinoPartnership"),
@@ -199,9 +199,9 @@ const UpdateSuper = () => {
       mobileAppCharge: getUserField("MobileAppCharge"),
       commissionType: isNoComm ? 1 : 2,
       partnership: values?.share,
-      casinoPartnership: values?.supercasinocomm,
+      casinoPartnership: values?.share,
       internationalCasinoPartnership: getUserField("IntlCasinoPartnership"),
-      matkaPartnership: values?.matka_share ?? 0,
+      matkaPartnership: values?.share ?? 0,
       matchCommission: isNoComm ? 0 : values?.super_match_comm,
       sessionCommission: isNoComm ? 0 : values?.super_sess_comm,
       casinoCommission:  values?.sess_comm,
@@ -245,7 +245,7 @@ const UpdateSuper = () => {
   const onCommissionType = (value) => {
     console.log(value, "valuevalue");
     setCommType(value);
-    if (value !== "bbb") {
+    if (value === "no-comm") {
       form.setFieldsValue({
         super_match_comm: 0,
         super_sess_comm: 0,
@@ -358,7 +358,8 @@ const UpdateSuper = () => {
                   <Col lg={12} md={12} xs={24}>
                     <Form.Item
                       label={`${parentLabel} Match Share (%)`}
-                      name="matchShare">
+                      name="matchShare"
+                      required>
                       <Input type="number" disabled />
                     </Form.Item>
                   </Col>{" "}
@@ -377,15 +378,16 @@ const UpdateSuper = () => {
 
               <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label={`${parentLabel} Comm Type`}
+                  label={`${parentLabel} COMMISSION TYPE`}
                   name="commType"
+                  required
                   rules={[{ required: true }]}>
                   <Input disabled />
                 </Form.Item>
               </Col>
               <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label={`${userTypeLabel} Comm Type`}
+                  label={`${userTypeLabel} COMMISSION TYPE`}
                   name="comm_type"
                   rules={[{ required: true }]}>
                   <Select onChange={onCommissionType} value={commType}>
@@ -397,15 +399,16 @@ const UpdateSuper = () => {
 
               <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label={`${parentLabel} Match Comm (%)`}
-                  name="matchcomm">
+                  label={`${parentLabel} Match Comm`}
+                  name="myMatchCommission"
+                  required>
                   <Input type="number" disabled />
                 </Form.Item>
               </Col>
 
               <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label={`${userTypeLabel} Match Comm (%)`}
+                  label={`${userTypeLabel} Match Comm`}
                   name="super_match_comm"
                   rules={[
                     {
@@ -413,21 +416,22 @@ const UpdateSuper = () => {
                       message: "Please enter match comm",
                     },
                   ]}>
-                  <Input disabled={commType !== "bbb"} />
+                  <Input disabled={commType === "no-comm"} />
                 </Form.Item>
               </Col>
 
               <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label={`${parentLabel} Sess Comm (%)`}
-                  name="sesscomm">
+                  label={`${parentLabel} Session Comm`}
+                  name="mySessionCommision"
+                  required>
                   <Input type="number" disabled />
                 </Form.Item>
               </Col>
 
               <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label={`${userTypeLabel} Sess Comm (%)`}
+                  label={`${userTypeLabel} Session Comm`}
                   name="super_sess_comm"
                   rules={[
                     {
@@ -435,100 +439,55 @@ const UpdateSuper = () => {
                       message: "Please enter session comm",
                     },
                   ]}>
-                  <Input disabled={commType !== "bbb"} />
+                  <Input disabled={commType === "no-comm"} />
                 </Form.Item>
               </Col>
-              </Row>
-            </div>
 
-            <div className="update_super_section">
-
-              <Row className="super_agent update_agent update_super_grid" gutter={[18, 14]}>
               <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label={`${parentLabel} Casino Share (%)`}
-                  name="super_casino_share">
+                  label={`${parentLabel} Casino Comm`}
+                  name="super_casino_comm"
+                  required>
                   <Input type="number" disabled />
                 </Form.Item>
               </Col>
 
               <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label={`${userTypeLabel} Casino Share (%)`}
-                  name="supercasinocomm"
-                  rules={[
-                    { required: true, message: "Please enter casino share" },
-                  ]}>
-                  <Input disabled={isClient} />
-                </Form.Item>
-              </Col>
-
-              <Col lg={12} md={12} xs={24}>
-                <Form.Item
-                  label={`${parentLabel} Casino Comm (%)`}
-                  name="super_casino_comm">
-                  <Input type="number" disabled />
-                </Form.Item>
-              </Col>
-
-              <Col lg={12} md={12} xs={24}>
-                <Form.Item
-                  label={`${userTypeLabel} Casino Comm (%)`}
+                  label={`${userTypeLabel} Casino Comm`}
                   name="sess_comm"
                   rules={[
-                    { required: true, message: "Please enter casino comm" },
+                    {
+                      required: commType === "bbb",
+                      message: "Please enter casino comm",
+                    },
                   ]}>
-                  <Input />
+                  <Input disabled={commType === "no-comm"} />
                 </Form.Item>
               </Col>
-            </Row>
-            </div>
 
-            <div className="update_super_section">
-              <div className="update_super_section_title">
-                Matka Share and Commission
-              </div>
-              <Row className="super_agent update_agent update_super_grid" gutter={[18, 14]}>
-                <Col lg={12} md={12} xs={24}>
-                  <Form.Item
-                    label={`${parentLabel} Matka Share (%)`}
-                    name="super_matka_share">
-                    <Input type="number" disabled />
-                  </Form.Item>
-                </Col>
+              <Col lg={12} md={12} xs={24}>
+                <Form.Item
+                  label={`${parentLabel} Matka Comm`}
+                  name="super_matka_comm"
+                  required>
+                  <Input type="number" disabled />
+                </Form.Item>
+              </Col>
 
-                <Col lg={12} md={12} xs={24}>
-                  <Form.Item
-                    label={`${userTypeLabel} Matka Share (%)`}
-                    name="matka_share"
-                    rules={[
-                      { required: true, message: "Please enter matka share" },
-                    ]}>
-                  <Input disabled={isClient} />
-                  </Form.Item>
-                </Col>
-
-                <Col lg={12} md={12} xs={24}>
-                  <Form.Item
-                    label={`${parentLabel} Matka Comm (%)`}
-                    name="super_matka_comm">
-                    <Input type="number" disabled />
-                  </Form.Item>
-                </Col>
-
-                <Col lg={12} md={12} xs={24}>
-                  <Form.Item
-                    label={`${userTypeLabel} Matka Comm (%)`}
-                    name="matka_comm"
-                    rules={[
-                      {
-                        required: commType === "bbb",
-                        message: "Please enter matka commission",
-                      },
-                    ]}>
-                    <Input />
-                  </Form.Item>
-                </Col>
+              <Col lg={12} md={12} xs={24}>
+                <Form.Item
+                  label={`${userTypeLabel} Matka Comm`}
+                  name="matka_comm"
+                  rules={[
+                    {
+                      required: commType !== "no-comm",
+                      message: "Please enter matka commission",
+                    },
+                  ]}>
+                  <Input disabled={commType === "no-comm"} />
+                </Form.Item>
+              </Col>
               </Row>
             </div>
 

@@ -25,6 +25,41 @@
     border-color: #0b79d0;
     color: #fff;
   }
+
+  .statement_limit_summary {
+    margin: 8px 0 12px;
+    padding: 14px;
+    background: #f0f2f5;
+    border-radius: 6px;
+    display: flex;
+    gap: 36px;
+  }
+
+  .statement_limit_item {
+    min-width: 220px;
+  }
+
+  .statement_limit_label {
+    color: #8c8c8c;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .statement_limit_value {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .statement_limit_value.is-credit {
+    color: #52c41a;
+  }
+
+  .statement_limit_value.is-debit {
+    color: #f5222d;
+  }
   // .ant-picker{
   //     width: 40% !important;
   // }

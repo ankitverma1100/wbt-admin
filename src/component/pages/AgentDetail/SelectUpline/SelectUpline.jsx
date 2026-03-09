@@ -241,15 +241,15 @@ const SelectUpline = () => {
             <Row className="super_agent sub_super">
               <Col span={12}>
                 <Form.Item
-                  label="My Match Share(%)"
-                  name="My Match Share(%)"
+                  label="My MATCH SHARE"
+                  name="My MATCH SHARE"
                   required={false}>
                   <Input type="number" disabled />
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="Match Share(%)"
+                  label="MATCH SHARE"
                   name="matchShare"
                   required
                   rules={[
@@ -286,7 +286,7 @@ const SelectUpline = () => {
 
               <Col span={12}>
                 <Form.Item
-                  label="My Comm type"
+                  label="My Commission Type"
                   name="MyCommtype"
                   required={false}>
                   <Input type="text" disabled />
@@ -327,7 +327,7 @@ const SelectUpline = () => {
                   <Input type="number" disabled />
                 </Form.Item>
                 {/* <Form.Item
-                  label="My Casino comm(%)"
+                  label="My CASINO COMM"
                   name="cassinoComm"
                   required={false}>
                   <Input type="number" disabled />
@@ -350,7 +350,7 @@ const SelectUpline = () => {
 
               <Col span={12}>
                 <Form.Item
-                  label="My Casino comm(%)"
+                  label="My CASINO COMM"
                   name="cassinoComm"
                   required={false}>
                   <Input type="number" disabled />
@@ -358,7 +358,7 @@ const SelectUpline = () => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="Casino comm(%)"
+                  label="CASINO COMM"
                   name="cassino_Comm"
                   required
                   rules={[

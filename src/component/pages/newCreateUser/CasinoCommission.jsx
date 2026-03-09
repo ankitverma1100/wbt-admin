@@ -8,7 +8,7 @@ const CasinoCommission = ({ createName, commiType }) => {
   return (
     <>
       <Row className="super_agent sub_super" gutter={[18, 14]}>
-        {id !== "2" && (
+        {/* {id !== "2" && (
           <Col lg={12} md={12} xs={12}>
             <Form.Item
               label="MY CASINO SHARE (%)"
@@ -17,8 +17,8 @@ const CasinoCommission = ({ createName, commiType }) => {
               <Input type="number" value={2} disabled />
             </Form.Item>
           </Col>
-        )}
-        {id !== "2" && (
+        )} */}
+        {/* {id !== "2" && (
           <Col lg={12} md={12} xs={12}>
             <Form.Item
               label={`${labelPrefix}CASINO SHARE (%)`}
@@ -33,10 +33,10 @@ const CasinoCommission = ({ createName, commiType }) => {
               <Input placeholder="casino share" />
             </Form.Item>
           </Col>
-        )}
+        )} */}
         <Col lg={12} md={12} xs={12}>
           <Form.Item
-            label="MY CASINO COMM(%)"
+            label="MY CASINO COMM"
             name="cassinoComm"
             required={false}>
             <Input type="number" value={2} disabled />
@@ -44,7 +44,7 @@ const CasinoCommission = ({ createName, commiType }) => {
         </Col>
         <Col lg={12} md={12} xs={12}>
           <Form.Item
-            label={`${labelPrefix}CASINO COMM(%)`}
+            label={`${labelPrefix}CASINO COMM`}
             name="cassino_Comm"
             required
             rules={[

@@ -220,7 +220,7 @@ const ClientUpline = () => {
             <Row className="super_agent sub_super">
               <Col span={12}>
                 <Form.Item
-                  label="My Comm type"
+                  label="My Commission Type"
                   name="MyCommtype"
                   required={false}>
                   <Input type="text" disabled />
@@ -249,7 +249,7 @@ const ClientUpline = () => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="My Casino comm(%)"
+                  label="My CASINO COMM"
                   name="cassinoComm"
                   required={false}>
                   <Input type="number" disabled />
@@ -257,7 +257,7 @@ const ClientUpline = () => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="Casino comm(%)"
+                  label="CASINO COMM"
                   name="cassino_Comm"
                   required
                   rules={[

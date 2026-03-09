@@ -159,7 +159,7 @@ const UpdateClient = () => {
               </Col>
 
               <Col lg={12} md={12} xs={24}>
-                <Form.Item label="AGENT casino comm(%)" name="casinoComm">
+                <Form.Item label="AGENT CASINO COMM" name="casinoComm">
                   <Input
                     type="number"
                     placeholder="0"
@@ -171,7 +171,7 @@ const UpdateClient = () => {
 
               <Col lg={12} md={12} xs={24}>
                 <Form.Item
-                  label="CLIENT casino comm(%)"
+                  label="CLIENT CASINO COMM"
                   name="ClientcasinoComm"
                   rules={[
                     {

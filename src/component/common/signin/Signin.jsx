@@ -53,6 +53,7 @@ const Signin = () => {
       password: password.trim(),
       url: window.location.hostname,
       // url: "superadmin.wbt24.com",
+      // url: "admin.wbt24.com",
       // url: "superadmin.antpro.co",
       // url: "superadmin.urb99.com",
     };

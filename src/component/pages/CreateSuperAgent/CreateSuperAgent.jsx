@@ -397,7 +397,7 @@ const CreateSuperAgent = ({ createName }) => {
                   <>
                     <Col lg={12} xs={24}>
                       <Form.Item
-                        label="My Match Share(%)"
+                        label="My MATCH SHARE"
                         name="MyMatchShare"
                         required={false}>
                         <InputNumber
@@ -412,7 +412,7 @@ const CreateSuperAgent = ({ createName }) => {
                     </Col>
                     <Col lg={12} xs={24}>
                       <Form.Item
-                        label="Match Share(%)"
+                        label="MATCH SHARE"
                         name="matchShare"
                         rules={[
                           {
@@ -456,7 +456,7 @@ const CreateSuperAgent = ({ createName }) => {
 
                 <Col lg={12} xs={24}>
                   <Form.Item
-                    label="My Comm type"
+                    label="My Commission Type"
                     name="MyCommtype"
                     required={false}>
                     <Input type="text" disabled />
@@ -655,7 +655,7 @@ const CreateSuperAgent = ({ createName }) => {
                   <>
                     <Col span={12}>
                       <Form.Item
-                        label="My Casino comm(%)"
+                        label="My CASINO COMM"
                         name="cassinoComm"
                         required={false}>
                         <Input type="number" disabled />
@@ -663,7 +663,7 @@ const CreateSuperAgent = ({ createName }) => {
                     </Col>
                     <Col span={12}>
                       <Form.Item
-                        label="Casino comm(%)"
+                        label="CASINO COMM"
                         name="cassino_Comm"
                         required
                         rules={[
@@ -673,7 +673,7 @@ const CreateSuperAgent = ({ createName }) => {
                           },
                         ]}>
                         <Select
-                          defaultValue="Select Casino Comm(%)"
+                          defaultValue="Select CASINO COMM"
                           options={[
                             {
                               value: "0.00",

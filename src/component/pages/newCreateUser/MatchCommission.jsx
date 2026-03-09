@@ -32,7 +32,7 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
             </Col>
             <Col lg={12} md={12} xs={12}>
               <Form.Item
-                label={`${labelPrefix}MATCH SHARE(%)`}
+                label={`${labelPrefix}MATCH SHARE`}
                 name="matchShare"
                 rules={[
                   {
@@ -62,7 +62,6 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
                   min={0}
                   step="1"
                   type="number"
-                  placeholder="Enter Match Share"
                   onKeyDown={(e) => {
                     if (e.key == ".") {
                       e.preventDefault();
@@ -76,7 +75,7 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
 
         <Col lg={12} md={12} xs={12}>
           <Form.Item
-            label="MY COMM TYPE"
+            label="My Commission Type"
             name="MyCommtype"
             required={false}>
             <Input type="text" disabled />
@@ -86,7 +85,7 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
         <Col lg={12} md={12} xs={12}>
           <Form.Item
             name="Commtype"
-            label={`${labelPrefix}COMM TYPE`}
+            label={`${labelPrefix}COMMISSION TYPE`}
             required
             rules={[
               {
@@ -104,63 +103,107 @@ const MatchCommission = ({ commissionType, commiType, data, createName }) => {
             />
           </Form.Item>
         </Col>
-        {commiType === "bbb" && (
-          <>
-            <Col lg={12} md={12} xs={12}>
-              <Form.Item
-                name="My_Match_comm"
-                label="MY MATCH COMM(%)">
-                <InputNumber
-                  className="number_field"
-                  min={0}
-                  step="0.1"
-                  disabled
-                />
-              </Form.Item>
-            </Col>
-            <Col lg={12} md={12} xs={12}>
-              <Form.Item
-                name="Match_comm"
-                required
-                label={`${labelPrefix}MATCH COMM(%)`}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your match Commission!",
-                  },
-                ]}>
-                <Input placeholder="master Match Commission" />
-              </Form.Item>
-            </Col>
+        <Col lg={12} md={12} xs={12}>
+          <Form.Item
+            name="My_Match_comm"
+            label="MY MATCH COMM">
+            <InputNumber
+              className="number_field"
+              min={0}
+              step="0.1"
+              disabled
+            />
+          </Form.Item>
+        </Col>
+        <Col lg={12} md={12} xs={12}>
+          <Form.Item
+            name="Match_comm"
+            required
+            label={`${labelPrefix}MATCH COMM`}
+            rules={[
+              {
+                required: commiType === "bbb",
+                message: "Please input your match Commission!",
+              },
+            ]}>
+            <Input disabled={commiType === "nocomm"} />
+          </Form.Item>
+        </Col>
 
-            <Col lg={12} md={12} xs={12}>
-              <Form.Item
-                name="My_sess_comm"
-                label="MY SESS COMM(%)">
-                <InputNumber
-                  className="number_field"
-                  min={0}
-                  step="0.1"
-                  disabled
-                />
-              </Form.Item>
-            </Col>
-            <Col lg={12} md={12} xs={12}>
-              <Form.Item
-                name="sess_comm"
-                required
-                label={`${labelPrefix}SESS COMM(%)`}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your Sess Commission!",
-                  },
-                ]}>
-                <Input placeholder="master Session Commission" />
-              </Form.Item>
-            </Col>
-          </>
-        )}
+        <Col lg={12} md={12} xs={12}>
+          <Form.Item
+            name="My_sess_comm"
+            label="MY SESSION COMM">
+            <InputNumber
+              className="number_field"
+              min={0}
+              step="0.1"
+              disabled
+            />
+          </Form.Item>
+        </Col>
+        <Col lg={12} md={12} xs={12}>
+          <Form.Item
+            name="sess_comm"
+            required
+            label={`${labelPrefix}SESSION COMM`}
+            rules={[
+              {
+                required: commiType === "bbb",
+                message: "Please input your session commission!",
+              },
+            ]}>
+            <Input disabled={commiType === "nocomm"} />
+          </Form.Item>
+        </Col>
+
+        <Col lg={12} md={12} xs={12}>
+          <Form.Item
+            label="MY CASINO COMM"
+            name="cassinoComm"
+            required={false}>
+            <Input type="number" disabled />
+          </Form.Item>
+        </Col>
+        <Col lg={12} md={12} xs={12}>
+          <Form.Item
+            label={`${labelPrefix}CASINO COMM`}
+            name="cassino_Comm"
+            required
+            rules={[
+              {
+                required: commiType === "bbb",
+                message: "Please enter valid casino commission",
+              },
+            ]}>
+            <Input disabled={commiType === "nocomm"} />
+          </Form.Item>
+        </Col>
+
+        <Col lg={12} md={12} xs={12}>
+          <Form.Item
+            label="MY MATKA COMM"
+            name="MyMatkaComm"
+            required={false}>
+            <InputNumber
+              className="number_field"
+              disabled
+            />
+          </Form.Item>
+        </Col>
+        <Col lg={12} md={12} xs={12}>
+          <Form.Item
+            label={`${labelPrefix}MATKA COMM`}
+            name="matkaComm"
+            rules={[
+              {
+                required: commiType !== "nocomm",
+                message: "Please enter matka commission",
+              },
+            ]}>
+            <Input disabled={commiType === "nocomm"} />
+          </Form.Item>
+        </Col>
       </Row>
 
       {/* <div>

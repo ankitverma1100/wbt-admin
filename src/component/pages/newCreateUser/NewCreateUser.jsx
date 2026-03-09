@@ -19,7 +19,6 @@ import {
   useUserIdForSearchQuery,
 } from "../../../store/service/supermasteAccountStatementServices";
 import MatchCommission from "./MatchCommission";
-import CasinoCommission from "./CasinoCommission";
 import SelectUpline from "./SelectUpline";
 import { convertCodeReverse } from "../../../store/constant";
 import {
@@ -39,17 +38,25 @@ const createName = {
 
 const NewCreateUser = () => {
   const [userData, setUserData] = useState({});
-  const [commiType, setCommiType] = useState("nocomm");
+  const [commiType, setCommiType] = useState("");
   const [, contextHolder] = notification.useNotification();
   const [parentId, setParentId] = useState(null);
   const [form] = Form.useForm();
 
   const commissionType = (value) => {
     setCommiType(value);
+    if (value === "nocomm") {
+      form.setFieldsValue({
+        Match_comm: 0,
+        sess_comm: 0,
+        cassino_Comm: 0,
+        matkaComm: 0,
+      });
+    }
   };
 
   const { id } = useParams();
-  const handleChange = (value) => {};
+  const handleChange = (value) => { };
   const handleSelect = (value) => {
     setParentId(value);
   };
@@ -117,13 +124,12 @@ const NewCreateUser = () => {
       password,
       mobile,
       matchShare,
-      cassino_Share,
       cassino_Comm,
       sess_comm,
       Match_comm,
-      matkaShare,
       matkaComm,
       Coins,
+      shareType,
       appId,
       appIdChangeAllowed,
       loginOtpDisabled,
@@ -131,23 +137,25 @@ const NewCreateUser = () => {
     const appIdChangeAllowedByUpline = Boolean(
       userDetails?.data?.appIdChangeAllowed
     );
+    const effectiveShare =
+      id === "2" ? userDetails?.data?.myPartnership : matchShare;
     const userData = {
       username: Name,
       reference: reference,
       password: password,
-      contact: mobile,
+      contact: mobile || "8008008008",
+      shareType: shareType || "Change",
+      flatShare: (shareType || "Change") === "Fixed",
       mobileAppCharge: "0",
-      partnership: id === "2" ? userDetails?.data?.myPartnership : matchShare,
-      casinoPartnership:
-        id === "2" ? userDetails?.data?.myCasinoPartnership : cassino_Share,
+      partnership: effectiveShare,
+      casinoPartnership: effectiveShare,
       internationalCasinoPartnership: 0,
       commissionType: commiType === "bbb" ? "2" : "1",
       matchCommission: commiType === "bbb" ? Match_comm : 0,
       sessionCommission: commiType === "bbb" ? sess_comm : 0,
       casinoCommission: commiType === "bbb" ? cassino_Comm : 0,
-      matkaPartnership:
-        id === "2" ? userDetails?.data?.myMatkaPartnership : matkaShare ?? 0,
-      matkaCommission: commiType === "bbb" ? matkaComm : 0,
+      matkaPartnership: effectiveShare ?? 0,
+      matkaCommission: matkaComm,
       limit: Coins,
       parentIdForUserCreation: convertCodeReverse(parentId),
       ...(Number(id) === 7 && { loginOtpDisabled: loginOtpDisabled }),
@@ -239,7 +247,7 @@ const NewCreateUser = () => {
                   name: "MyCommtype",
                   value:
                     userDetails?.data?.myPartnership > 0 ||
-                    userDetails?.data?.myCasinoPartnership > 0
+                      userDetails?.data?.myCasinoPartnership > 0
                       ? "BetByBet"
                       : "NoComm",
                 },
@@ -262,16 +270,24 @@ const NewCreateUser = () => {
                     userDetails?.data?.myMatkaCommission,
                 },
                 {
+                  name: "Match_comm",
+                  value: commiType === "nocomm" ? 0 : "",
+                },
+                {
+                  name: "sess_comm",
+                  value: commiType === "nocomm" ? 0 : "",
+                },
+                {
                   name: "cassino_Comm",
-                  value: commiType !== "bbb" ? 0 : "",
+                  value: commiType === "nocomm" ? 0 : "",
                 },
                 {
                   name: "matkaComm",
-                  value: commiType !== "bbb" ? 0 : "",
+                  value: commiType === "nocomm" ? 0 : "",
                 },
                 {
                   name: "shareType",
-                  value: "Fixed",
+                  value: "Change",
                 },
                 {
                   name: "loginOtpDisabled",
@@ -284,102 +300,101 @@ const NewCreateUser = () => {
               ]}>
               <div>
                 <div className="create_user_section_block">
-                  <div className="create_user_section_title">User Info</div>
                   <Row
                     className="super_agent create_user_grid"
                     gutter={[18, 14]}>
-                  <Col xl={12} lg={12} md={12} xs={12}>
-                    <Form.Item
-                      label="Name"
-                      name="Name"
-                      required
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your name!",
-                        },
-                      ]}>
-                      <Input
-                        type="text"
-                        placeholder="Enter full name"
-                        onKeyDown={(e) => {
-                          if (
-                            !e.key.match(/^[a-zA-Z ]$/) &&
-                            e.key.length === 1
-                          ) {
-                            e.preventDefault();
-                          }
-                        }}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col xl={12} lg={12} md={12} xs={12}>
-                    <Form.Item
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your reference!",
-                        },
-                      ]}
-                      label="Reference"
-                      name="reference">
-                      <Input type="text" placeholder="Enter Reference" />
-                    </Form.Item>
-                  </Col>
-                  <Col lg={12} md={12} xs={12}>
-                    <Form.Item
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your reference!",
-                        },
-                      ]}
-                      label="My Coins"
-                      name="My Coins">
-                      <Input type="number" disabled onWheel={handleNumberWheel} />
-                    </Form.Item>
-                  </Col>
-                  <Col lg={12} md={12} xs={12}>
-                    <Form.Item
-                      label="Coins"
-                      name="Coins"
-                      required
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your coins!",
-                        },
-                        {
-                          validator: async (_, values) => {
-                            if (
-                              userDetails?.data?.balance < values &&
-                              values != "" &&
-                              values != null
-                            ) {
-                              return Promise.reject(
-                                new Error(
-                                  `Coins must be less than ${userDetails?.data?.balance}`
-                                )
-                              );
-                            }
+                    <Col xl={12} lg={12} md={12} xs={12}>
+                      <Form.Item
+                        label="Name"
+                        name="Name"
+                        required
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your name!",
                           },
-                        },
-                      ]}>
-                      <InputNumber
-                        className="number_field"
-                        min={0}
-                        type="number"
-                        placeholder="Enter Coins"
-                        onWheel={handleNumberWheel}
-                        onKeyDown={(e) => {
-                          if (e.key == ".") {
-                            e.preventDefault();
-                          }
-                        }}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col lg={12} md={12} xs={12}>
+                        ]}>
+                        <Input
+                          type="text"
+                          placeholder="Enter full name"
+                          onKeyDown={(e) => {
+                            if (
+                              !e.key.match(/^[a-zA-Z ]$/) &&
+                              e.key.length === 1
+                            ) {
+                              e.preventDefault();
+                            }
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xl={12} lg={12} md={12} xs={12}>
+                      <Form.Item
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your reference!",
+                          },
+                        ]}
+                        label="Reference"
+                        name="reference">
+                        <Input type="text" placeholder="Enter Reference" />
+                      </Form.Item>
+                    </Col>
+                    <Col lg={12} md={12} xs={12}>
+                      <Form.Item
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your reference!",
+                          },
+                        ]}
+                        label="My Coins"
+                        name="My Coins">
+                        <Input type="number" disabled onWheel={handleNumberWheel} />
+                      </Form.Item>
+                    </Col>
+                    <Col lg={12} md={12} xs={12}>
+                      <Form.Item
+                        label="Coins"
+                        name="Coins"
+                        required
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your coins!",
+                          },
+                          {
+                            validator: async (_, values) => {
+                              if (
+                                userDetails?.data?.balance < values &&
+                                values != "" &&
+                                values != null
+                              ) {
+                                return Promise.reject(
+                                  new Error(
+                                    `Coins must be less than ${userDetails?.data?.balance}`
+                                  )
+                                );
+                              }
+                            },
+                          },
+                        ]}>
+                        <InputNumber
+                          className="number_field"
+                          min={0}
+                          type="number"
+                          placeholder="Enter Coins"
+                          onWheel={handleNumberWheel}
+                          onKeyDown={(e) => {
+                            if (e.key == ".") {
+                              e.preventDefault();
+                            }
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {/* <Col lg={12} md={12} xs={12}>
                     <Form.Item
                       label="Contact No."
                       name="mobile"
@@ -414,22 +429,22 @@ const NewCreateUser = () => {
                         }}
                       />
                     </Form.Item>
-                  </Col>
+                  </Col> */}
 
-                  <Col lg={12} md={12} xs={12}>
-                    <Form.Item
-                      label="Password"
-                      name="password"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your Password",
-                        },
-                      ]}>
-                      <Input type="password" placeholder="Password" />
-                    </Form.Item>
-                  </Col>
-                  {id !== "2" && (
+                    <Col lg={12} md={12} xs={12}>
+                      <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your Password",
+                          },
+                        ]}>
+                        <Input type="password" placeholder="Password" />
+                      </Form.Item>
+                    </Col>
+                    {/* {id !== "2" && (
                     <Col lg={12} md={12} xs={12}>
                       <Form.Item
                         label="Share Type"
@@ -455,86 +470,86 @@ const NewCreateUser = () => {
                         />
                       </Form.Item>
                     </Col>
-                  )}
-                  {(Number(id) === 7 ||
-                    ([6, 5].includes(Number(id)) &&
-                      userDetails?.data?.appIdChangeAllowed)) && (
-                    <>
-                      <Col lg={12} md={12} xs={12}>
-                        <Form.Item
-                          label="App Url"
-                          name="appId"
-                          placeholder="Select App Details"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please select your app details!",
-                            },
-                          ]}>
-                          <Select
-                            options={appOptions?.map((item) => ({
-                              value: item.id ?? item.appId,
-                              label: item.appName,
-                            }))}
-                          />
-                        </Form.Item>
-                      </Col>
-                      {userDetails?.data?.appIdChangeAllowed &&
-                        Number(id) === 7 && (
-                        <Col lg={12} md={12} xs={12}>
-                          <Form.Item
-                            label="App Id Change Allowed"
-                            name="appIdChangeAllowed"
-                            rules={[
-                              {
-                                required: true,
-                                message:
-                                  "Please select app id change allow status!",
-                              },
-                            ]}>
-                            <Select
-                              options={[
+                  )} */}
+                    {(Number(id) === 7 ||
+                      ([6, 5].includes(Number(id)) &&
+                        userDetails?.data?.appIdChangeAllowed)) && (
+                        <>
+                          <Col lg={12} md={12} xs={12}>
+                            <Form.Item
+                              label="App Url"
+                              name="appId"
+                              placeholder="Select App Details"
+                              rules={[
                                 {
-                                  value: true,
-                                  label: "Yes",
+                                  required: true,
+                                  message: "Please select your app details!",
                                 },
-                                {
-                                  value: false,
-                                  label: "No",
-                                },
-                              ]}
-                            />
-                          </Form.Item>
-                        </Col>
-                        )}
-                      {userDetails?.data?.loginOtpDisabled && (
-                        <Col lg={12} md={12} xs={12}>
-                          <Form.Item
-                            label="Login Otp Disabled"
-                            name="loginOtpDisabled"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please select login OTP status!",
-                              },
-                            ]}>
-                            <Select
-                              options={[
-                                {
-                                  value: true,
-                                  label: "Yes",
-                                },
-                                {
-                                  value: false,
-                                  label: "No",
-                                },
-                              ]}
-                            />
-                          </Form.Item>
-                        </Col>
+                              ]}>
+                              <Select
+                                options={appOptions?.map((item) => ({
+                                  value: item.id ?? item.appId,
+                                  label: item.appName,
+                                }))}
+                              />
+                            </Form.Item>
+                          </Col>
+                          {userDetails?.data?.appIdChangeAllowed &&
+                            Number(id) === 7 && (
+                              <Col lg={12} md={12} xs={12}>
+                                <Form.Item
+                                  label="App Id Change Allowed"
+                                  name="appIdChangeAllowed"
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message:
+                                        "Please select app id change allow status!",
+                                    },
+                                  ]}>
+                                  <Select
+                                    options={[
+                                      {
+                                        value: true,
+                                        label: "Yes",
+                                      },
+                                      {
+                                        value: false,
+                                        label: "No",
+                                      },
+                                    ]}
+                                  />
+                                </Form.Item>
+                              </Col>
+                            )}
+                          {userDetails?.data?.loginOtpDisabled && (
+                            <Col lg={12} md={12} xs={12}>
+                              <Form.Item
+                                label="Login Otp Disabled"
+                                name="loginOtpDisabled"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please select login OTP status!",
+                                  },
+                                ]}>
+                                <Select
+                                  options={[
+                                    {
+                                      value: true,
+                                      label: "Yes",
+                                    },
+                                    {
+                                      value: false,
+                                      label: "No",
+                                    },
+                                  ]}
+                                />
+                              </Form.Item>
+                            </Col>
+                          )}
+                        </>
                       )}
-                    </>
-                  )}
                   </Row>
                 </div>
                 <div className="create_user_section_block">
@@ -546,94 +561,6 @@ const NewCreateUser = () => {
                     userData={userData}
                   />
                 </div>
-                <div className="create_user_section_block">
-                  <CasinoCommission
-                    createName={createName[id]}
-                    commiType={commiType}
-                  />
-                </div>
-                <div className="create_user_section_block">
-                  <div>
-                    <h2 className="match_share">
-                      {createName[id]} Matka Share and Commission
-                    </h2>
-                  </div>
-                  <Row
-                    className="super_agent sub_super create_user_grid"
-                    gutter={[18, 14]}>
-                    {id !== "2" && (
-                      <>
-                        <Col lg={12} md={12} xs={12}>
-                          <Form.Item
-                            label="My Matka Share (%)"
-                            name="MyMatkaShare"
-                            required={false}>
-                            <InputNumber
-                              className="number_field"
-                              disabled
-                              onWheel={handleNumberWheel}
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col lg={12} xs={12}>
-                          <Form.Item
-                            label="Matka Share (%)"
-                            name="matkaShare"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please enter matka share",
-                              },
-                            ]}>
-                            <InputNumber
-                              className="number_field"
-                              min={0}
-                              step="1"
-                              type="number"
-                              placeholder="Enter Matka Share"
-                              onWheel={handleNumberWheel}
-                              onKeyDown={(e) => {
-                                if (e.key == ".") {
-                                  e.preventDefault();
-                                }
-                              }}
-                            />
-                          </Form.Item>
-                        </Col>
-                      </>
-                    )}
-
-                    <Col lg={12} md={12} xs={12}>
-                      <Form.Item
-                        label="My Matka Comm (%)"
-                        name="MyMatkaComm"
-                        required={false}>
-                        <InputNumber
-                          className="number_field"
-                          disabled
-                          onWheel={handleNumberWheel}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col lg={12} md={12} xs={12}>
-                      <Form.Item
-                        label="Matka Comm (%)"
-                        name="matkaComm"
-                        rules={[
-                          {
-                            required: commiType === "bbb",
-                            message: "Please enter matka commission",
-                          },
-                        ]}>
-                        <Input
-                          placeholder="Matka Commission"
-                          disabled={commiType !== "bbb"}
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </div>
-
                 <div className="create_user_actions">
                   <Button type="primary" htmlType="submit">
                     Submit

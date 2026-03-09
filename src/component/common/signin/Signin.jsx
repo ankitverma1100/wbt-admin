@@ -30,17 +30,29 @@ const Signin = () => {
   const [showOtp, setShowOtp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [touched, setTouched] = useState({
+    username: false,
+    password: false,
+    otp: false,
+  });
+
+  const showUsernameError = (isSubmitted || touched.username) && !username.trim();
+  const showPasswordError = (isSubmitted || touched.password) && !password.trim();
+  const showOtpError = showOtp && (isSubmitted || touched.otp) && !otp.trim();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitted(true);
 
     // ⛔ HARD STOP IF EMPTY (UI already shows error)
-    if (!username || !password) return;
+    if (!username.trim() || !password.trim() || (showOtp && !otp.trim())) return;
 
     const payload = {
       userId: convertCodeReverse(username.trim()),
       password: password.trim(),
-      url: "superadmin.wbt24.com",
+      url: window.location.hostname,
+      // url: "superadmin.wbt24.com",
       // url: "superadmin.antpro.co",
       // url: "superadmin.urb99.com",
     };
@@ -111,24 +123,27 @@ const Signin = () => {
 
             {/* USERNAME */}
             <div className="login-form-group">
-              <div className={`input-wrap ${!username ? "error" : ""}`}>
+              <div className={`input-wrap ${showUsernameError ? "error" : ""}`}>
                 <UserIcon />
                 <input
                   type="text"
                   placeholder="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  onBlur={() =>
+                    setTouched((prev) => ({ ...prev, username: true }))
+                  }
                 />
               </div>
 
-              {!username && (
+              {showUsernameError && (
                 <p className="login-error">PLEASE INPUT YOUR USERNAME!</p>
               )}
             </div>
 
             {/* PASSWORD */}
             <div className="login-form-group">
-              <div className={`input-wrap ${!password ? "error" : ""}`}>
+              <div className={`input-wrap ${showPasswordError ? "error" : ""}`}>
                 <LockIcon />
 
                 <input
@@ -136,6 +151,9 @@ const Signin = () => {
                   placeholder="******"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onBlur={() =>
+                    setTouched((prev) => ({ ...prev, password: true }))
+                  }
                 />
 
                 <span
@@ -146,7 +164,7 @@ const Signin = () => {
                 </span>
               </div>
 
-              {!password && (
+              {showPasswordError && (
                 <p className="login-error">PLEASE INPUT YOUR PASSWORD!</p>
               )}
             </div>
@@ -154,15 +172,21 @@ const Signin = () => {
             {/* OTP */}
             {showOtp && (
               <div className="login-form-group">
-                <div className="input-wrap">
+                <div className={`input-wrap ${showOtpError ? "error" : ""}`}>
                   <OtpIcon />
                   <input
                     type="text"
                     placeholder="OTP"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
+                    onBlur={() =>
+                      setTouched((prev) => ({ ...prev, otp: true }))
+                    }
                   />
                 </div>
+                {showOtpError && (
+                  <p className="login-error">PLEASE INPUT OTP!</p>
+                )}
               </div>
             )}
 

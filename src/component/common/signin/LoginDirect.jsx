@@ -66,18 +66,27 @@ const LoginDirect = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [touched, setTouched] = useState({
+    username: false,
+    password: false,
+  });
+  const hostname = window.location.hostname;
+
+  const showUsernameError = (isSubmitted || touched.username) && !username.trim();
+  const showPasswordError = (isSubmitted || touched.password) && !password.trim();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitted(true);
 
-    if (!username || !password) return;
+    if (!username.trim() || !password.trim()) return;
 
     const payload = {
       userId: convertCodeReverse(username.trim()),
       password: password.trim(),
-      // url: "superadmin.antpro.co",
-      url: "superadmin.wbt24.com",
-      // url: "superadmin.urb99.com",
+      url: hostname,
+      // url: "superadmin.wbt24.com",
     };
 
     setLoading(true);
@@ -126,23 +135,26 @@ const LoginDirect = () => {
         <div className="signin-right">
           <form className="login-form" onSubmit={handleSubmit}>
             <div className="login-form-group">
-              <div className={`input-wrap ${!username ? "error" : ""}`}>
+              <div className={`input-wrap ${showUsernameError ? "error" : ""}`}>
                 <UserIcon />
                 <input
                   type="text"
                   placeholder="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  onBlur={() =>
+                    setTouched((prev) => ({ ...prev, username: true }))
+                  }
                 />
               </div>
 
-              {!username && (
+              {showUsernameError && (
                 <p className="login-error">PLEASE INPUT YOUR USERNAME!</p>
               )}
             </div>
 
             <div className="login-form-group">
-              <div className={`input-wrap ${!password ? "error" : ""}`}>
+              <div className={`input-wrap ${showPasswordError ? "error" : ""}`}>
                 <LockIcon />
 
                 <input
@@ -150,6 +162,9 @@ const LoginDirect = () => {
                   placeholder="******"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onBlur={() =>
+                    setTouched((prev) => ({ ...prev, password: true }))
+                  }
                 />
 
                 <span
@@ -159,7 +174,7 @@ const LoginDirect = () => {
                 </span>
               </div>
 
-              {!password && (
+              {showPasswordError && (
                 <p className="login-error">PLEASE INPUT YOUR PASSWORD!</p>
               )}
             </div>

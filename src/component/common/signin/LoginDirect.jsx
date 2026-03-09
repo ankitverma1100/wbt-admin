@@ -75,7 +75,8 @@ const LoginDirect = () => {
     const payload = {
       userId: convertCodeReverse(username.trim()),
       password: password.trim(),
-      url: "superadmin.antpro.co",
+      // url: "superadmin.antpro.co",
+      url: "superadmin.wbt24.com",
       // url: "superadmin.urb99.com",
     };
 

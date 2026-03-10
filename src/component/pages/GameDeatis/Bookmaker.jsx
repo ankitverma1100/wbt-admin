@@ -9,6 +9,60 @@ const Bookmaker = ({
   setShowTtlBook,
   showTtlBook,
 }) => {
+  const bookmakerRows =
+    data?.Bookmaker?.filter((item) => item?.t === "Bookmaker") || [];
+  const processedBookmakerRows = [...bookmakerRows];
+
+  if (processedBookmakerRows.length >= 2) {
+    const allB1Same = processedBookmakerRows.every(
+      (item) => Number(item?.b1) === Number(processedBookmakerRows[0]?.b1)
+    );
+
+    if (allB1Same) {
+      const allL1Same = processedBookmakerRows.every(
+        (item) => Number(item?.l1) === Number(processedBookmakerRows[0]?.l1)
+      );
+
+      if (!allL1Same) {
+        const maxL1Index = processedBookmakerRows.reduce(
+          (maxIdx, curr, idx, arr) =>
+            Number(curr?.l1) > Number(arr[maxIdx]?.l1) ? idx : maxIdx,
+          0
+        );
+
+        processedBookmakerRows.forEach((item, index) => {
+          if (index !== maxL1Index) {
+            processedBookmakerRows[index] = {
+              ...item,
+              b1: 0,
+              l1: 0,
+            };
+          }
+        });
+      }
+    } else {
+      const minB1Index = processedBookmakerRows.reduce((minIdx, curr, idx, arr) => {
+        const currStatus = curr?.gstatus?.toLowerCase();
+        const minStatus = arr[minIdx]?.gstatus?.toLowerCase();
+
+        if (currStatus === "suspended") return minIdx;
+        if (minStatus === "suspended") return idx;
+
+        return Number(curr?.b1) < Number(arr[minIdx]?.b1) ? idx : minIdx;
+      }, 0);
+
+      processedBookmakerRows.forEach((item, index) => {
+        if (index !== minB1Index) {
+          processedBookmakerRows[index] = {
+            ...item,
+            b1: 0,
+            l1: 0,
+          };
+        }
+      });
+    }
+  }
+
   return (
     <>
       <div
@@ -68,9 +122,7 @@ const Bookmaker = ({
                       </tr>
                     </thead>
                     <tbody className="ant-table-tbody">
-                      {data?.Bookmaker?.filter(
-                        (item) => item?.t === "Bookmaker"
-                      )?.map((runner, index) => {
+                      {processedBookmakerRows?.map((runner, index) => {
                         const pnlsOdds = pnl?.find(
                           (element) => element?.marketId == runner?.mid
                         );

@@ -38,7 +38,7 @@ const getRoleLabel = (uType) =>
     : uType == 5
     ? "Mini Admin"
     : uType == 4
-    ? "Masetr"
+    ? "Master"
     : uType == 3
     ? "Super Master"
     : uType == 2

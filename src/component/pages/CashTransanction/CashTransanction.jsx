@@ -27,7 +27,7 @@ const data = [
   },
   {
     image: <BiUserCircle />,
-    head: "SUPER MASTER",
+    head: "SUPER AGENT MASTER",
     path: "/client/txn-super/Super/3",
     size: "14",
     userType: 3,

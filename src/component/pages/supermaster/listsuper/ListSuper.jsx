@@ -39,7 +39,7 @@ const ListSuper = ({ forDeadClient }) => {
             <div
               style={{ padding: "5px 8px", fontSize: "26px" }}
               className="team_name">
-              {forDeadClient ? "Dead" : ""} {Listname?.replace("-", " ")}{" "}
+              {forDeadClient ? "Dead" : ""} {Listname?.replace("-", " ") === 'Super Master' ? 'Super Agent Master' : Listname?.replace("-", " ")}{" "}
               Details
             </div>
             <div className="show_btn">

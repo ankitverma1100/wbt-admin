@@ -47,8 +47,11 @@ const FancyBets = ({ setFancyId, fancyId, setShowMatchBet, showMatchBet }) => {
     { pollingInterval: 1000 }
   );
 
+  const matchBetList =
+    matchBets?.data?.betList ?? matchBets?.data?.bookmaker?.betList ?? [];
+
   const filteredAllOdds =
-    matchBets?.data?.betList?.filter(
+    matchBetList?.filter(
       (item) =>
         item?.username?.toLowerCase().includes(searchTermOdds.toLowerCase()) ||
         item?.userId?.toString().includes(searchTermOdds)
@@ -88,7 +91,7 @@ const FancyBets = ({ setFancyId, fancyId, setShowMatchBet, showMatchBet }) => {
               borderTopLeftRadius: "8px",
               borderTopRightRadius: "8px",
             }}>
-            Match Bet ({matchBets?.data?.betList?.length || 0})
+            Match Bet ({matchBetList?.length || 0})
           </div>
           <div
             onClick={() => {
@@ -322,17 +325,17 @@ const FancyBets = ({ setFancyId, fancyId, setShowMatchBet, showMatchBet }) => {
                           </td>
                         </tr>
                       )}
-                      {matchBets?.data?.betList?.length > 0 && (
+                      {matchBetList?.length > 0 && (
                         <tr>
                           <td colSpan={8}>Total</td>
                           <td>
-                            {matchBets?.data?.betList?.reduce(
+                            {matchBetList?.reduce(
                               (acc, item) => acc + item.liability,
                               0
                             ) || 0}
                           </td>
                           <td>
-                            {matchBets?.data?.betList?.reduce(
+                            {matchBetList?.reduce(
                               (acc, item) => acc + item.pnl,
                               0
                             ) || 0}

@@ -153,9 +153,14 @@ const AgentTransactions = () => {
                     showSearch
                     value={clientId}
                     allowClear
+                    onClear={() => {
+                      setClientId("");
+                      nav(`/client/txn-super/${name}/${id}`);
+                    }}
                     onSearch={(value) => value && getClient({ userType: id })}
                     onSelect={(value) => {
                       setClientId(value);
+                      nav(`/client/txn-super/${name}/${id}/${value}`);
                       trigger({
                         userId: convertCodeReverse(value),
                         transactiontype: "All",

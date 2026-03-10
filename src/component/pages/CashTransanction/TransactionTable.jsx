@@ -48,8 +48,6 @@ const TransactionTable = ({ data, clientId, trigger: triggerTran }) => {
 
   const totalCreadit = data?.reduce((acc, item) => acc + item.credit, 0) || 0;
   const totalDebit = data?.reduce((acc, item) => acc + item.debit, 0) || 0;
-  // const totalBalance =
-  //   data?.reduce((acc, item) => acc + Number(item.balance || 0), 0) || 0;
   const totalBalance = totalCreadit - totalDebit;
 
   const items = (id) => [
@@ -107,20 +105,20 @@ const TransactionTable = ({ data, clientId, trigger: triggerTran }) => {
       <div className="my_ledger" style={{ padding: "12px 15px", margin: "24px 0" }}>
         <div>
           <h3 style={{ color: "red" }}>
-            Dena : {totalCreadit?.toFixed(2)}
+            Dena : {totalDebit?.toFixed(2)}
           </h3>
         </div>
         <div>
           <h3 style={{ color: "rgb(51, 181, 28)" }}>
-            Lena : {totalDebit?.toFixed(2)}
+            Lena : {totalCreadit?.toFixed(2)}
           </h3>
         </div>
         <div>
           <h3
             style={{  }}
-            className={totalBalance < 0 ? "text_success" : "text_danger"}>
-            Balance: {(-1 * totalBalance)?.toFixed(2)}{" "}
-            {totalBalance > 0 ? "(Dena)" : "(Lena)"}
+            className={totalBalance >= 0 ? "text_success" : "text_danger"}>
+            Balance: {Math.abs(totalBalance)?.toFixed(2)}{" "}
+            {totalBalance >= 0 ? "(Lena)" : "(Dena)"}
           </h3>
         </div>
       </div>
@@ -180,17 +178,17 @@ const TransactionTable = ({ data, clientId, trigger: triggerTran }) => {
                     {moment(res?.date).format("YYYY-MM-DD HH:mm:ss")}
                   </td>
                   <td>
-                    {res?.ledgerType}
-                  </td>
-                  <td style={{ whiteSpace: "nowrap" }} className="text-right">
-                    {res?.debit}
+                    {res?.collectionName === "CA1 CASH" ? "CASH" : res?.ledgerType}
                   </td>
                   <td style={{ whiteSpace: "nowrap" }} className="text-right">
                     {res?.credit}
                   </td>
                   <td style={{ whiteSpace: "nowrap" }} className="text-right">
-                    {(-1 * res?.balance)?.toFixed(2)} (
-                    {res?.balance > 0 ? "Lena" : "Dena"})
+                    {res?.debit}
+                  </td>
+                  <td style={{ whiteSpace: "nowrap" }} className="text-right">
+                    {Math.abs(res?.balance || 0)?.toFixed(2)} (
+                    {res?.balance >= 0 ? "Lena" : "Dena"})
                   </td>
                   <td style={{ whiteSpace: "nowrap" }}>{res?.remark}</td>
                   <td>SYSTEM</td>

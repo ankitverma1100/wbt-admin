@@ -146,7 +146,7 @@ const Sidebar = (props) => {
                 {
                   className: hasRole(["7", "6", "5", "4"]) ? "" : "d-none",
                   label: (
-                    <Link to="/user-list/Super-Master/3">Super Master</Link>
+                    <Link to="/user-list/Super-Master/3">Super Agent Master</Link>
                   ),
                 },
                 {
@@ -353,7 +353,7 @@ const Sidebar = (props) => {
                   className: hasRole(["7", "6", "5", "4"]) ? "" : "d-none",
                   label: (
                     <Link to="/client/txn-super/Super-Master/3">
-                      SUPER MASTER
+                      SUPER AGENT MASTER
                     </Link>
                   ),
                 },

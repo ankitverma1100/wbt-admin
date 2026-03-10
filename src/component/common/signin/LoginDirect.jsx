@@ -58,6 +58,23 @@ const EyeOffIcon = () => (
   </svg>
 );
 
+const LOCAL_LOGIN_URL = import.meta.env.VITE_LOCAL_LOGIN_URL || "superadmin.antpro.co";
+
+const buildLoginUrl = (hostname) => {
+  if (!hostname) return "";
+
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
+    return LOCAL_LOGIN_URL;
+  }
+
+  const [subdomain, ...rest] = hostname.split(".");
+  if (subdomain === "madmin" && rest.length >= 2) {
+    return ["sub", ...rest].join(".");
+  }
+
+  return hostname;
+};
+
 const LoginDirect = () => {
   const nav = useNavigate();
   const [trigger, { error }] = useLoginDirectMutation();
@@ -72,6 +89,7 @@ const LoginDirect = () => {
     password: false,
   });
   const hostname = window.location.hostname;
+  const loginUrl = buildLoginUrl(hostname);
 
   const showUsernameError = (isSubmitted || touched.username) && !username.trim();
   const showPasswordError = (isSubmitted || touched.password) && !password.trim();
@@ -85,7 +103,7 @@ const LoginDirect = () => {
     const payload = {
       userId: convertCodeReverse(username.trim()),
       password: password.trim(),
-      url: hostname,
+      url: loginUrl,
       // url: "superadmin.wbt24.com",
     };
 

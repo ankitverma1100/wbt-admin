@@ -119,11 +119,16 @@ const Navbar = ({ action, collapsed, onToggleCollapse }) => {
               trigger={["hover"]}>
               <span
                 className="user_deatils"
-                style={{ cursor: "pointer", marginRight: "42px" }}
+                style={{ cursor: "pointer" }}
                 onClick={(e) => e.preventDefault()}>
                 <span className="user_deatils_text">
-                  {userId ? `${userData} (${userId})` : userData}{" "}
-                  <DownOutlined style={{ fontSize: "14px" }} />
+                  <span className="user_name_text">
+                    {userId ? `${userData} (${userId})` : userData}
+                  </span>
+                  <DownOutlined
+                    className="user_deatils_icon"
+                    style={{ fontSize: "14px" }}
+                  />
                 </span>
               </span>
             </Dropdown>

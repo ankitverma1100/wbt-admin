@@ -354,15 +354,40 @@ p.ant-dropdown-trigger.user_deatils.droup_nav {
 }
 
 .user_deatils_text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  white-space: nowrap;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.4px;
   text-transform: uppercase;
 }
 
+.user_deatils {
+  margin-right: 42px;
+}
+
+.user_name_text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 260px;
+}
+
+.user_deatils_icon {
+  flex: 0 0 auto;
+}
+
 @media screen and (max-width: 1024px) {
-  p.user_deatils {
+  .user_deatils {
     margin-right: 6px !important;
+  }
+
+  .user_name_text {
+    max-width: min(42vw, 165px);
   }
 
   .mob_side {

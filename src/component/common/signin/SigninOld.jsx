@@ -33,11 +33,13 @@ const Signin = () => {
     : hostname;
 
   const onFinish = async (values) => {
+    const normalizedUserId = values?.username?.trim()?.toUpperCase();
+
     const authPayload = {
-      userId: convertCodeReverse(values?.username?.trim()),
+      userId: convertCodeReverse(normalizedUserId),
       password: values?.password?.trim(),
-      // url,
-      url: "superadmin.wbt24.com",
+      url,
+      // url: "superadmin.wbt24.com",
       // url: "superadmin.antpro.co",
     };
 

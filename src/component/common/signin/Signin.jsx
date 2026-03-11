@@ -66,8 +66,10 @@ const Signin = () => {
     // ⛔ HARD STOP IF EMPTY (UI already shows error)
     if (!username.trim() || !password.trim() || (showOtp && !otp.trim())) return;
 
+    const normalizedUserId = username.trim().toUpperCase();
+
     const payload = {
-      userId: convertCodeReverse(username.trim()),
+      userId: convertCodeReverse(normalizedUserId),
       password: password.trim(),
       url: loginUrl,
     };

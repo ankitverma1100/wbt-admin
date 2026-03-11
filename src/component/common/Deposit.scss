@@ -78,6 +78,33 @@
   }
 }
 
+.modal_deposit .exposure {
+  .exposure-type-col {
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .ant-table-thead > tr > th:nth-child(5),
+  .ant-table-tbody > tr > td:nth-child(5) {
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .ant-table colgroup col:nth-child(5) {
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+  }
+}
+
 .betting_icon {
   min-height: unset !important;
 }

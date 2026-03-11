@@ -100,8 +100,10 @@ const LoginDirect = () => {
 
     if (!username.trim() || !password.trim()) return;
 
+    const normalizedUserId = username.trim().toUpperCase();
+
     const payload = {
-      userId: convertCodeReverse(username.trim()),
+      userId: convertCodeReverse(normalizedUserId),
       password: password.trim(),
       url: loginUrl,
       // url: "superadmin.wbt24.com",

@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
-import { Form, Modal, Table } from "antd";
+import { useEffect } from "react";
+import { Modal, Table } from "antd";
 import "./Deposit.scss";
 
 import { useLazyGetUserLabilatyQuery } from "../../store/service/SportDetailServices";
-import { render } from "react-dom";
 import CustomLoading from "./CustomLoading/CustomLoading";
 
 const Exposure = ({ openExp, setOpenExp, userId }) => {
+  const TABLE_SCROLL_X = 1080;
+  const TYPE_COL_WIDTH = 44;
+
   const [trigger, { data: exposureData, isLoading }] =
     useLazyGetUserLabilatyQuery();
 
@@ -21,6 +23,8 @@ const Exposure = ({ openExp, setOpenExp, userId }) => {
       title: "Match",
       dataIndex: "matchName",
       key: "matchName",
+      width: 280,
+      ellipsis: true,
       render: (text, record) => (
         <span>
           {record?.matchName}-
@@ -32,21 +36,44 @@ const Exposure = ({ openExp, setOpenExp, userId }) => {
       title: "Selection Name",
       dataIndex: "selectionName",
       key: "selectionName",
+      width: 150,
+      ellipsis: true,
     },
     {
       title: "Stake",
       dataIndex: "stake",
       key: "stake",
+      width: 90,
     },
     {
       title: "Rate",
       dataIndex: "odds",
       key: "odds",
+      width: 70,
     },
     {
       title: "Type",
       dataIndex: "back",
       key: 2,
+      width: TYPE_COL_WIDTH,
+      align: "center",
+      className: "exposure-type-col",
+      onHeaderCell: () => ({
+        style: {
+          width: TYPE_COL_WIDTH,
+          minWidth: TYPE_COL_WIDTH,
+          maxWidth: TYPE_COL_WIDTH,
+        },
+      }),
+      onCell: () => ({
+        style: {
+          width: TYPE_COL_WIDTH,
+          minWidth: TYPE_COL_WIDTH,
+          maxWidth: TYPE_COL_WIDTH,
+          paddingLeft: 6,
+          paddingRight: 6,
+        },
+      }),
       render: (text, record) => (
         <span>
           {record?.marketType == "Fancy"
@@ -63,16 +90,20 @@ const Exposure = ({ openExp, setOpenExp, userId }) => {
       title: "Time",
       dataIndex: "date",
       key: "date",
+      width: 170,
+      ellipsis: true,
     },
     {
       title: "Loss",
       dataIndex: "loss",
+      width: 90,
       render: (text) => <span>{text?.toFixed(2)}</span>,
     },
     {
       title: "Profit",
       dataIndex: "profit",
       key: "profit",
+      width: 90,
       render: (text) => <span>{text?.toFixed(2)}</span>,
     },
   ];
@@ -82,6 +113,8 @@ const Exposure = ({ openExp, setOpenExp, userId }) => {
       title: "Match",
       dataIndex: "matchName",
       key: "matchName",
+      width: 280,
+      ellipsis: true,
       render: (text, record) => (
         <span>
           {record?.matchName}-
@@ -93,21 +126,44 @@ const Exposure = ({ openExp, setOpenExp, userId }) => {
       title: "Selection Name",
       dataIndex: "selectionName",
       key: "selectionName",
+      width: 150,
+      ellipsis: true,
     },
     {
       title: "Stake",
       dataIndex: "stake",
       key: "stake",
+      width: 90,
     },
     {
       title: "Run",
       dataIndex: "odds",
       key: "odds",
+      width: 70,
     },
     {
       title: "Type",
       dataIndex: "back",
       key: 2,
+      width: TYPE_COL_WIDTH,
+      align: "center",
+      className: "exposure-type-col",
+      onHeaderCell: () => ({
+        style: {
+          width: TYPE_COL_WIDTH,
+          minWidth: TYPE_COL_WIDTH,
+          maxWidth: TYPE_COL_WIDTH,
+        },
+      }),
+      onCell: () => ({
+        style: {
+          width: TYPE_COL_WIDTH,
+          minWidth: TYPE_COL_WIDTH,
+          maxWidth: TYPE_COL_WIDTH,
+          paddingLeft: 6,
+          paddingRight: 6,
+        },
+      }),
       render: (text, record) => (
         <span>
           {record?.marketType == "Fancy"
@@ -124,16 +180,20 @@ const Exposure = ({ openExp, setOpenExp, userId }) => {
       title: "Time",
       dataIndex: "date",
       key: "date",
+      width: 170,
+      ellipsis: true,
     },
     {
       title: "Loss",
       dataIndex: "loss",
+      width: 90,
       render: (text) => <span>{text?.toFixed(2)}</span>,
     },
     {
       title: "Profit",
       dataIndex: "profit",
       key: "profit",
+      width: 90,
       render: (text) => <span>{text?.toFixed(2)}</span>,
     },
   ];
@@ -171,6 +231,8 @@ const Exposure = ({ openExp, setOpenExp, userId }) => {
           <Table
             columns={column}
             dataSource={matchData || []}
+            tableLayout="fixed"
+            scroll={{ x: TABLE_SCROLL_X }}
             pagination={false}
             loading={{
               spinning: isLoading,
@@ -188,6 +250,8 @@ const Exposure = ({ openExp, setOpenExp, userId }) => {
           <Table
             columns={columnFancy}
             dataSource={sessionData || []}
+            tableLayout="fixed"
+            scroll={{ x: TABLE_SCROLL_X }}
             pagination={false}
             loading={{
               spinning: isLoading,

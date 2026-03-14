@@ -191,7 +191,7 @@ const TransactionTable = ({ data, clientId, trigger: triggerTran }) => {
                     {res?.balance >= 0 ? "Lena" : "Dena"})
                   </td>
                   <td style={{ whiteSpace: "nowrap" }}>{res?.remark}</td>
-                  <td>SYSTEM</td>
+                  <td>{res?.performedBy ? res?.performedBy : "SYSTEM"}</td>
                 </tr>
               ))
             ) : (

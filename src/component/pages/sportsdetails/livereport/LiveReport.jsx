@@ -36,7 +36,7 @@ const LiveReport = () => {
     });
   }, [data]);
 
-  const [trigger, { data: PnlOdds }] = useLazyOddsQuPnlQuery();
+  const { data: PnlOdds } = useOddsQuPnlQuery({ matchId: id ?? "" }, { pollingInterval: 30000 });
 
   const [getData, { data: results }] = useLazyTtlBookQuery();
   const [winnerPnl, { data: winnerData }] = useWinnerPnlMutation();

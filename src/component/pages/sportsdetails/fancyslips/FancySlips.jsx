@@ -29,9 +29,8 @@ const FancySlips = ({ name }) => {
   const { id, inplay } = useParams();
 
   const [trigger, { data: matchBets }] = useGetBetlistUrbFilterMutation();
-  const [triggerOddsPnl, { data: oddsPnlData }] = useLazyOddsQuPnlQuery();
-  const [triggerOddsPnlMy, { data: oddsPnlMyData }] =
-    useLazyOddsQuPnlMyQuery();
+  const { data: oddsPnlData } = useOddsQuPnlQuery({ matchId: id ?? "" }, { pollingInterval: 30000 });
+  const { data: oddsPnlMyData } = useOddsQuPnlMyQuery({ matchId: id ?? "" }, { pollingInterval: 30000 });
   const { data: childListData } = useGetChildListForBetsQuery(
     {
       matchId: Number(id),

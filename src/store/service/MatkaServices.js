@@ -40,6 +40,25 @@ export const matkaApi = createApi({
         body,
       }),
     }),
+    getMatkaBetBySid: build.mutation({
+      async queryFn(body, api, extraOptions, baseQuery) {
+        const primaryResult = await baseQuery({
+          url: "matka/get-matka-bet-by-sid",
+          method: "POST",
+          body,
+        });
+
+        if (!primaryResult?.error || primaryResult?.error?.status === 401) {
+          return primaryResult;
+        }
+
+        return baseQuery({
+          url: "matka/get-mtk-bet-by-sid",
+          method: "POST",
+          body,
+        });
+      },
+    }),
   }),
 });
 
@@ -49,4 +68,5 @@ export const {
   useGetMatkaBetsQuery,
   useGetMatkaLiabilityQuery,
   useSetMatkaResultMutation,
+  useGetMatkaBetBySidMutation,
 } = matkaApi;

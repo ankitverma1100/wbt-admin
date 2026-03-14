@@ -24,7 +24,7 @@ const BookMakerData = ({ data, keyData, handleBets }) => {
     });
   }, [data]);
 
-  const [trigger, { data: PnlOdds }] = useLazyOddsQuPnlQuery();
+  const { data: PnlOdds } = useOddsQuPnlQuery({ matchId: id ?? "" }, { pollingInterval: 30000 });
 
   const { data: fancyPnl } = useFancyPnlQuery({
     matchId: id,

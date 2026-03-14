@@ -1,11 +1,13 @@
-import { Card, Empty, Tabs } from "antd";
+import { Card, Empty, Tabs, Modal } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { FaEye } from "react-icons/fa";
 import CustomLoading from "../../common/CustomLoading/CustomLoading";
 import {
   useGetMatkaBetsQuery,
   useGetMatkaLiabilityQuery,
   useGetMatkaMarketQuery,
+  useGetMatkaBetBySidMutation,
 } from "../../../store/service/MatkaServices";
 
 const InplayMatkaDetail = () => {
@@ -15,6 +17,8 @@ const InplayMatkaDetail = () => {
   const searchParams = new URLSearchParams(location.search);
   const activeTabParam = searchParams.get("tab") || "";
   const [selectedTab, setSelectedTab] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [betDetails, setBetDetails] = useState([]);
 
   const matchIdRaw = eventId;
   const matchIdNumber = Number(matchIdRaw);
@@ -46,10 +50,17 @@ const InplayMatkaDetail = () => {
         time: marketData.data.time,
       }
     : null;
-  const markets = Array.isArray(marketData?.data?.matkaMarket)
-    ? marketData.data.matkaMarket
-    : [];
-  const bets = Array.isArray(betsData?.data) ? betsData.data : [];
+  const markets = useMemo(
+    () =>
+      Array.isArray(marketData?.data?.matkaMarket)
+        ? marketData.data.matkaMarket
+        : [],
+    [marketData?.data?.matkaMarket]
+  );
+  const bets = useMemo(
+    () => (Array.isArray(betsData?.data) ? betsData.data : []),
+    [betsData?.data]
+  );
 
   const normalizedTabParam = (activeTabParam || "").toUpperCase();
   const isHarupMarket = (marketName = "") =>
@@ -173,6 +184,9 @@ const InplayMatkaDetail = () => {
     { skip: !matchId || selectedTab !== "HARUP" || !harupBaharMarketId }
   );
 
+  const [getMatkaBetBySid, { isLoading: isBetDetailsLoading }] =
+    useGetMatkaBetBySidMutation();
+
   const isBusy =
     isMarketLoading ||
     isMarketFetching ||
@@ -205,6 +219,85 @@ const InplayMatkaDetail = () => {
     [harupBaharLiabilityData]
   );
 
+  const getMarketSuffix = (marketName = "") => {
+    const upperMarketName = String(marketName).toUpperCase();
+
+    if (upperMarketName.includes("JODI")) return "_JODI";
+    if (upperMarketName.includes("ANDAR")) return "_HARUP_ANDAR";
+    if (upperMarketName.includes("BAHAR")) return "_HARUP_BAHAR";
+
+    return "";
+  };
+
+  const buildBetMarketId = (marketName = "") => {
+    const baseName = marketData?.data?.matkaName || "";
+    const suffix = getMarketSuffix(marketName);
+
+    if (!baseName || !suffix) return baseName || "";
+
+    const firstDashIndex = baseName.indexOf("-");
+    if (firstDashIndex === -1) {
+      return `${baseName}${suffix}`;
+    }
+
+    return `${baseName.slice(0, firstDashIndex)}${suffix}${baseName.slice(
+      firstDashIndex
+    )}`;
+  };
+
+  const handleGridBetDetails = async (runner, market) => {
+    const marketId = buildBetMarketId(market?.marketName) || market?.marketId;
+
+    setIsModalOpen(true);
+    setBetDetails([]);
+
+    try {
+      const response = await getMatkaBetBySid({
+        matkaId: matchId,
+        marketId,
+        selectionId: Number(runner?.selectionId),
+      }).unwrap();
+      setBetDetails(response?.data || []);
+    } catch {
+      setBetDetails([]);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setBetDetails([]);
+  };
+
+  const modalColumns = [
+    "ID",
+    "MATKA NAME",
+    "GAME",
+    "RATE",
+    "BET NUM",
+    "STACK",
+    "P&L",
+    "WINNER",
+    "STATUS",
+    "CREATED AT",
+  ];
+  const modalTableCellStyle = {
+    padding: "10px 12px",
+    borderBottom: "1px solid #e5e7eb",
+    whiteSpace: "nowrap",
+    fontSize: "13px",
+    verticalAlign: "top",
+  };
+  const modalHeaderCellStyle = {
+    ...modalTableCellStyle,
+    background: "#1571cd",
+    color: "#fff",
+    fontWeight: 700,
+    borderBottom: "1px solid #125ea8",
+    position: "sticky",
+    top: 0,
+    zIndex: 1,
+  };
+
   const errorMessage =
     (marketData?.status === false && marketData?.message) ||
     (betsData?.status === false && betsData?.message) ||
@@ -230,7 +323,9 @@ const InplayMatkaDetail = () => {
               alignItems: "center",
               gap: "6px",
             }}>
-            <div
+            <button
+              type="button"
+              onClick={() => handleGridBetDetails(runner, market)}
               style={{
                 width: "100%",
                 borderRadius: "6px",
@@ -240,19 +335,34 @@ const InplayMatkaDetail = () => {
                 textAlign: "center",
                 fontSize: "13px",
                 color: "#2f2f2f",
+                cursor: "pointer",
               }}>
               {runner.selectionName}
-            </div>
-            <div
-              style={{
-                fontSize: "13px",
-                color:
-                  Number(liabilitiesMap[runner.selectionId] || 0) < 0
-                    ? "#f03e3e"
-                    : "#2fb344",
-                fontWeight: 600,
-              }}>
-              {Number(liabilitiesMap[runner.selectionId] || 0).toFixed(2)}
+            </button>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <button
+                type="button"
+                onClick={() => handleGridBetDetails(runner, market)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#1677ff",
+                }}
+                aria-label="View Bet Details">
+                <FaEye />
+              </button>
+              <div
+                style={{
+                  fontSize: "13px",
+                  color:
+                    Number(liabilitiesMap[runner.selectionId] || 0) < 0
+                      ? "#f03e3e"
+                      : "#2fb344",
+                  fontWeight: 600,
+                }}>
+                {Number(liabilitiesMap[runner.selectionId] || 0).toFixed(2)}
+              </div>
             </div>
           </div>
         ))}
@@ -459,6 +569,86 @@ const InplayMatkaDetail = () => {
           </div>
         </div>
       </Card>
+      <Modal
+        open={isModalOpen}
+        onCancel={closeModal}
+        footer={null}
+        width={1200}
+        title="Bet Details"
+      >
+        {isBetDetailsLoading && (
+          <div style={{ padding: "30px 0", position: "relative" }}>
+            <CustomLoading />
+          </div>
+        )}
+        <div
+          style={{
+            overflowX: "auto",
+            maxHeight: "65vh",
+            border: "1px solid #d9d9d9",
+            borderRadius: "8px",
+            background: "#fff",
+          }}>
+          <table
+            style={{
+              width: "100%",
+              minWidth: "1080px",
+              borderCollapse: "separate",
+              borderSpacing: 0,
+              tableLayout: "auto",
+            }}>
+            <thead>
+              <tr>
+                {modalColumns.map((column) => (
+                  <th key={column} style={modalHeaderCellStyle}>
+                    {column}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {betDetails.length > 0 ? (
+                betDetails.map((bet, index) => (
+                  <tr key={`${bet?.betId || bet?.id || index}`}>
+                    <td style={modalTableCellStyle}>
+                      {bet?.betId || bet?.id || index + 1}
+                    </td>
+                    <td style={modalTableCellStyle}>{matchInfo?.name || "-"}</td>
+                    <td style={modalTableCellStyle}>{bet.matkaName || "-"}</td>
+                    <td style={modalTableCellStyle}>{bet.rate ?? "-"}</td>
+                    <td style={modalTableCellStyle}>{bet.nation ?? "-"}</td>
+                    <td style={modalTableCellStyle}>{bet.amount ?? "-"}</td>
+                    <td style={modalTableCellStyle}>
+                      <span
+                        className={bet.pnl >= 0 ? "text_success" : "text_danger"}>
+                        {Number(bet.pnl || 0).toFixed(2)}
+                      </span>
+                    </td>
+                    <td style={modalTableCellStyle}>
+                      {bet.declared === "null" || !bet.declared
+                        ? "-"
+                        : bet.declared}
+                    </td>
+                    <td style={modalTableCellStyle}>
+                      <span
+                        className={bet.back ? "text_info" : "text_danger"}>
+                        {bet.back ? "BACK" : "LAY"}
+                      </span>
+                    </td>
+                    <td style={modalTableCellStyle}>{bet.betTime || "-"}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={modalColumns.length} style={{ padding: "24px" }}>
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Modal>
     </div>
   );
 };

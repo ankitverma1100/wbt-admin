@@ -30,7 +30,7 @@ const FancyBets = ({ setFancyId, fancyId, setShowMatchBet, showMatchBet }) => {
       matchCompleted: false,
       marketType: oddsType,
     },
-    { pollingInterval: 1000 }
+    { pollingInterval: 5000 }
   );
 
   const { data: sessionBets } = useGetSessionHavingBetQuery({
@@ -44,7 +44,7 @@ const FancyBets = ({ setFancyId, fancyId, setShowMatchBet, showMatchBet }) => {
       marketId: fancyId,
       matchCompleted: false,
     },
-    { pollingInterval: 1000 }
+    { pollingInterval: 5000 }
   );
 
   const matchBetList =

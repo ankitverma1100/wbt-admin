@@ -25,8 +25,8 @@ const GameDeatis = () => {
   const [loadingTv, setLoadingTv] = useState(false);
   const { id } = useParams();
   const { data } = useEventDetailQuery(id ?? "", { pollingInterval: 1000 });
-  const { data: oddsPnl } = useOddsQuPnlQuery({ matchId: id ?? "" }, { pollingInterval: 30000 });
-  const { data: oddsPnlMy } = useOddsQuPnlMyQuery({ matchId: id ?? "" }, { pollingInterval: 30000 });
+  const [trigger, { data: oddsPnl }] = useLazyOddsQuPnlQuery();
+  const [triggerMy, { data: oddsPnlMy }] = useLazyOddsQuPnlMyQuery();
   const [fancyId, setFancyId] = useState("");
   const [showMatchBet, setShowMatchBet] = useState(0);
 

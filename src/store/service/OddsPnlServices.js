@@ -45,7 +45,9 @@ export const oddsPnlApi = createApi({
 });
 
 export const {
+  useOddsQuPnlQuery,
   useLazyOddsQuPnlQuery,
+  useOddsQuPnlMyQuery,
   useFancyPnlQuery,
   useWinnerPnlMutation,
   useLazyOddsQuPnlMyQuery,

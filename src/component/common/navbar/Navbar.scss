@@ -358,7 +358,7 @@ p.ant-dropdown-trigger.user_deatils.droup_nav {
   align-items: center;
   gap: 6px;
   max-width: 100%;
-  white-space: nowrap;
+  min-width: 0;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.4px;
@@ -370,11 +370,21 @@ p.ant-dropdown-trigger.user_deatils.droup_nav {
 }
 
 .user_name_text {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
   min-width: 0;
+  max-width: 260px;
+}
+
+.user_name_line,
+.user_id_line {
+  display: inline-block;
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 260px;
 }
 
 .user_deatils_icon {
@@ -382,12 +392,27 @@ p.ant-dropdown-trigger.user_deatils.droup_nav {
 }
 
 @media screen and (max-width: 1024px) {
+  .user_deatils_text {
+    align-items: flex-start;
+    gap: 4px;
+  }
+
   .user_deatils {
     margin-right: 6px !important;
   }
 
   .user_name_text {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    line-height: 1.1;
     max-width: min(42vw, 165px);
+  }
+
+  .user_name_line,
+  .user_id_line {
+    width: 100%;
+    line-height: 1.1;
   }
 
   .mob_side {

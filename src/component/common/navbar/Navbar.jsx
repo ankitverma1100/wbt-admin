@@ -123,7 +123,14 @@ const Navbar = ({ action, collapsed, onToggleCollapse }) => {
                 onClick={(e) => e.preventDefault()}>
                 <span className="user_deatils_text">
                   <span className="user_name_text">
-                    {userId ? `${userData} (${userId})` : userData}
+                    <span className="user_name_line" title={userData}>
+                      {userData}
+                    </span>
+                    {userId && (
+                      <span className="user_id_line" title={userId}>
+                        ({userId})
+                      </span>
+                    )}
                   </span>
                   <DownOutlined
                     className="user_deatils_icon"

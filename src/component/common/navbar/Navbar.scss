@@ -371,10 +371,21 @@ p.ant-dropdown-trigger.user_deatils.droup_nav {
 
 .user_name_text {
   display: inline-flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   min-width: 0;
-  max-width: 260px;
+  max-width: 320px;
+  gap: 0;
+  line-height: 1.1;
+}
+
+.user_identity_line {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  min-width: 0;
+  width: 100%;
 }
 
 .user_name_line,
@@ -385,6 +396,20 @@ p.ant-dropdown-trigger.user_deatils.droup_nav {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.user_balance_line {
+  display: block;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.1;
+  opacity: 0.9;
 }
 
 .user_deatils_icon {
@@ -402,15 +427,26 @@ p.ant-dropdown-trigger.user_deatils.droup_nav {
   }
 
   .user_name_text {
-    flex-direction: column;
     align-items: flex-start;
     gap: 1px;
     line-height: 1.1;
     max-width: min(42vw, 165px);
   }
 
+  .user_identity_line {
+    justify-content: flex-start;
+    width: 100%;
+    flex-wrap: nowrap;
+  }
+
   .user_name_line,
   .user_id_line {
+    width: auto;
+    max-width: 100%;
+    line-height: 1.1;
+  }
+
+  .user_balance_line {
     width: 100%;
     line-height: 1.1;
   }

@@ -18,6 +18,12 @@ const Deposit = ({
 
   const [trigger, { isLoading }] = useLazyDepositAndWithdrawQuery();
 
+  useEffect(() => {
+    if (!isDepositeModalOpen) {
+      form.resetFields();
+    }
+  }, [isDepositeModalOpen, form]);
+
   const onFinish = async (values) => {
     const depositData = {
       userId: datadeposit?.userId,

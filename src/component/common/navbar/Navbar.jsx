@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../../../store/service/authService";
+import { useDashboardQuery } from "../../../store/service/userlistService";
 import ChangePassword from "../ChangePassword/ChangePassword";
 import SelfDeposit from "../DepositModal/SelfDeposit";
 import { imgUrl } from "../../../store/constant";
@@ -16,6 +17,15 @@ const Navbar = ({ action, collapsed, onToggleCollapse }) => {
   const userData = localStorage.getItem("username");
   const userId = localStorage.getItem("userId");
   const userType = localStorage.getItem("userType");
+  const usernameLabel = userData || "User";
+  const { data: dashboardData } = useDashboardQuery(undefined, {
+    pollingInterval: 3000,
+    refetchOnMountOrArgChange: true,
+  });
+  const balanceValue = Number(dashboardData?.data?.balance);
+  const balanceLabel = Number.isFinite(balanceValue)
+    ? balanceValue.toFixed(2)
+    : "--";
 
   const [trigger] = useLogoutMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -123,14 +133,19 @@ const Navbar = ({ action, collapsed, onToggleCollapse }) => {
                 onClick={(e) => e.preventDefault()}>
                 <span className="user_deatils_text">
                   <span className="user_name_text">
-                    <span className="user_name_line" title={userData}>
-                      {userData}
-                    </span>
-                    {userId && (
-                      <span className="user_id_line" title={userId}>
-                        ({userId})
+                    <span className="user_identity_line">
+                      <span className="user_name_line" title={usernameLabel}>
+                        {usernameLabel}
                       </span>
-                    )}
+                      {userId && (
+                        <span className="user_id_line" title={userId}>
+                          ({userId})
+                        </span>
+                      )}
+                    </span>
+                    <span className="user_balance_line">
+                      Bal: {balanceLabel}
+                    </span>
                   </span>
                   <DownOutlined
                     className="user_deatils_icon"

@@ -11,9 +11,11 @@ import CustomLoading from "../../../common/CustomLoading/CustomLoading";
 const { RangePicker } = DatePicker;
 
 const AccountStatement = () => {
-  const timeBefore = moment().startOf("month").format("YYYY-MM-DD");
-  const time = moment().endOf("month").format("YYYY-MM-DD");
-  const [dateData, setDateData] = useState([timeBefore, time]);
+  const today = moment().format("YYYY-MM-DD");
+  const threeMonthsBefore = moment()
+    .subtract(3, "months")
+    .format("YYYY-MM-DD");
+  const [dateData, setDateData] = useState([threeMonthsBefore, today]);
   const [clientId, setClientId] = useState("");
   const [detailType, setDetailsType] = useState("ALL");
 
@@ -82,7 +84,7 @@ const AccountStatement = () => {
                   <Row justify="end">
                     {/* <Col xs={24} lg={6}>
                       <RangePicker
-                        defaultValue={[dayjs(timeBefore), dayjs(time)]}
+                        defaultValue={[dayjs(threeMonthsBefore), dayjs(today)]}
                         style={{
                           marginBottom: "10px",
                           width: "100%",

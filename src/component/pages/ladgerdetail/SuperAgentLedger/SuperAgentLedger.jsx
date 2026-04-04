@@ -92,7 +92,7 @@ const SuperAgentLedger = () => {
       width: "50%",
       render: (text, record) => (
         <span
-          style={{ color: "#038fde", cursor: "pointer" }}
+          style={{ color: "#78152B", cursor: "pointer" }}
           onClick={() => handleDownline(record?.userId)}>
           <EyeOutlined /> {record?.fullName} ({convertCode(record?.userId)})
         </span>

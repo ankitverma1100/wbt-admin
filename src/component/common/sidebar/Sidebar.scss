@@ -47,10 +47,12 @@
 
   .drawer_main {
     .ant-drawer-wrapper-body {
-      background-color: var(--bg-color);
+      background-color: #78152B;
+      background-image: linear-gradient(to bottom, #8C002B 0%, #C2003B 100%);
       color: #fff !important;
       .ant-drawer-header {
-        background-color: var(--bg-color);
+        background-color: transparent;
+        background-image: none;
         height: 72px;
         min-height: 72px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -71,7 +73,7 @@
         margin: 0;
         padding: 0;
         .ant-menu {
-          background: var(--bg-color);
+          background: transparent;
           height: calc(100vh - 72px);
           min-height: calc(100vh - 72px);
           max-height: calc(100vh - 72px);

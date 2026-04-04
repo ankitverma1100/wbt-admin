@@ -21,7 +21,7 @@
 }
 
 .ant-menu-sub {
-  background: var(--bg-color) !important;
+  background: transparent !important;
   border-radius: unset !important;
   color: #fff;
   width: 91%;
@@ -41,6 +41,7 @@
   justify-content: flex-start;
   padding-left: 16px;
   left: 0;
+  background: #8C002B !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 2;
   .anticon svg {
@@ -255,7 +256,7 @@
     margin-right: 14px;
   }
   .ant-btn-primary {
-    background: #038fde !important;
+    background: #B8860B !important;
     color: #fff;
     border-radius: 2px;
     border: unset;

@@ -1,3 +1,4 @@
+import rolexLogo from "../assets/logo-rolex.png";
 // export function convertCode(name) {
 //   if (name.startsWith("SUB")) {
 //     return name.replace("SUB", "AD");
@@ -31,7 +32,7 @@ export function convertCodeReverse(name) {
 
 // // ant 
 export const baseUrl = import.meta.env.VITE_BASE_URL;
-export const imgUrl = "/Images/logo.png";
+export const imgUrl = rolexLogo;
 
 //  KohinoorBase 
 // export const baseUrl = import.meta.env.VITE_BASE_URL_KHO;

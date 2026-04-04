@@ -5,7 +5,7 @@
 }
 
 .completed-fancy-header {
-  background: #1571cd;
+  background: #78152B;
   color: #fff;
   font-weight: 700;
   text-transform: uppercase;
@@ -58,8 +58,12 @@
   padding: 0 16px 16px;
 }
 
+.completed-fancy-ant .ant-table-thead > tr {
+  background: linear-gradient(to right, #8C002B, #C2003B) !important;
+}
+
 .completed-fancy-ant .ant-table-thead > tr > th {
-  background: #1571cd !important;
+  background: transparent !important;
   color: #fff !important;
   text-transform: uppercase;
   font-weight: 700;

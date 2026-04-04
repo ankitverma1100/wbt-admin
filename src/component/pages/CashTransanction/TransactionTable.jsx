@@ -97,7 +97,7 @@ const TransactionTable = ({ data, clientId, trigger: triggerTran }) => {
           <Button style={{
             border: 'none',
             backgroundColor: 'transparent',
-            color: '#1677FF',
+            color: '#78152B',
             fontWeight: '500',
           }} onClick={fetchDeletedTran}>DELETED</Button>
         </div>

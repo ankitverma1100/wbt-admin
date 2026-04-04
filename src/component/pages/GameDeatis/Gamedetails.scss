@@ -203,8 +203,11 @@
   .ant-table.ant-table-small tfoot > tr > th {
     padding: 8px;
   }
+  .ant-table .ant-table-thead > tr {
+    background: linear-gradient(to right, #8C002B, #C2003B);
+  }
   .ant-table .ant-table-thead > tr > th {
-    background-color: var(--bg-color);
+    background: transparent;
     color: #ffffff;
     border-radius: 0 !important;
   }
@@ -225,7 +228,7 @@
   .gx-text-primary,
   a.gx-text-primary:focus,
   a.gx-text-primary:hover {
-    color: #038fde !important;
+    color: #78152B !important;
   }
   .matchdtailsYesBackground {
     background-color: #a7d8fd !important;
@@ -238,7 +241,7 @@
     word-break: normal;
   }
   .ant-table-row-expand-icon {
-    color: #038fde;
+    color: #78152B;
     outline: none;
     cursor: pointer;
     transition: color 0.3s;
@@ -468,17 +471,13 @@ a.gx-bg-white:hover {
 }
 .ant-table-thead {
   .matchdtailsNoBackground {
-    background-color: #ef839b !important;
+    background: transparent !important;
   }
   .matchdtailsYesBackground {
-    background-color: #63b7f7 !important;
+    background: transparent !important;
   }
   .matchdtailsNoYesBackground {
-    background: linear-gradient(
-      to right,
-      rgb(239, 131, 155),
-      rgb(99, 183, 247)
-    ) !important;
+    background: transparent !important;
   }
 }
 
@@ -499,10 +498,13 @@ a.gx-bg-white:hover {
   }
 
   .ant-table-thead {
+    > tr {
+      background: linear-gradient(to right, #8C002B, #C2003B) !important;
+    }
     .matchdtailsNoBackground,
     .matchdtailsYesBackground,
     .matchdtailsNoYesBackground {
-      background: #1571cd !important;
+      background: transparent !important;
       color: #fff !important;
     }
   }
@@ -551,6 +553,20 @@ a.gx-bg-white:hover {
   .bookmaker-tab.is-active {
     background: #1f1a10;
     color: #fff;
+  }
+}
+
+.fancy-data-table {
+  .ant-table-thead {
+    > tr {
+      background: linear-gradient(to right, #8C002B, #C2003B) !important;
+    }
+    .matchdtailsNoBackground,
+    .matchdtailsYesBackground,
+    .matchdtailsNoYesBackground {
+      background: transparent !important;
+      color: #fff !important;
+    }
   }
 }
 

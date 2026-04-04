@@ -32,7 +32,7 @@
     position: relative;
 
     &.active {
-      color: #1677ff;
+      color: #78152B;
 
       &::after {
         content: "";
@@ -42,7 +42,7 @@
         transform: translateX(-50%);
         width: 60%;
         height: 2px;
-        background: #1677ff;
+        background: #78152B;
       }
     }
   }
@@ -93,9 +93,10 @@
   }
 
   .btn-ok {
-    background: #038fde;
+    background: #B8860B;
     border: none;
     color: #fff;
+    padding: 4px 15px;
   }
 }
 

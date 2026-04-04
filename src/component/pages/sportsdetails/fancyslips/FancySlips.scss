@@ -165,8 +165,11 @@
   }
 
   .ant-table-thead {
+    > tr {
+      background: linear-gradient(to right, #8C002B, #C2003B) !important;
+    }
     .ant-table-cell {
-      background: #1571cd !important;
+      background: transparent !important;
       color: #fff !important;
       font-weight: 600;
       text-transform: uppercase;
@@ -195,8 +198,12 @@
     background: #ffffff;
   }
 
+  .match-book-table__table thead > tr {
+    background: linear-gradient(to right, #8C002B, #C2003B);
+  }
+
   .match-book-table__table thead th {
-    background: #1571cd;
+    background: transparent;
     color: #fff;
     text-align: left;
   }
@@ -218,7 +225,7 @@
 }
 
 .section-header {
-  background: #1571cd;
+  background: #78152B;
   color: #fff;
   font-weight: 700;
   text-transform: uppercase;
@@ -255,7 +262,7 @@
 }
 
 .filter-reset-btn {
-  background: #1890ff;
+  background: #78152B;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -275,7 +282,7 @@
 }
 
 .match-bets-table thead th {
-  background: #1571cd;
+  background: #78152B;
   color: #fff;
   text-transform: uppercase;
   font-weight: 700;
@@ -315,7 +322,7 @@
 }
 
 .session-bets-table thead th {
-  background: #1571cd;
+  background: #78152B;
   color: #fff;
   text-transform: uppercase;
   font-weight: 700;

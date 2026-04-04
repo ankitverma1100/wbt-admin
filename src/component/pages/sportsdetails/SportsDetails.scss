@@ -35,7 +35,7 @@
       box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
       border-radius: 6px;
       color: #fff;
-      background-color: #038fde;
+      background-color: #B8860B;
       padding: 10px 14px;
       font-weight: 600;
       outline: unset;
@@ -171,7 +171,7 @@
       margin-right: 14px;
     }
     .ant-btn-primary {
-      background: #038fde !important;
+      background: #B8860B !important;
       color: #fff;
       border-radius: 2px;
       border: unset;
@@ -187,7 +187,7 @@
 .pagination_main {
   float: right;
   font-size: 15px;
-  color: #038fde !important;
+  color: #78152B !important;
   .ant-pagination-item,
   .ant-pagination-prev,
   .ant-pagination-next {
@@ -196,13 +196,13 @@
   .ant-pagination-item a,
   .ant-pagination-prev .ant-pagination-item-link,
   .ant-pagination-next .ant-pagination-item-link {
-    color: #038fde !important;
+    color: #78152B !important;
   }
   .ant-pagination-item-active {
     font-weight: 500;
     background-color: #ffffff !important;
-    border-color: #038fde !important;
-    color: #038fde !important;
+    border-color: #78152B !important;
+    color: #78152B !important;
   }
 }
 
@@ -326,6 +326,6 @@
 
 .ant-table-thead {
   td {
-    background-color: var(--bg-color) !important;
+    background: transparent !important;
   }
 }

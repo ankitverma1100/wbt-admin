@@ -43,7 +43,7 @@
     align-items: center;
     justify-content: center;
     background: #e6f4ff;
-    color: #1677ff;
+    color: #78152B;
     border: 1px solid #91caff;
     border-radius: 3px;
     padding: 0 6px;
@@ -80,8 +80,11 @@
     font-size: 14px;
     letter-spacing: 0.3px;
   }
+  .casino_bets_table .ant-table-thead > tr {
+    background: linear-gradient(to right, #8C002B, #C2003B);
+  }
   .casino_bets_table .ant-table-thead > tr > th {
-    background-color: var(--bg-color);
+    background: transparent;
     color: #ffffff;
     font-size: 11px;
     font-weight: 600;
@@ -146,8 +149,11 @@
     text-transform: uppercase;
     letter-spacing: 0.2px;
   }
+  .casino_card_bets_table .ant-table-thead > tr {
+    background: linear-gradient(to right, #8C002B, #C2003B);
+  }
   .casino_card_bets_table .ant-table-thead > tr > th {
-    background-color: var(--bg-color);
+    background: transparent;
     color: #ffffff;
     font-size: 11px;
     font-weight: 600;
@@ -242,7 +248,7 @@
   }
   .casino_last_winners .casino_winner-b {
     border-color: #91caff !important;
-    color: #0958d9 !important;
+    color: #78152B !important;
     background: #e6f4ff !important;
   }
   .casino_last_winners .casino_winner-c {
@@ -257,7 +263,7 @@
   }
   .casino_last_winners .casino_winner-t {
     border-color: #91caff !important;
-    color: #0958d9 !important;
+    color: #78152B !important;
     background: #e6f4ff !important;
   }
   .casino_cards_section {
@@ -431,8 +437,11 @@
     color: #389e0d;
     padding-bottom: 10px;
   }
+  .ant-table .ant-table-thead > tr {
+    background: linear-gradient(to right, #8C002B, #C2003B);
+  }
   .ant-table .ant-table-thead > tr > th {
-    background-color: var(--bg-color);
+    background: transparent;
     color: #ffffff;
     border-radius: 0 !important;
     font-weight: 300;

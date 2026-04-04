@@ -62,7 +62,7 @@ const Sidebar = (props) => {
         collapsed={collapsed}
         className={`side_bar coll desk_side`}
         style={{
-          background: "var(--bg-color)",
+          background: "linear-gradient(to bottom, #8C002B 0%, #C2003B 100%)",
         }}>
         <div className={collapsed ? "logo_icon" : "logo_icon coll_btn"}>
           <div
@@ -77,7 +77,7 @@ const Sidebar = (props) => {
                   ? "/img/mum-img.png"
                   : imgUrl
               }
-              height={72}
+              height={100}
             />
           </div>
         </div>

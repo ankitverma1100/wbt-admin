@@ -5,7 +5,7 @@
 }
 
 .rejected-bets-header {
-  background: #1571cd;
+  background: #78152B;
   color: #fff;
   font-weight: 700;
   text-transform: uppercase;
@@ -69,8 +69,12 @@
   padding: 8px 12px;
 }
 
+.rejected-bets-grid thead > tr {
+  background: linear-gradient(to right, #8C002B, #C2003B);
+}
+
 .rejected-bets-grid thead th {
-  background: #1571cd;
+  background: transparent;
   color: #fff;
   text-transform: uppercase;
   font-weight: 700;

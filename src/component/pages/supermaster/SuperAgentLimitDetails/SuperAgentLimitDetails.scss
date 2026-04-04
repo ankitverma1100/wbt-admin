@@ -1,8 +1,10 @@
 .limit_update {
   .ant-table-thead {
-    background-color: var(--bg-color) !important;
+    > tr {
+      background: linear-gradient(to right, #8C002B, #C2003B) !important;
+    }
     th.ant-table-cell {
-      background: var(--bg-color) !important;
+      background: transparent !important;
       padding: 5px 10px !important;
       color: #fff !important;
       &:first-child {
@@ -70,8 +72,8 @@
 
           .add {
             color: #fff;
-            background-color: #038fde;
-            border-color: #038fde;
+            background-color: #B8860B;
+            border-color: #B8860B;
             box-shadow: none;
             border-radius: 6px;
             outline: unset;
@@ -113,8 +115,8 @@
 .minus_btn {
   .add {
     color: #fff;
-    background-color: #038fde;
-    border-color: #038fde;
+    background-color: #B8860B;
+    border-color: #B8860B;
     box-shadow: none;
     border-radius: 6px;
     outline: unset;

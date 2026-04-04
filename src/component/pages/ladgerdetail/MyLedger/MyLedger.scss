@@ -63,8 +63,11 @@
     font-size: 20px;
     text-transform: uppercase;
   }
+  .ant-table-thead > tr {
+    background: linear-gradient(to right, #8C002B, #C2003B) !important;
+  }
   .ant-table-thead > tr > th {
-    background: #b7872a !important;
+    background: transparent !important;
     color: #ffffff !important;
     font-size: 12px;
     font-weight: 600;
@@ -86,7 +89,7 @@
     border-radius: 3px;
     a {
       padding: 0px !important;
-        color: #038fde !important;
+        color: #78152B !important;
     }
   }
   li.ant-pagination-item {
@@ -101,13 +104,13 @@
   margin-right: 11px;
   span.anticon.anticon-left {
     svg {
-        color: #038fde !important;
+        color: #78152B !important;
       font-size: 12px !important;
     }
   }
   span.anticon.anticon-right {
     svg {
-        color: #038fde !important;
+        color: #78152B !important;
       font-size: 12px !important;
     }
   }
@@ -116,11 +119,11 @@
 .ant-pagination-item-active {
   font-weight: 500;
   background-color: #ffffff !important;
-        color: #038fde !important;
+        color: #78152B !important;
 }
 .ant-pagination-item-active {
   a {
-        color: #038fde !important;
+        color: #78152B !important;
   }
 }
 

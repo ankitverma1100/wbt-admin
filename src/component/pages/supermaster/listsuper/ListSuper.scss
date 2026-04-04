@@ -39,7 +39,7 @@
       // padding: 0px 6px;
     }
     .plus_btn {
-      background: #038fde;
+      background: #78152B;
       width: 24px;
       height: 24px;
       padding: 0;
@@ -51,7 +51,7 @@
       border-radius: 4px;
     }
     .icon-share {
-      color: #1890ff;
+      color: #78152B;
       background: #fff;
       width: 22px;
       height: 22px;
@@ -68,7 +68,7 @@
       justify-content: center;
       width: 28px;
       height: 22px;
-      background: #038fde;
+      background: #78152B;
       border-radius: 4px;
     }
     .icon-down {
@@ -155,12 +155,12 @@
 .ant-table-filter-dropdown {
   .ant-btn-primary {
     color: #fff;
-    background-color: #038fde;
-    border-color: #038fde;
+    background-color: #78152B;
+    border-color: #78152B;
     box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
     color: #ffffff !important;
-    background-color: #038fde !important;
-    border-color: #038fde !important;
+    background-color: #B8860B !important;
+    border-color: #B8860B !important;
   }
   .ant-btn {
     background-image: none;
@@ -264,7 +264,7 @@
   }
   p.ant-dropdown-trigger.droup_link.droup_menu {
     position: static;
-    background: #038fde;
+    background: #78152B;
     padding: 4px 6px;
   }
 }
@@ -291,7 +291,7 @@
     align-items: center;
   }
   .ant-btn-primary {
-    background: #038fde !important;
+    background: #B8860B !important;
     color: #fff;
     border-radius: 2px;
     border: unset;
@@ -315,7 +315,7 @@
 @media screen and (max-width: 1024px) {
   p.ant-dropdown-trigger.droup_link.droup_menu {
     position: static;
-    background: #038fde;
+    background: #78152B;
     padding: 5px 6px !important;
   }
 }

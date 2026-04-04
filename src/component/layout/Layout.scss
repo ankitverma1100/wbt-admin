@@ -3,7 +3,7 @@
   height: 100%;
   max-height: 100%;
   .ant-layout-header {
-    background: var(--header-bg, #1571cd) !important;
+    background: var(--header-bg, linear-gradient(to right, #8C002B 0%, #C2003B 100%)) !important;
     color: #fff !important;
   }
 }

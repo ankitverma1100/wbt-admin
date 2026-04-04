@@ -72,12 +72,12 @@ input[type="number"] {
 }
 
 :root {
-  --login-bg: #1571cd;
-  --bg-color: #1571cd;
-  --btn-bg-color: #1571cd;
-  --header-bg: #1571cd;
+  --login-bg: linear-gradient(to bottom, #8C002B 0%, #C2003B 100%);
+  --bg-color: #78152B;
+  --btn-bg-color: #B8860B;
+  --header-bg: linear-gradient(to right, #8C002B 0%, #C2003B 100%);
   --login-wrap: #8b8f87;
-  --fancy-tab: #0f4f9c;
+  --fancy-tab: #78152B;
 }
 
 [data-theme="kohinoor"] {

@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
 
 :root {
-  --primary-color: #1571cd !important;
-  --secondary-color: #1571cd !important;
-  --model-header: #1f5058 !important;
+  --primary-color: #78152B !important;
+  --secondary-color: #78152B !important;
+  --model-header: #78152B !important;
 }
 
 * {
@@ -61,14 +61,16 @@ a:hover {
   border: unset;
   outline: unset;
   margin-right: 14px;
+  padding: 4px 15px;
 }
 
 .ant-btn-primary {
-  background: #038fde !important;
+  background: #B8860B !important;
   color: #fff;
   border-radius: 2px;
   border: unset;
   outline: unset;
+  padding: 4px 15px;
 }
 
 .main_live_section {
@@ -110,7 +112,7 @@ a:hover {
 }
 
 ::selection {
-  background: #038fde;
+  background: #78152B;
   color: #fff;
 }
 
@@ -270,7 +272,7 @@ div#rc-tabs-0-tab-2 {
 }
 
 .gx-text-blue {
-  color: #1890ff !important;
+  color: #78152B !important;
 }
 
 .gx-link,
@@ -523,7 +525,7 @@ div#rc-tabs-0-tab-2 {
 }
 
 .ant-picker-footer-extra .ant-tag-blue {
-  color: #038fde !important;
+  color: #78152B !important;
   background: #e6faff !important;
   border-color: #7ddcff !important;
   cursor: pointer !important;
@@ -547,7 +549,7 @@ div#rc-tabs-0-tab-2 {
 }
 
 .gx-text-blue {
-  color: #1890ff !important;
+  color: #78152B !important;
 }
 
 .gx-mt-3,
@@ -596,8 +598,8 @@ div#rc-tabs-0-tab-2 {
 
 .match_casino_ledger {
   .action_btn {
-    background: #038fde;
-    border: 1px solid #038fde;
+    background: #78152B;
+    border: 1px solid #78152B;
     border-radius: unset;
     color: #fff;
     font-size: 12px;
@@ -668,12 +670,12 @@ div#rc-tabs-0-tab-2 {
   height: 36px;
   padding: 0px 15px;
   border-radius: 5px;
-  border: 1px solid #038fde;
-  background: #038fde;
+  border: 1px solid #78152B;
+  background: #78152B;
   color: #fff;
 
   &:hover {
-    background: #038fde;
+    background: #78152B;
     color: #fff !important;
   }
   a {
@@ -748,7 +750,7 @@ div#rc-tabs-0-tab-2 {
 }
 
 .gx-plus-minus-h3 {
-  background-color: #038fde;
+  background-color: #78152B;
   margin-bottom: 1px;
   color: #fff;
 }
@@ -834,8 +836,13 @@ div#rc-tabs-0-tab-2 {
   font-size: 14px;
 }
 
+.ant-table-thead > tr {
+  background: linear-gradient(to right, #8C002B, #C2003B) !important;
+}
+
 th.ant-table-cell {
-  background: var(--bg-color) !important;
+  background: transparent !important;
+  color: #fff !important;
 }
 
 .casino_diamond_details {
@@ -1192,7 +1199,7 @@ th.ant-table-cell {
     padding: 0px 8px;
 
     a {
-      color: #038fde;
+      color: #78152B;
 
       .sport_title {
         padding-top: 8px;
@@ -1440,7 +1447,7 @@ th.ant-table-cell {
 }
 
 .ant-spin {
-  color: #038fde !important;
+  color: #78152B !important;
 }
 
 .ant-spin-spinning {
@@ -1456,7 +1463,7 @@ th.ant-table-cell {
   }
 
   .ant-spin-dot-item {
-    background-color: #038fde;
+    background-color: #78152B;
     border-radius: 100%;
 
     &:first-child {
@@ -1715,7 +1722,7 @@ th.ant-table-cell {
 
 .apply_btn1 {
   color: #fff;
-  background-color: #038fde;
+  background-color: #B8860B;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
   text-align: center;

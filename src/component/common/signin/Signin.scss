@@ -5,7 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--primary-color);
+  background: linear-gradient(to bottom, #8C002B 0%, #C2003B 100%);
   padding: 24px 12px;
 }
 
@@ -14,7 +14,7 @@
 .signin-card {
   width: 95%;
   max-width: 680px;
-  background: linear-gradient(var(--primary-color) 0, #000 100%);
+  background: linear-gradient(to bottom, #8C002B 0%, #C2003B 100%);
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -136,8 +136,8 @@
 
   /* FOCUS STATE */
   &:focus-within {
-    border-color: #1677ff;
-    box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.15);
+    border-color: #78152B;
+    box-shadow: 0 0 0 2px rgba(5, 42, 81, 0.2);
   }
 
   /* ERROR STATE */
@@ -173,7 +173,7 @@
   font-size: 16px;
   border-radius: 6px;
   border: none;
-  background: #1677ff;
+  background: #B8860B;
   color: #ffffff;
   display: flex;
   justify-content: center;
@@ -183,7 +183,7 @@
   transition: background 0.2s ease;
 
   &:hover {
-    background: #0958d9;
+    background: #073e75;
   }
 
   &.disabled,

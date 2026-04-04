@@ -289,7 +289,7 @@ const InplayMatkaDetail = () => {
   };
   const modalHeaderCellStyle = {
     ...modalTableCellStyle,
-    background: "#1571cd",
+    background: "linear-gradient(to right, #8C002B, #C2003B)",
     color: "#fff",
     fontWeight: 700,
     borderBottom: "1px solid #125ea8",
@@ -347,7 +347,7 @@ const InplayMatkaDetail = () => {
                   background: "none",
                   border: "none",
                   cursor: "pointer",
-                  color: "#1677ff",
+                  color: "#78152B",
                 }}
                 aria-label="View Bet Details">
                 <FaEye />
@@ -439,7 +439,7 @@ const InplayMatkaDetail = () => {
                     }}>
                     <div
                       style={{
-                        background: "#1677ff",
+                        background: "linear-gradient(to right, #8C002B, #C2003B)",
                         color: "#fff",
                         padding: "8px 12px",
                         fontWeight: 600,
@@ -460,7 +460,7 @@ const InplayMatkaDetail = () => {
                     }}>
                     <div
                       style={{
-                        background: "#1677ff",
+                        background: "linear-gradient(to right, #8C002B, #C2003B)",
                         color: "#fff",
                         padding: "8px 12px",
                         fontWeight: 600,

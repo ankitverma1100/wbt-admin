@@ -109,7 +109,7 @@ export const LetterAndColorById = {
       label: "D",
     },
     "2": {
-      color: "#0958d9",
+      color: "#78152B",
       background: "#e6f4ff",
       borderColor: "#91caff",
       label: "T",

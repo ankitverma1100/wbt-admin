@@ -20,8 +20,12 @@
     background: #fff;
   }
 
+  .ant-table-thead > tr {
+    background: linear-gradient(to right, #8C002B, #C2003B);
+  }
+
   .ant-table-thead > tr > th {
-    background: #1677ff;
+    background: transparent;
     color: #fff;
     font-size: 12px;
     font-weight: 700;

@@ -58,7 +58,7 @@ const FancyData = ({ data }) => {
               return (
                 <div
                   key={item}
-                  className="ant-table-wrapper gx-w-100 gx-mx-0 gx-my-0 gx-table-responsive"
+                  className="ant-table-wrapper gx-w-100 gx-mx-0 gx-my-0 gx-table-responsive fancy-data-table"
                   style={{ marginTop: 16 }}>
                   <div className="ant-spin-nested-loading">
                     <div className="ant-spin-container">

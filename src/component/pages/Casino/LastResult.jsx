@@ -35,8 +35,8 @@ const LastResult = () => {
                   : "casino_winner"
               }
               style={{
-                border: `1px solid ${meta?.borderColor || meta?.color || "#1677ff"}`,
-                color: meta?.color || "#1677ff",
+                border: `1px solid ${meta?.borderColor || meta?.color || "#78152B"}`,
+                color: meta?.color || "#78152B",
                 background: meta?.background || "#fff",
               }}
             >

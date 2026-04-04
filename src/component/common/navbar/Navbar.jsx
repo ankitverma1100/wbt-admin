@@ -111,7 +111,7 @@ const Navbar = ({ action, collapsed, onToggleCollapse }) => {
             src={
               hostName.includes("mumbaiexchange9") ? "/img/mum-img.png" : imgUrl
             }
-            height={40}
+            height={60}
             style={{ cursor: "pointer" }}
             onClick={() => nav("/dashboard")}
           />

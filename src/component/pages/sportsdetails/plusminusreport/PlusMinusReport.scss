@@ -5,7 +5,7 @@
     border: unset;
     border-radius: unset;
     outline: unset;
-    background: #038fde;
+    background: #B8860B;
     color: #fff;
     font-weight: bold;
     padding: 10px 12px;
@@ -116,8 +116,8 @@
       .ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover
         .ant-checkbox-checked:not(.ant-checkbox-disabled)
         .ant-checkbox-inner {
-        background-color: #038fde !important;
-        border-color: #038fde;
+        background-color: #78152B !important;
+        border-color: #78152B;
         border-radius: 2px;
       }
     }
@@ -186,13 +186,13 @@
   table {
     thead {
       tr {
-        background-color: var(--bg-color);
+        background: linear-gradient(to right, #8C002B, #C2003B);
         color: #fff;
         min-height: 53px;
       }
     }
     th.ant-table-cell {
-      background-color: var(--bg-color);
+      background: transparent;
       color: #fff;
       min-height: 53px;
     }

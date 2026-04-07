@@ -297,6 +297,13 @@ export const userlistApi = createApi({
         method: "POST",
       }),
     }),
+    getBetByMarketUserId: build.query({
+      query: (body) => ({
+        url: `/ant-pro/get-bet-by-market-userid`,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -340,5 +347,6 @@ export const {
   useGetDeletdBetMutation,
   useGetMatchedBetDeletedQuery,
   useGetMessageQuery,
-  useSetMessageMutation
+  useSetMessageMutation,
+  useLazyGetBetByMarketUserIdQuery,
 } = userlistApi;

@@ -1,11 +1,43 @@
 import { useState } from "react";
-import { Modal, Table } from "antd";
+import { Modal, Table, Spin } from "antd";
 import AccountModals from "../AccountModals";
 import moment from "moment";
 import { convertCode } from "../../../../../store/constant";
+import { useLazyGetBetByMarketUserIdQuery } from "../../../../../store/service/userlistService";
 
-const AllStatement = ({ dateData, isLoading }) => {
+const AllStatement = ({ dateData, isLoading, userId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [betModalOpen, setBetModalOpen] = useState(false);
+  const [selectedDescription, setSelectedDescription] = useState("");
+  const [triggerBets, { data: betData, isFetching: betFetching }] =
+    useLazyGetBetByMarketUserIdQuery();
+
+  const handleDescriptionClick = (record) => {
+    if (!record?.marketId) return;
+    setSelectedDescription(record?.description || "");
+    triggerBets({ marketId: record.marketId, userId: userId || "" });
+    setBetModalOpen(true);
+  };
+
+  const betColumns = [
+    { title: "User ID", dataIndex: "userId", key: "userId" },
+    { title: "Nation", dataIndex: "selectionName", key: "selectionName" },
+    { title: "Rate", dataIndex: "rate", key: "rate" },
+    { title: "Amount", dataIndex: "amount", key: "amount" },
+    { title: "Run", dataIndex: "run", key: "run" },
+    { title: "Mode", dataIndex: "mode", key: "mode" },
+    {
+      title: "P&L",
+      dataIndex: "netPnl",
+      key: "netPnl",
+      render: (text) => (
+        <span className={text > 0 ? "text_success" : "text_danger"}>
+          {typeof text === "number" ? text.toFixed(2) : text}
+        </span>
+      ),
+    },
+    { title: "Date", dataIndex: "time", key: "time" },
+  ];
   const formatNumber = (value) => {
     const numberValue = Number(value);
     if (Number.isNaN(numberValue)) {
@@ -26,10 +58,20 @@ const AllStatement = ({ dateData, isLoading }) => {
       title: "Description",
       dataIndex: "description",
       key: "description",
-      render: (text) => {
+      render: (text, record) => {
         const output = text.replace(/\((.*?)\)/g, (match, code) => {
           return `(${convertCode(code)})`;
         });
+        if (record?.marketId) {
+          return (
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleDescriptionClick(record)}
+            >
+              {output}
+            </span>
+          );
+        }
         return <span>{output}</span>;
       },
     },
@@ -111,13 +153,6 @@ const AllStatement = ({ dateData, isLoading }) => {
             bordered
             rowKey={(record, index) => record?.id ?? record?.txnId ?? index}
             rowClassName="c_pointer"
-            // onRow={(record, rowIndex) => {
-            //   return {
-            //     onClick: (event) => {
-            //       handelAccountModals(event, record?.marketid, record?.remark);
-            //     },
-            //   };
-            // }}
             loading={isLoading}
             columns={columns}
             pagination={{
@@ -127,16 +162,42 @@ const AllStatement = ({ dateData, isLoading }) => {
             dataSource={dateData || []}></Table>
         </div>
       </div>
-      {/* {marketId != "" && (
-        <Modal
-          title="Bet List"
-          className="bet_list"
-          open={isModalOpen1}
-          onCancel={handleCancel}
-          footer={null}>
-          <AccountModals marketId={marketId} remark={remark} id={id} />
-        </Modal>
-      )} */}
+
+      <Modal
+        title={
+          <span
+            style={{
+              display: "block",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              paddingRight: "24px",
+            }}
+          >
+            {selectedDescription || "Bet List"}
+          </span>
+        }
+        open={betModalOpen}
+        onCancel={() => setBetModalOpen(false)}
+        footer={null}
+        width={900}
+      >
+        {betFetching ? (
+          <div style={{ textAlign: "center", padding: "30px" }}>
+            <Spin />
+          </div>
+        ) : (
+          <Table
+            className="live_table acc_tabel"
+            bordered
+            rowClassName={(record) => (record?.isback ? "back" : "lay")}
+            columns={betColumns}
+            dataSource={betData?.data || []}
+            rowKey={(record, index) => record?.id ?? index}
+            pagination={false}
+          />
+        )}
+      </Modal>
     </>
   );
 };

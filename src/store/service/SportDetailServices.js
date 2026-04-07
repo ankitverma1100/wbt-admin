@@ -399,6 +399,13 @@ export const sportDetailsApi = createApi({
         };
       },
     }),
+    getClientHavingActiveBets: build.query({
+      query: (body) => ({
+        url: `/report/client-having-active-bets-odds-session`,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -447,5 +454,6 @@ export const {
   useGetQueryMatchBetsQuery,
   useGetSessionQureyBetQuery,
   useGetActiveSessionDataQuery,
-  useGetChildListForBetsQuery
+  useGetChildListForBetsQuery,
+  useLazyGetClientHavingActiveBetsQuery,
 } = sportDetailsApi;

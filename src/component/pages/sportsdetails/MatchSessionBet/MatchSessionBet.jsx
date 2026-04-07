@@ -1,23 +1,32 @@
-import { Card, Select, Row, Col, Form, Empty } from "antd";
-import { useGetMatchAndSessionBetMutation } from "../../../../store/service/SportDetailServices";
+import { Card, Select, Row, Col, Form, Empty, Spin } from "antd";
+import { useGetMatchAndSessionBetMutation, useLazyGetClientHavingActiveBetsQuery } from "../../../../store/service/SportDetailServices";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useLazyFilterbyClientQuery } from "../../../../store/service/supermasteAccountStatementServices";
 
 const MatchSessionBet = () => {
   const [clientId, setClientId] = useState("");
   const { id, inplay } = useParams();
   const nav = useNavigate();
-  const [trigger, { data: matchBets }] = useGetMatchAndSessionBetMutation();
-  const [userTrigger, { data: userData }] = useLazyFilterbyClientQuery();
+  const [trigger, { data: matchBets, isLoading: isBetLoading }] = useGetMatchAndSessionBetMutation();
+  const [triggerClientList, { data: clientListData }] = useLazyGetClientHavingActiveBetsQuery();
 
   useEffect(() => {
-    trigger({
-      matchId: id ?? "",
-      userId: clientId,
-      matchCompleted: inplay === "0" ? true : false,
-    });
-  }, [clientId, id, inplay]);
+    if (!id) return;
+    const matchCompleted = inplay === "0";
+    triggerClientList({ matchId: String(id), matchCompleted });
+  }, [id, inplay, triggerClientList]);
+
+  const handleClientSelect = (value) => {
+    setClientId(value);
+    if (value) {
+      trigger({
+        matchId: String(id),
+        userId: value,
+        matchCompleted: inplay === "0",
+        allFancyBets: true,
+      });
+    }
+  };
 
   const totalPnl = matchBets?.data?.sessionBets?.reduce((acc, item) => {
     return acc + (item.netPnl || 0);
@@ -48,17 +57,18 @@ const MatchSessionBet = () => {
                 <Select
                   placeholder="Select User"
                   showSearch
-                  onSearch={(value) => {
-                    if (value) userTrigger({ userId: value, userType: 1 });
-                  }}
                   value={clientId}
                   allowClear
-                  onSelect={(value) => setClientId(value)}
+                  onSelect={handleClientSelect}
+                  onClear={() => setClientId("")}
+                  filterOption={(input, option) =>
+                    option?.label?.toLowerCase().includes(input.toLowerCase())
+                  }
                   options={
-                    userData?.data?.map((user) => ({
+                    (clientListData?.data || []).map((user) => ({
                       label: `${user.userName} (${user.userId})`,
                       value: user.userId,
-                    })) || []
+                    }))
                   }
                 />
               </Form.Item>
@@ -66,6 +76,9 @@ const MatchSessionBet = () => {
           </Row>
         </Form>
 
+        {isBetLoading ? (
+          <Spin tip="Loading..." size="large" style={{ display: "flex", justifyContent: "center", padding: "40px" }} />
+        ) : (
         <Row gutter={[16, 16]}>
           <Col xs={24} md={24} lg={12} xl={12}>
             <div className="table_section statement_tabs_data active_match_table">
@@ -200,6 +213,7 @@ const MatchSessionBet = () => {
             </div>
           </Col>
         </Row>
+        )}
       </Card>
     </div>
   );

@@ -44,9 +44,7 @@ const AllStatement = ({ dateData, isLoading }) => {
           record?.opening ??
           record?.openingBalance ??
           0;
-        return {
-          children: <p>{formatNumber(value)}</p>,
-        };
+        return <p>{formatNumber(value)}</p>;
       },
     },
 
@@ -54,22 +52,14 @@ const AllStatement = ({ dateData, isLoading }) => {
       title: "CR",
       dataIndex: "credit",
       key: "credit",
-      render: (text) => {
-        return {
-          children: <p className="text_success">{text}</p>,
-        };
-      },
+      render: (text) => <p className="text_success">{text}</p>,
     },
 
     {
       title: "DR",
       dataIndex: "debit",
       key: "debit",
-      render: (text) => {
-        return {
-          children: <p className="text_danger">{text}</p>,
-        };
-      },
+      render: (text) => <p className="text_danger">{text}</p>,
     },
     {
       title: "COMM+",
@@ -81,9 +71,7 @@ const AllStatement = ({ dateData, isLoading }) => {
           record?.commissionPlus ??
           record?.commissionCredit ??
           0;
-        return {
-          children: <p className="text_success">{formatNumber(value)}</p>,
-        };
+        return <p className="text_success">{formatNumber(value)}</p>;
       },
     },
     {
@@ -96,9 +84,7 @@ const AllStatement = ({ dateData, isLoading }) => {
           record?.commissionMinus ??
           record?.commissionDebit ??
           0;
-        return {
-          children: <p className="text_danger">{formatNumber(value)}</p>,
-        };
+        return <p className="text_danger">{formatNumber(value)}</p>;
       },
     },
 
@@ -106,11 +92,7 @@ const AllStatement = ({ dateData, isLoading }) => {
       title: "Balance",
       dataIndex: "closing",
       key: "closing",
-      render: (text) => {
-        return {
-          children: <p>{text?.toFixed(2)}</p>,
-        };
-      },
+      render: (text) => <p>{text?.toFixed(2)}</p>,
     },
   ];
 
@@ -127,6 +109,7 @@ const AllStatement = ({ dateData, isLoading }) => {
           <Table
             className="live_table statemt_account agent_master1"
             bordered
+            rowKey={(record, index) => record?.id ?? record?.txnId ?? index}
             rowClassName="c_pointer"
             // onRow={(record, rowIndex) => {
             //   return {

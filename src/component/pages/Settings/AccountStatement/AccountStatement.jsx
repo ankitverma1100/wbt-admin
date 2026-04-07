@@ -158,6 +158,7 @@ const AccountStatement = () => {
                 <AllStatement
                   gameType={1}
                   clientId={clientId}
+                  userId={id}
                   loading={{
                     spinning: isLoading || isFetching,
                     indicator: <CustomLoading />,

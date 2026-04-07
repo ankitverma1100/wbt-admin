@@ -6,6 +6,8 @@ import "./FancySlips.scss";
 import {
   useGetChildListForBetsQuery,
   useGetBetlistUrbFilterMutation,
+  useLazyGetClientHavingActiveBetsQuery,
+  useGetMatchAndSessionBetMutation,
 } from "../../../../store/service/SportDetailServices";
 import {
   useLazyOddsQuPnlMyQuery,
@@ -29,8 +31,8 @@ const FancySlips = ({ name }) => {
   const { id, inplay } = useParams();
 
   const [trigger, { data: matchBets }] = useGetBetlistUrbFilterMutation();
-  const { data: oddsPnlData } = useOddsQuPnlQuery({ matchId: id ?? "" }, { pollingInterval: 30000 });
-  const { data: oddsPnlMyData } = useOddsQuPnlMyQuery({ matchId: id ?? "" }, { pollingInterval: 30000 });
+  const [triggerOddsPnl, { data: oddsPnlData }] = useLazyOddsQuPnlQuery();
+  const [triggerOddsPnlMy, { data: oddsPnlMyData }] = useLazyOddsQuPnlMyQuery();
   const { data: childListData } = useGetChildListForBetsQuery(
     {
       matchId: Number(id),
@@ -38,27 +40,14 @@ const FancySlips = ({ name }) => {
     },
     { skip: !id }
   );
+  const [triggerClientList, { data: clientListData }] = useLazyGetClientHavingActiveBetsQuery();
+  const [fetchMatchSessionBet, { data: matchAndSessionData, isLoading: isBetLoading }] = useGetMatchAndSessionBetMutation();
 
   useEffect(() => {
-    trigger({
-      matchId: Number(id ?? 35196722),
-      forMatchBet: true,
-      adminId: null,
-      subAdminId: selectedMini || null,
-      superMasterId: selectedMaster || null,
-      masterId: selectedSuper || null,
-      dealerId: selectedAgent || null,
-      userId: clientId || "C2696",
-    });
-  }, [
-    clientId,
-    selectedMini,
-    selectedMaster,
-    selectedSuper,
-    selectedAgent,
-    id,
-    trigger,
-  ]);
+    if (!id) return;
+    const isInplay = String(inplay ?? "").startsWith("1");
+    triggerClientList({ matchId: String(id), matchCompleted: !isInplay });
+  }, [id, inplay, triggerClientList]);
 
   useEffect(() => {
     if (!id) return;
@@ -135,6 +124,15 @@ const FancySlips = ({ name }) => {
 
   const handleClientChange = (value) => {
     setClientId(value);
+    if (value) {
+      const isInplay = String(inplay ?? "").startsWith("1");
+      fetchMatchSessionBet({
+        matchId: String(id),
+        userId: value,
+        matchCompleted: !isInplay,
+        allFancyBets: true,
+      });
+    }
   };
   useEffect(() => {
     if (matchBets?.data?.bookmaker?.betList) {
@@ -187,7 +185,10 @@ const FancySlips = ({ name }) => {
   const masterOptions = toOptions(childListData?.data?.superMasterIds || []);
   const superOptions = toOptions(childListData?.data?.masterIds || []);
   const agentOptions = toOptions(childListData?.data?.dealerIds || []);
-  const clientOptions = toOptions(childListData?.data?.userIds || []);
+  const clientOptions = (clientListData?.data || []).map((user) => ({
+    value: user.userId,
+    label: `${user.userName} (${user.userId})`,
+  }));
 
   const matchBookDisplayRows =
     matchBookRows.length > 0
@@ -336,57 +337,136 @@ const FancySlips = ({ name }) => {
           handleReset={handleReset}
         />
 
-        <div className="match-bets-section">
-          <div className="section-header">Match Bets</div>
-          {isLoading ? (
-            <Spin className="loading_active" tip="Loading..." size="large">
-              <div className="content" />
-            </Spin>
-          ) : (
-            <div className="table_section statement_tabs_data active_match_table">
-              <table className="match-bets-table">
-                <thead>
-                  <tr>
-                    <th>Username</th>
-                    <th>Runner Name</th>
-                    <th>Bet Type</th>
-                    <th>Bet Price</th>
-                    <th>Bet Amount</th>
-                    <th>Status</th>
-                    <th>Winner</th>
-                    <th>Place Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {matchBets?.data?.bookmaker?.betList?.length > 0 ? (
-                    matchBets?.data?.bookmaker?.betList.map((res, id) => (
-                      <tr
-                        key={id}
-                        className={res?.mode === "L" ? "back" : "lay"}>
-                        <td>
-                          {res?.username} ({res?.userId})
-                        </td>
-                        <td>{res?.team}</td>
-                        <td>{res?.mode !== "L" ? "Lagai" : "Khai"}</td>
-                        <td>{Number(res?.odds).toFixed(2)}</td>
-                        <td>{res?.stake}</td>
-                        <td>{res?.status || "-"}</td>
-                        <td>{res?.winner || "-"}</td>
-                        <td>{res?.date}</td>
-                      </tr>
-                    ))
-                  ) : (
+        {isBetLoading && (
+          <Spin className="loading_active" tip="Loading..." size="large">
+            <div className="content" />
+          </Spin>
+        )}
+
+        {!isBetLoading && matchAndSessionData && (
+          <>
+            {/* Match Bets */}
+            <div className="match-bets-section">
+              <div className="section-header">Match Bets</div>
+              <div className="table_section statement_tabs_data active_match_table">
+                <table className="match-bets-table">
+                  <thead>
                     <tr>
-                      <td colSpan={8}>
-                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                      </td>
+                      <th>Username</th>
+                      <th>Runner Name</th>
+                      <th>Bet Type</th>
+                      <th>Bet Price</th>
+                      <th>Bet Amount</th>
+                      <th>P&amp;L</th>
+                      <th>Place Time</th>
                     </tr>
-                  )}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {matchAndSessionData?.data?.matchBets?.betList?.length > 0 ? (
+                      matchAndSessionData.data.matchBets.betList.map((res, idx) => (
+                        <tr key={idx} className={res?.mode === "L" ? "back" : "lay"}>
+                          <td>{res?.username} ({res?.userId})</td>
+                          <td>{res?.team}</td>
+                          <td>{res?.mode !== "L" ? "Lagai" : "Khai"}</td>
+                          <td>{Number(res?.odds).toFixed(2)}</td>
+                          <td>{res?.stake}</td>
+                          <td className={res?.pnl >= 0 ? "text-success" : "text-danger"}>{formatPnl(res?.pnl)}</td>
+                          <td>{res?.date}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr><td colSpan={7}><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /></td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          )}
-        </div>
+
+            {/* Toss Bets */}
+            <div className="match-bets-section">
+              <div className="section-header">Toss Bets</div>
+              <div className="table_section statement_tabs_data active_match_table">
+                <table className="match-bets-table">
+                  <thead>
+                    <tr>
+                      <th>Username</th>
+                      <th>Runner Name</th>
+                      <th>Bet Type</th>
+                      <th>Bet Price</th>
+                      <th>Bet Amount</th>
+                      <th>P&amp;L</th>
+                      <th>Place Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {matchAndSessionData?.data?.tossBets?.betList?.length > 0 ? (
+                      matchAndSessionData.data.tossBets.betList.map((res, idx) => (
+                        <tr key={idx} className={res?.mode === "L" ? "back" : "lay"}>
+                          <td>{res?.username} ({res?.userId})</td>
+                          <td>{res?.team}</td>
+                          <td>{res?.mode !== "L" ? "Lagai" : "Khai"}</td>
+                          <td>{Number(res?.odds).toFixed(2)}</td>
+                          <td>{res?.stake}</td>
+                          <td className={res?.pnl >= 0 ? "text-success" : "text-danger"}>{formatPnl(res?.pnl)}</td>
+                          <td>{res?.date}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr><td colSpan={7}><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /></td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Session Bets */}
+            <div className="match-bets-section">
+              <div className="section-header">Session Bets</div>
+              <div className="table_section statement_tabs_data active_match_table">
+                <table className="match-bets-table">
+                  <thead>
+                    <tr>
+                      <th>Username</th>
+                      <th>Session Name</th>
+                      <th>Rate</th>
+                      <th>Amount</th>
+                      <th>Run</th>
+                      <th>Mode</th>
+                      <th>P&amp;L</th>
+                      <th>Declared</th>
+                      <th>Place Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {matchAndSessionData?.data?.sessionBets?.length > 0 ? (
+                      matchAndSessionData.data.sessionBets.map((res, idx) => (
+                        <tr key={idx} className={res?.mode === "YES" ? "back" : "lay"}>
+                          <td>{res?.username} ({res?.userId})</td>
+                          <td>{res?.selectionName}</td>
+                          <td>{res?.rate}</td>
+                          <td>{res?.amount}</td>
+                          <td>{res?.run}</td>
+                          <td>{res?.mode}</td>
+                          <td className={res?.pnl >= 0 ? "text-success" : "text-danger"}>{formatPnl(res?.pnl)}</td>
+                          <td>{res?.declared ?? "-"}</td>
+                          <td>{res?.time}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr><td colSpan={9}><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /></td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        )}
+
+        {!isBetLoading && !matchAndSessionData && (
+          <div className="match-bets-section">
+            <div className="section-header">Select a client to view bets</div>
+          </div>
+        )}
       </div>
     </>
   );

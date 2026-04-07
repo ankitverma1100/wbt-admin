@@ -45,7 +45,7 @@ const FancyBets = () => {
       superMasterId: selectedMaster || null,
       masterId: selectedSuper || null,
       dealerId: selectedAgent || null,
-      userId: clientId || "C2696",
+      userId: clientId || null,
     });
   }, [
     clientId,

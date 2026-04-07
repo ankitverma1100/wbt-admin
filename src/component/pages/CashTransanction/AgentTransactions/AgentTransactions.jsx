@@ -107,12 +107,12 @@ const AgentTransactions = () => {
   useEffect(() => {
     if (result?.data?.data?.length && userId) {
       const matchedClient = result.data.data.find(
-        (user) => String(user.userId) === String(userId)
+        (user) => String(user.userId) === String(convertCodeReverse(userId))
       );
 
       if (matchedClient) {
         form.setFieldsValue({ client: convertCode(matchedClient.userId) });
-        setClientId(matchedClient.userId);
+        setClientId(convertCode(matchedClient.userId));
         trigger({
           userId: matchedClient.userId,
           transactiontype: "All",

@@ -126,7 +126,7 @@ const Deposit = ({
                   </Button>
                 </Form.Item>
                 <Form.Item>
-                  <Button className="deposit_submit" type="primary" htmlType="submit">
+                  <Button className="deposit_submit" type="primary" htmlType="submit" loading={isLoading} disabled={isLoading}>
                     {datadeposit?.isDeposit ? "Deposit" : "Withdraw"}
                   </Button>
                 </Form.Item>

@@ -87,6 +87,7 @@ const UserListTable = ({
     casino: false,
     matka: false,
   });
+  const [activeDeactiveLoading, setActiveDeactiveLoading] = useState(null);
   const [userToSearch, setUserToSearch] = useState("");
   const [activeSearch, setActiveSearch] = useState(null);
   const [codeForm] = Form.useForm();
@@ -178,16 +179,24 @@ const UserListTable = ({
   };
 
   const handleToggleAccountStatus = async (res) => {
-    const result = await getUserActiveDeactive({
-      activate: !res?.isActive,
-      userIdList: [res?.userId],
-    }).unwrap();
-    if (result?.status) {
-      openNotification(result?.message);
-      fetchData();
-      resetDropdownStates();
-    } else {
-      openNotificationError(result?.message);
+    if (activeDeactiveLoading === res?.userId) return;
+    setActiveDeactiveLoading(res?.userId);
+    try {
+      const result = await getUserActiveDeactive({
+        activate: !res?.isActive,
+        userIdList: [res?.userId],
+      }).unwrap();
+      if (result?.status) {
+        openNotification(result?.message);
+        fetchData();
+        resetDropdownStates();
+      } else {
+        openNotificationError(result?.message);
+      }
+    } catch (error) {
+      openNotificationError(error?.data?.message || error?.message || "Something went wrong");
+    } finally {
+      setActiveDeactiveLoading(null);
     }
   };
 
@@ -395,11 +404,16 @@ const UserListTable = ({
       // Toggle Active/Inactive
       {
         label: (
-          <div onClick={() => handleToggleAccountStatus(res)}>
-            {res?.isActive ? "InActive" : "Active"}
+          <div
+            onClick={() => {
+              if (activeDeactiveLoading !== res?.userId) handleToggleAccountStatus(res);
+            }}
+            style={activeDeactiveLoading === res?.userId ? { opacity: 0.5, pointerEvents: "none" } : {}}>
+            {activeDeactiveLoading === res?.userId ? "Processing..." : (res?.isActive ? "InActive" : "Active")}
           </div>
         ),
         key: "2",
+        disabled: activeDeactiveLoading === res?.userId,
       },
 
       !isDeadClient && {

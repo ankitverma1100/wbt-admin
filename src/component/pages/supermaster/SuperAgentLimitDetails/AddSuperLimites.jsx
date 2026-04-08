@@ -34,6 +34,7 @@ const AddSuperLimites = () => {
   const [triggerDeposit] = useLazyDepositAndWithdrawQuery();
 
   const [userDetailsData, setUserDetailsData] = useState([]);
+  const [limitLoading, setLimitLoading] = useState({});
   const [paginationInfo, setPaginationInfo] = useState({
     totalPages: 1,
     currentPage: 0,
@@ -97,6 +98,9 @@ const AddSuperLimites = () => {
       return;
     }
 
+    const loadingKey = `${user.userId}_${isAdd ? "add" : "minus"}`;
+    setLimitLoading((prev) => ({ ...prev, [loadingKey]: true }));
+
     const payload = {
       userId: user.userId,
       limit: amount,
@@ -119,6 +123,9 @@ const AddSuperLimites = () => {
       })
       .catch(() => {
         openNotificationError("Transaction failed");
+      })
+      .finally(() => {
+        setLimitLoading((prev) => ({ ...prev, [loadingKey]: false }));
       });
   };
 
@@ -290,11 +297,15 @@ const AddSuperLimites = () => {
                       <div className="minus_btn">
                         <Button
                           className="add"
+                          loading={limitLoading[`${user.userId}_add`]}
+                          disabled={limitLoading[`${user.userId}_add`] || limitLoading[`${user.userId}_minus`]}
                           onClick={() => handleLimitAction(user, true)}>
                           <span className="action_icon">+</span> Add
                         </Button>
                         <Button
                           className="minus"
+                          loading={limitLoading[`${user.userId}_minus`]}
+                          disabled={limitLoading[`${user.userId}_add`] || limitLoading[`${user.userId}_minus`]}
                           onClick={() => handleLimitAction(user, false)}>
                           <span className="action_icon">−</span> Minus
                         </Button>

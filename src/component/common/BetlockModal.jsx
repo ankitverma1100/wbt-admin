@@ -122,7 +122,7 @@ const BetlockModal = ({
                 </Button>
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" loading={isLoading} disabled={isLoading}>
                   Submit
                 </Button>
               </Form.Item>

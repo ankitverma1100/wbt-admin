@@ -13,7 +13,7 @@ const LedgerdataAgent = ({ ledgerData }) => {
             <table className="plus-table plus_minus_sec">
               <thead>
                 <tr>
-                  <th colSpan={7} className="text-center">
+                  <th colSpan={8} className="text-center">
                     Client PlusMinus{" "}
                   </th>
                   <th colSpan={7} className="text-center">
@@ -26,6 +26,7 @@ const LedgerdataAgent = ({ ledgerData }) => {
                   <th>CLIENT</th>
                   <th>M AMT</th>
                   <th>S AMT</th>
+                  <th>TOSS AMT</th>
                   <th>C COM</th>
                   <th>NET AMT</th>
                   <th>C MOB</th>
@@ -47,6 +48,7 @@ const LedgerdataAgent = ({ ledgerData }) => {
                     </td>
                     <td>{agent.matchAmount?.toFixed(2)}</td>
                     <td>{agent.sessionAmount?.toFixed(2)}</td>
+                    <td>{agent.tossAmount?.toFixed(2)}</td>
                     <td>{agent.clientCommission?.toFixed(2)}</td>
                     <td>{agent.clientNetAmount?.toFixed(2)}</td>
                     <td>{agent.clientMobileApp?.toFixed(2)}</td>
@@ -66,6 +68,7 @@ const LedgerdataAgent = ({ ledgerData }) => {
                   <th>TOTAL</th>
                   <th>{ledgerData?.data?.matchAmount?.toFixed(2)}</th>
                   <th>{ledgerData?.data?.sessionAmount?.toFixed(2)}</th>
+                  <th>{ledgerData?.data?.tossAmount?.toFixed(2)}</th>
                   <th>{ledgerData?.data?.clientCommission?.toFixed(2)}</th>
                   <th>{ledgerData?.data?.clientNetAmount?.toFixed(2)}</th>
                   <th>{ledgerData?.data?.clientMobileApp?.toFixed(2)}</th>

@@ -27,7 +27,7 @@ const RecursiveCard = ({ data, depth }) => {
                   <table id="data" className="plus-table plus_minus_sec">
                     <thead>
                       <tr>
-                        <th colSpan={4} />
+                        <th colSpan={5} />
                         <th colSpan={6}>Agent PlusMinus </th>
                         <th colSpan={6}>Super Agent PlusMinus </th>
                         <th colSpan={6}>Master Agent PlusMinus </th>
@@ -39,7 +39,8 @@ const RecursiveCard = ({ data, depth }) => {
                         <th>Client</th>
                         <th>M Amt</th>
                         <th>S Amt</th>
-                        <th>TOT Amt</th>
+                        <th>Toss Amt</th>
+                        <th>TOTAL Amt</th>
                         <th>M Com</th>
                         <th>S Com</th>
                         <th>T Com</th>
@@ -74,6 +75,7 @@ const RecursiveCard = ({ data, depth }) => {
                           </td>
                           <td>{agent?.matchAmount?.toFixed(2)}</td>
                           <td>{agent?.sessionAmount?.toFixed(2)}</td>
+                          <td>{agent?.tossAmount?.toFixed(2)}</td>
                           <td>{agent?.totalAmoount?.toFixed(2)}</td>
                           <td>{agent?.matchCommissionDealer?.toFixed(2)}</td>
                           <td>{agent?.sessionCommissionDealer?.toFixed(2)}</td>
@@ -115,6 +117,7 @@ const RecursiveCard = ({ data, depth }) => {
                         <th>TOTAL</th>
                         <td>{item?.matchAmount?.toFixed(2)}</td>
                         <td>{item?.sessionAmount?.toFixed(2)}</td>
+                        <td>{item?.tossAmount?.toFixed(2)}</td>
                         <td>{item?.totalAmoount?.toFixed(2)}</td>
                         <td>{item?.matchCommissionDealer?.toFixed(2)}</td>
                         <td>{item?.sessionCommissionDealer?.toFixed(2)}</td>
@@ -164,6 +167,7 @@ const RecursiveCard = ({ data, depth }) => {
                     </th>
                     <td>{item?.matchAmount?.toFixed(2)}</td>
                     <td>{item?.sessionAmount?.toFixed(2)}</td>
+                    <td>{item?.tossAmount?.toFixed(2)}</td>
                     <td>{item?.totalAmoount?.toFixed(2)}</td>
                     <td>{item?.matchCommissionDealer?.toFixed(2)}</td>
                     <td>{item?.sessionCommissionDealer?.toFixed(2)}</td>
@@ -225,6 +229,7 @@ const LedgerdataSubAdmin = ({ ledgerData }) => {
                   </th>
                   <td>{ledgerData?.data?.matchAmount?.toFixed(2)}</td>
                   <td>{ledgerData?.data?.sessionAmount?.toFixed(2)}</td>
+                  <td>{ledgerData?.data?.tossAmount?.toFixed(2)}</td>
                   <td>{ledgerData?.data?.totalAmoount?.toFixed(2)}</td>
                   <td>{ledgerData?.data?.matchCommissionDealer?.toFixed(2)}</td>
                   <td>

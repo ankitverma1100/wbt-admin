@@ -91,6 +91,11 @@ const GameDeatis = () => {
   const { data: userIp } = useGetMyIpQuery();
 
   const channelId = chids?.data?.channelId;
+  const antProTvUrl = tvScoreData?.data?.tvUrl;
+  const scoreUrl =
+    tvScoreData?.data?.scoreUrl ||
+    tvScoreData?.data?.scoreURL ||
+    tvScoreData?.data?.score_url;
 
   const fetchTvStream = async () => {
     if (!channelId) return;
@@ -176,21 +181,21 @@ const GameDeatis = () => {
                     height: "400px",
                     background: "#000",
                   }}>
-                  {loadingTv ? (
+                  {loadingTv && !antProTvUrl ? (
                     <p style={{ color: "#fff", textAlign: "center" }}>
                       Loading stream...
                     </p>
-                  ) : tvUrl ? (
-                    tvUrl.includes("<iframe") ? (
+                  ) : antProTvUrl || tvUrl ? (
+                    (antProTvUrl || tvUrl).includes("<iframe") ? (
                       // Response is iframe HTML
                       <div
-                        dangerouslySetInnerHTML={{ __html: tvUrl }}
+                        dangerouslySetInnerHTML={{ __html: antProTvUrl || tvUrl }}
                         style={{ width: "100%", height: "100%" }}
                       />
                     ) : (
                       // Response is just a URL
                       <iframe
-                        src={tvUrl}
+                        src={antProTvUrl || tvUrl}
                         title="TV Stream"
                         style={{
                           width: "100%",
@@ -213,7 +218,7 @@ const GameDeatis = () => {
                 }`}>
                 <iframe
                   // src={`https://scorediamond.247idhub.com/score/${id}`}
-                  src={tvScoreData?.data?.scoreUrl}
+                  src={scoreUrl}
                   title="Score-I-frame"
                   className=""
                   style={{ width: "100%", height: "100%", border: "none" }}

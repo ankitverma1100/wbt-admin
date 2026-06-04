@@ -113,7 +113,7 @@ export const casinoDetailsApi = createApi({
     }),
     getTvScoreData: build.query({
       query: (body) => ({
-        url: `ant-pro/get-tv-url`,
+        url: `https://api.antpro999.net/ant-pro/get-tv-url`,
         method: "POST",
         body,
       }),

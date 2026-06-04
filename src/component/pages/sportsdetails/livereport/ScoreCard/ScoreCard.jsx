@@ -1,16 +1,24 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGetTvScoreDataQuery } from "../../../../../store/service/CasinoServices";
 
 const ScoreCard = ({ mid }) => {
   const [showTv, setShowTv] = useState(false);
   const [scoreTv, setScoreTv] = useState(false);
   const nav = useNavigate()
+  const { data: tvScoreData } = useGetTvScoreDataQuery({ matchId: mid ?? "" });
 
   const ref = useRef(null)
   const scale = (ref.current?.clientWidth || 300) / 280
+  const tvUrl = tvScoreData?.data?.tvUrl || `https://100tun.online/web/${mid}.html`;
+  const scoreUrl =
+    tvScoreData?.data?.scoreUrl ||
+    tvScoreData?.data?.scoreURL ||
+    tvScoreData?.data?.score_url ||
+    `https://score.247idhub.com/index.html/event/${mid}?theme=crazy-diamond`;
   
   const handleShowTv = ()=>{
-    if(setShowTv === true){
+    if(showTv === true){
       setShowTv(false);
     }else{
       setShowTv(true);
@@ -50,7 +58,7 @@ const ScoreCard = ({ mid }) => {
           ref={ref}
             // src={`https://stream.openhomepageforapi.live/YGapp/play.html?name=ttfour&amp;autoplay=true`}
             // src={`http://43.205.116.130/tv.php?eventId=${mid}`}
-            src={`https://100tun.online/web/${mid}.html`}
+            src={tvUrl}
             width="100%"
             style={{
               aspectRatio: "16/9",
@@ -66,7 +74,7 @@ const ScoreCard = ({ mid }) => {
           <iframe
           // src={`https://internal-consumer-apis.jmk888.com/go-score/template/4/${mid}`}
           // src={`https://score.247idhub.com/go-score/template/4/${mid}`}
-          src={`https://score.247idhub.com/index.html/event/${mid}?theme=crazy-diamond`}
+          src={scoreUrl}
           width="100%"
           height="284px;"
           className="score-card"

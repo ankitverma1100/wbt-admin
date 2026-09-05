@@ -295,6 +295,7 @@ export const userlistApi = createApi({
       query: () => ({
         url: `/message/get-message`,
         method: "POST",
+        body: { panelName: window.location.hostname },
       }),
     }),
     getBetByMarketUserId: build.query({

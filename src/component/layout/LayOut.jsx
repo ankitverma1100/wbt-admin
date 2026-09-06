@@ -5,17 +5,13 @@ const { Header, Content } = Layout;
 import Navbar from "../common/navbar/Navbar";
 import "./Layout.scss";
 import MarqueeTag from "../common/marquee/MarqueeTag";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import HomeRules from "../pages/HomeRules";
-import { useSelector } from "react-redux";
-import { selectShowMarquee } from "../../store/global/slice";
 
 const LayOut = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [openRules, setOpenRules] = useState(false);
   const [open, setOpen] = useState(false);
-  const showMarquee = useSelector(selectShowMarquee);
-  const { pathname } = useLocation();
 
   const toggleDarawer = () => setOpen((prev) => !prev);
   const toggleCollapsed = () => setCollapsed((prev) => !prev);
@@ -63,11 +59,9 @@ const LayOut = () => {
               onToggleCollapse={toggleCollapsed}
             />
           </Header>
-          {showMarquee && pathname === "/dashboard" && (
-            <div className="marqu_tag">
-              <MarqueeTag />
-            </div>
-          )}
+          <div className="marqu_tag">
+            <MarqueeTag />
+          </div>
           <Content
             // style={{ margin: "2px 1px", padding: "21px 19px 0" }}
             className="main_section">

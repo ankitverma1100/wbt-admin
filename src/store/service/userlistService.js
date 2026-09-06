@@ -4,7 +4,7 @@ import { dynamicBaseQuery } from "./dynamicBaseQuery";
 export const userlistApi = createApi({
   reducerPath: "userlistApi",
   baseQuery: dynamicBaseQuery,
-  tagTypes: ["dashboard"],
+  tagTypes: ["dashboard", "message"],
   endpoints: (build) => ({
     userList: build.mutation({
       query: (body) => ({
@@ -290,15 +290,19 @@ export const userlistApi = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: (result, error) =>
+        !error && result?.status !== false ? ["message"] : [],
     }),
     getMessage: build.query({
-      query: () => ({
+      query: (body) => ({
         url: `/message/get-message`,
         method: "POST",
         body: {
           panelName: window.location.hostname.split(".").slice(-2).join("."),
+          ...body,
         },
       }),
+      providesTags: ["message"],
     }),
     getBetByMarketUserId: build.query({
       query: (body) => ({
